@@ -52,6 +52,37 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return new ArrayList<>(); // this is temporary??
+        Collection<ChessMove> moves = null;
+
+        switch (this.type) {
+            case BISHOP:
+                Bishop bishop = new Bishop(this.pieceColor);
+                moves = bishop.allMoves(board, myPosition);
+                break;
+            case KING:
+                King king = new King(this.pieceColor);
+                moves = king.allMoves(board, myPosition);
+                break;
+            case KNIGHT:
+                Knight knight = new Knight(this.pieceColor);
+                moves = knight.allMoves(board, myPosition);
+                break;
+            case QUEEN:
+                Queen queen = new Queen(this.pieceColor);
+                moves = queen.allMoves(board, myPosition);
+                break;
+            case ROOK:
+                Rook rook = new Rook(this.pieceColor);
+                moves = rook.allMoves(board, myPosition);
+                break;
+            // case PAWN:
+            //     Pawn pawn = new Pawn(this.pieceColor);
+            //     moves = pawn.allMoves(board, myPosition);
+            //     break;
+        }
+
+        return moves;
     }
+
 }
+

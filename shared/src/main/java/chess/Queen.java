@@ -278,4 +278,4 @@ public class Queen {
         return moves;
     }
 }
-}
+
