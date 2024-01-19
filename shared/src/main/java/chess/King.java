@@ -42,7 +42,7 @@ public class King {
 
 
             //down
-            if ((startPosition.getRow() - 1) > 0 ) {
+            if ((startPosition.getRow() - 1) >= 0 ) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn());
 
@@ -67,7 +67,7 @@ public class King {
             }
 
             //left
-            if ((startPosition.getColumn() - 1) > 0) {
+            if ((startPosition.getColumn() - 1) >= 0) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() , startPosition.getColumn() - 1);
 
@@ -94,7 +94,7 @@ public class King {
 
 
             // right
-            if ((startPosition.getColumn() + 1) > 0) {
+            if ((startPosition.getColumn() + 1) < 8) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() , startPosition.getColumn() + 1);
 

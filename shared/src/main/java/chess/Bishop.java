@@ -50,7 +50,7 @@ public class Bishop {
 
         for (int i = 1; i < 8; i++) {
             //down right
-            if ((startPosition.getRow() - i) > 0 || (startPosition.getColumn() + i) < 8) {
+            if ((startPosition.getRow() - i) >= 0 || (startPosition.getColumn() + i) < 8) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() - i, startPosition.getColumn() + i);
 
@@ -81,7 +81,7 @@ public class Bishop {
         }
         for (int i = 1; i < 8; i++) {
             // up left
-            if ((startPosition.getRow() + i) < 8 || (startPosition.getColumn() - i) > 0) {
+            if ((startPosition.getRow() + i) < 8 || (startPosition.getColumn() - i) >= 0) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() + i, startPosition.getColumn() - i);
 
@@ -113,7 +113,7 @@ public class Bishop {
         }
         for (int i = 1; i < 8; i++) {
             // down left
-            if ((startPosition.getRow() - i) > 0 || (startPosition.getColumn() - i) > 0) {
+            if ((startPosition.getRow() - i) >= 0 || (startPosition.getColumn() - i) >= 0) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() - i, startPosition.getColumn() - i);
 

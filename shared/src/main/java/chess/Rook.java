@@ -79,7 +79,7 @@ public class Rook {
 
         for (int i = 1; i < 8; i++) {
             //left
-            if ((startPosition.getColumn() - i) > 0) {
+            if ((startPosition.getColumn() - i) >= 0) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() , startPosition.getColumn() - i);
 
@@ -111,7 +111,7 @@ public class Rook {
         }
         for (int i = 1; i < 8; i++) {
             // down
-            if ((startPosition.getRow() - i) > 0) {
+            if ((startPosition.getRow() - i) >= 0) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() - i, startPosition.getColumn() );
 
