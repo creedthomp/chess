@@ -11,11 +11,11 @@ public class Bishop {
 
 
     public Collection<ChessMove> allMoves(ChessBoard board, ChessPosition startPosition) {
-        ArrayList<ChessMove> moves = new ArrayList<>();
+        Collection<ChessMove> moves = new HashSet<>();
 
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
             //up right
-            if ((startPosition.getRow() + i) < 8 || (startPosition.getColumn() - i) < 8) {
+            if ((startPosition.getRow() + i) < 9 && (startPosition.getColumn() + i) < 9) {
 
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() + i, startPosition.getColumn() + i);
@@ -24,7 +24,7 @@ public class Bishop {
                 if ((board.getPiece(endPosition) == null)) {
 
                     //add the piece to the array.   am I adding it in the right way?
-                    moves.add(new ChessMove(startPosition, endPosition, null));
+                    moves.add(new ChessMove(startPosition, endPosition , null));
                 }
 
                 // not null
@@ -48,9 +48,9 @@ public class Bishop {
         }
 
 
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
             //down right
-            if ((startPosition.getRow() - i) >= 0 || (startPosition.getColumn() + i) < 8) {
+            if ((startPosition.getRow() - i) >= 1 && (startPosition.getColumn() + i) < 9) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() - i, startPosition.getColumn() + i);
 
@@ -79,9 +79,9 @@ public class Bishop {
                 break;
             }
         }
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
             // up left
-            if ((startPosition.getRow() + i) < 8 || (startPosition.getColumn() - i) >= 0) {
+            if ((startPosition.getRow() + i) < 9 && (startPosition.getColumn() - i) >= 1) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() + i, startPosition.getColumn() - i);
 
@@ -111,9 +111,9 @@ public class Bishop {
                 break;
             }
         }
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
             // down left
-            if ((startPosition.getRow() - i) >= 0 || (startPosition.getColumn() - i) >= 0) {
+            if ((startPosition.getRow() - i) >= 1 && (startPosition.getColumn() - i) >= 1) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() - i, startPosition.getColumn() - i);
 
@@ -147,11 +147,18 @@ public class Bishop {
         // is this the right thing to return??
         return moves;
     }
+
+    @Override
+    public String toString() {
+        return "Bishop{" +
+                "teamColor=" + teamColor +
+                '}';
+    }
 }
 
 
 //    public boolean checkValidity(ChessBoard board, int i, ChessPosition startPosition) {
-//        //if ((startPosition.getRow() - i) >= 0 && (startPosition.getRow() + i) < 8 && (startPosition.getColumn() - i) >= 0 && (startPosition.getColumn() + i) < 8) {
+//        //if ((startPosition.getRow() - i) >= 1 && (startPosition.getRow() + i) < 9 && (startPosition.getColumn() - i) >= 1 && (startPosition.getColumn() + i) < 9) {
 //            if (board.getPiece(startPosition) == null) { //if this spot on the board is empty
 //                // this is a valid move. return true??
 //            }

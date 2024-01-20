@@ -84,5 +84,12 @@ public class ChessPiece {
         return moves;
     }
 
+    @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "type=" + type +
+                ", pieceColor=" + pieceColor +
+                '}';
+    }
 }
 
