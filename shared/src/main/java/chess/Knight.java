@@ -14,7 +14,7 @@ public class Knight {
         ArrayList<ChessMove> moves = new ArrayList<>();
 
         //up 2 right 1
-        if ((startPosition.getRow() + 2) < 8 || (startPosition.getColumn() + 1) < 8) {
+        if ((startPosition.getRow() + 2) < 9 && (startPosition.getColumn() + 1) < 9) {
 
             //save this position
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 2, startPosition.getColumn() + 1);
@@ -42,7 +42,7 @@ public class Knight {
 
 
         //right 2 up 1
-        if ((startPosition.getRow() + 1) < 8 || (startPosition.getColumn() + 2) < 8) {
+        if ((startPosition.getRow() + 1) < 9 && (startPosition.getColumn() + 2) < 9) {
             //save this position
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() + 2);
 
@@ -67,7 +67,7 @@ public class Knight {
         }
 
         //up 2 left 1
-        if ((startPosition.getRow() + 2) < 8 || (startPosition.getColumn() - 1) >= 0) {
+        if ((startPosition.getRow() + 2) < 9 && (startPosition.getColumn() - 1) >= 1) {
             //save this position
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 2, startPosition.getColumn() - 1);
 
@@ -94,7 +94,7 @@ public class Knight {
 
 
         // left 2 up 1
-        if ((startPosition.getRow() + 1) < 8 || (startPosition.getColumn() - 2) >= 0) {
+        if ((startPosition.getRow() + 1) < 9 && (startPosition.getColumn() - 2) >= 1) {
             //save this position
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1 , startPosition.getColumn() -2);
 
@@ -119,7 +119,7 @@ public class Knight {
         }
 //////////////////////////
         // left 2 down 1
-        if ((startPosition.getRow() - 1) >= 0 || (startPosition.getColumn() - 2) >= 0) {
+        if ((startPosition.getRow() - 1) >= 1 && (startPosition.getColumn() - 2) >= 1) {
 
             //save this position
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn() - 2);
@@ -147,7 +147,7 @@ public class Knight {
 
 
         //down 2 left 1
-        if ((startPosition.getRow() - 2 ) >= 0 || (startPosition.getColumn() - 1) >= 0) {
+        if ((startPosition.getRow() - 2 ) >= 1 && (startPosition.getColumn() - 1) >= 1) {
             //save this position
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() - 2, startPosition.getColumn() - 1);
 
@@ -172,7 +172,7 @@ public class Knight {
         }
 
         //down 2 right 1
-        if ((startPosition.getRow() - 2) >= 0 || (startPosition.getColumn() + 1) < 8) {
+        if ((startPosition.getRow() - 2) >= 1 && (startPosition.getColumn() + 1) < 9) {
             //save this position
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() - 2, startPosition.getColumn() + 1);
 
@@ -199,7 +199,7 @@ public class Knight {
 
 
         // right 2 down 1
-        if ((startPosition.getRow() - 1) >= 0 || (startPosition.getColumn() + 2) < 8) {
+        if ((startPosition.getRow() - 1) >= 1 && (startPosition.getColumn() + 2) < 9) {
             //save this position
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() -1 , startPosition.getColumn() + 2);
 
