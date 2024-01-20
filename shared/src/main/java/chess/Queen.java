@@ -13,9 +13,9 @@ public class Queen {
     public Collection<ChessMove> allMoves(ChessBoard board, ChessPosition startPosition) {
         ArrayList<ChessMove> moves = new ArrayList<>();
 
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
             //up
-            if ((startPosition.getRow() + i) < 8) {
+            if ((startPosition.getRow() + i) < 9) {
 
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() + i, startPosition.getColumn());
@@ -46,11 +46,11 @@ public class Queen {
         }
 
 
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
             // right
-            if ((startPosition.getColumn() + i) < 8) {
+            if ((startPosition.getColumn() + i) < 9) {
                 //save this position
-                ChessPosition endPosition = new ChessPosition(startPosition.getRow() - i, startPosition.getColumn() + i);
+                ChessPosition endPosition = new ChessPosition(startPosition.getRow(), startPosition.getColumn() + i);
 
                 // if there is on piece here
                 if ((board.getPiece(endPosition) == null)) {
@@ -77,9 +77,9 @@ public class Queen {
             }
         }
 
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
             //left
-            if ((startPosition.getColumn() - i) >= 0) {
+            if ((startPosition.getColumn() - i) >= 1) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() , startPosition.getColumn() - i);
 
@@ -109,9 +109,9 @@ public class Queen {
                 break;
             }
         }
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
             // down
-            if ((startPosition.getRow() - i) >= 0) {
+            if ((startPosition.getRow() - i) >= 1) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() - i, startPosition.getColumn() );
 
@@ -143,9 +143,9 @@ public class Queen {
         }
 
 
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
             //up right
-            if ((startPosition.getRow() + i) < 8 || (startPosition.getColumn() - i) < 8) {
+            if ((startPosition.getRow() + i) < 9 && (startPosition.getColumn() + i) < 9) {
 
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() + i, startPosition.getColumn() + i);
@@ -178,9 +178,9 @@ public class Queen {
         }
 
 
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
             //down right
-            if ((startPosition.getRow() - i) >= 0 || (startPosition.getColumn() + i) < 8) {
+            if ((startPosition.getRow() - i) >= 1 && (startPosition.getColumn() + i) < 9) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() - i, startPosition.getColumn() + i);
 
@@ -209,9 +209,9 @@ public class Queen {
                 break;
             }
         }
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
             // up left
-            if ((startPosition.getRow() + i) < 8 || (startPosition.getColumn() - i) >= 0) {
+            if ((startPosition.getRow() + i) < 9 && (startPosition.getColumn() - i) >= 1) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() + i, startPosition.getColumn() - i);
 
@@ -241,9 +241,9 @@ public class Queen {
                 break;
             }
         }
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 9; i++) {
             // down left
-            if ((startPosition.getRow() - i) >= 0 || (startPosition.getColumn() - i) >= 0) {
+            if ((startPosition.getRow() - i) >= 1 && (startPosition.getColumn() - i) >= 1) {
                 //save this position
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() - i, startPosition.getColumn() - i);
 
