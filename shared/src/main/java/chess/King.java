@@ -172,7 +172,7 @@ public class King {
         }
 
         // up left
-        if ((startPosition.getRow() + 1) < 9 && (startPosition.getColumn() - 1) >= 9) {
+        if ((startPosition.getRow() + 1) < 9 && (startPosition.getColumn() - 1) >= 0) {
             //save this position
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1 , startPosition.getColumn() - 1);
 

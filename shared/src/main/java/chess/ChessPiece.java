@@ -75,10 +75,10 @@ public class ChessPiece {
                 Rook rook = new Rook(this.pieceColor);
                 moves = rook.allMoves(board, myPosition);
                 break;
-            // case PAWN:
-            //     Pawn pawn = new Pawn(this.pieceColor);
-            //     moves = pawn.allMoves(board, myPosition);
-            //     break;
+             case PAWN:
+                 Pawn pawn = new Pawn(this.pieceColor);
+                 moves = pawn.allMoves(board, myPosition);
+                 break;
         }
 
         return moves;
