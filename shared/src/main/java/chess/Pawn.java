@@ -9,7 +9,13 @@ public class Pawn {
         this.teamColor = teamcolor;
     }
 
-    public Collection<ChessMove> allMoves(ChessBoard board, ChessPosition startPosition) {
+    /**
+     * find all the moves this Pawn can make. Pawn goes forward but does not take forward, only diagnol. remember start and promotion.
+     *
+     * @param board and the start position
+     * @return an array of the valid moves
+     */
+    public Collection<ChessMove> finalMoves(ChessBoard board, ChessPosition startPosition) {
         ArrayList<ChessMove> moves = new ArrayList<>();
 
         //team white

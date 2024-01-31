@@ -1,232 +1,42 @@
 package chess;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 public class King {
-    private ChessGame.TeamColor teamColor;
 
-    public King(ChessGame.TeamColor teamcolor){
-        this.teamColor = teamcolor;
+    private ChessGame.TeamColor color;
+    public King(ChessGame.TeamColor color) {
+        this.color = color;
     }
 
-    public Collection<ChessMove> allMoves(ChessBoard board, ChessPosition startPosition) {
-        ArrayList<ChessMove> moves = new ArrayList<>();
-
-            //up
-            if ((startPosition.getRow() + 1) < 9) {
-
-                //save this position
-                ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() );
-
-                // if there is on piece here
-                if ((board.getPiece(endPosition) == null)) {
-
-                    //add the piece to the array.   am I adding it in the right way?
-                    moves.add(new ChessMove(startPosition, endPosition, null));
-                }
-
-                // not null
-                else {
-                    //chess piece that is in the way
-                    ChessPiece blocked = board.getPiece(endPosition);
-
-                    //take opponents piece
-                    if (blocked.getTeamColor() != teamColor) {
-                        moves.add(new ChessMove(startPosition, endPosition, null));
-                    }
-
-                }
-
-            }
-
-
-            //down
-            if ((startPosition.getRow() - 1) >= 1 ) {
-                //save this position
-                ChessPosition endPosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn());
-
-                // if there is on piece here
-                if ((board.getPiece(endPosition) == null)) {
-
-                    //add the piece to the array.   am I adding it in the right way?
-                    moves.add(new ChessMove(startPosition, endPosition, null));
-                }
-
-                // not null
-                else {
-                    //chess piece that is in the way
-                    ChessPiece blocked = board.getPiece(endPosition);
-
-                    //take opponents piece
-                    if (blocked.getTeamColor() != teamColor) {
-                        moves.add(new ChessMove(startPosition, endPosition, null));
-                    }
-
-                }
-            }
-
-            //left
-            if ((startPosition.getColumn() - 1) >= 1) {
-                //save this position
-                ChessPosition endPosition = new ChessPosition(startPosition.getRow() , startPosition.getColumn() - 1);
-
-                // if there is on piece here
-                if ((board.getPiece(endPosition) == null)) {
-
-                    //add the piece to the array.   am I adding it in the right way?
-                    moves.add(new ChessMove(startPosition, endPosition, null));
-                }
-
-                // not null
-                else {
-                    //chess piece that is in the way
-                    ChessPiece blocked = board.getPiece(endPosition);
-
-                    //take opponents piece
-                    if (blocked.getTeamColor() != teamColor) {
-                        moves.add(new ChessMove(startPosition, endPosition, null));
-                    }
-
-                }
-
-            }
-
-
-            // right
-            if ((startPosition.getColumn() + 1) < 9) {
-                //save this position
-                ChessPosition endPosition = new ChessPosition(startPosition.getRow() , startPosition.getColumn() + 1);
-
-                // if there is on piece here
-                if ((board.getPiece(endPosition) == null)) {
-
-                    //add the piece to the array.   am I adding it in the right way?
-                    moves.add(new ChessMove(startPosition, endPosition, null));
-                }
-
-                // not null
-                else {
-                    //chess piece that is in the way
-                    ChessPiece blocked = board.getPiece(endPosition);
-
-                    //take opponents piece
-                    if (blocked.getTeamColor() != teamColor) {
-                        moves.add(new ChessMove(startPosition, endPosition, null));
-                    }
-                }
-
-            }
-////
-        //up right
-        if ((startPosition.getRow() + 1) < 9 && (startPosition.getColumn() + 1) < 9) {
-
-            //save this position
-            ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() + 1 );
-
-            // if there is on piece here
-            if ((board.getPiece(endPosition) == null)) {
-
-                //add the piece to the array.   am I adding it in the right way?
-                moves.add(new ChessMove(startPosition, endPosition, null));
-            }
-
-            // not null
-            else {
-                //chess piece that is in the way
-                ChessPiece blocked = board.getPiece(endPosition);
-
-                //take opponents piece
-                if (blocked.getTeamColor() != teamColor) {
-                    moves.add(new ChessMove(startPosition, endPosition, null));
-                }
-
-            }
-
+    public Collection<ChessMove> finalMoves(ChessBoard board, ChessPosition myPosition) {
+        Collection<ChessMove> moves = new HashSet<>();
+        MovesToMake movemade = new MovesToMake(color);
+        if (movemade.oneMove(board, myPosition, 1, 1) != null) {
+            moves.add((movemade.oneMove(board, myPosition, 1, 1)));
         }
-
-
-        //down right
-        if ((startPosition.getRow() - 1) >= 0 && (startPosition.getColumn() + 1) < 9) {
-            //save this position
-            ChessPosition endPosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn() + 1);
-
-            // if there is on piece here
-            if ((board.getPiece(endPosition) == null)) {
-
-                //add the piece to the array.   am I adding it in the right way?
-                moves.add(new ChessMove(startPosition, endPosition, null));
-            }
-
-            // not null
-            else {
-                //chess piece that is in the way
-                ChessPiece blocked = board.getPiece(endPosition);
-
-                //take opponents piece
-                if (blocked.getTeamColor() != teamColor) {
-                    moves.add(new ChessMove(startPosition, endPosition, null));
-                }
-
-            }
+        if (movemade.oneMove(board, myPosition, -1, -1) != null) {
+            moves.add((movemade.oneMove(board, myPosition, -1, -1)));
         }
-
-        // up left
-        if ((startPosition.getRow() + 1) < 9 && (startPosition.getColumn() - 1) >= 0) {
-            //save this position
-            ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1 , startPosition.getColumn() - 1);
-
-            // if there is on piece here
-            if ((board.getPiece(endPosition) == null)) {
-
-                //add the piece to the array.   am I adding it in the right way?
-                moves.add(new ChessMove(startPosition, endPosition, null));
-            }
-
-            // not null
-            else {
-                //chess piece that is in the way
-                ChessPiece blocked = board.getPiece(endPosition);
-
-                //take opponents piece
-                if (blocked.getTeamColor() != teamColor) {
-                    moves.add(new ChessMove(startPosition, endPosition, null));
-                }
-
-            }
-
+        if (movemade.oneMove(board, myPosition, 1, -1) != null) {
+            moves.add((movemade.oneMove(board, myPosition, 1, -1)));
         }
-
-
-        // down left
-        if ((startPosition.getRow() - 1) >= 0 && (startPosition.getColumn() - 1) >= 0) {
-            //save this position
-            ChessPosition endPosition = new ChessPosition(startPosition.getRow() - 1 , startPosition.getColumn() - 1);
-
-            // if there is on piece here
-            if ((board.getPiece(endPosition) == null)) {
-
-                //add the piece to the array.   am I adding it in the right way?
-                moves.add(new ChessMove(startPosition, endPosition, null));
-            }
-
-            // not null
-            else {
-                //chess piece that is in the way
-                ChessPiece blocked = board.getPiece(endPosition);
-
-                //take opponents piece
-                if (blocked.getTeamColor() != teamColor) {
-                    moves.add(new ChessMove(startPosition, endPosition, null));
-                }
-            }
-
+        if (movemade.oneMove(board, myPosition, -1, 1) != null) {
+            moves.add((movemade.oneMove(board, myPosition, -1, 1)));
         }
-
-
-        // is this the right thing to return??
+        if (movemade.oneMove(board, myPosition, 0, 1) != null) {
+            moves.add((movemade.oneMove(board, myPosition, 0, 1)));
+        }
+        if (movemade.oneMove(board, myPosition, 0, -1) != null) {
+            moves.add((movemade.oneMove(board, myPosition, 0, -1)));
+        }
+        if (movemade.oneMove(board, myPosition, 1, 0) != null) {
+            moves.add((movemade.oneMove(board, myPosition, 1, 0)));
+        }
+        if (movemade.oneMove(board, myPosition, -1, 0) != null) {
+            moves.add((movemade.oneMove(board, myPosition, -1, 0)));
+        }
         return moves;
     }
 }
-
-
