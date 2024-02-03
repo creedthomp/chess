@@ -53,7 +53,17 @@ public class ChessGame {
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         if (board.getPiece(startPosition) != null) {
             ChessPiece thisPiece = board.getPiece(startPosition);
-           return thisPiece.pieceMoves(this.board, startPosition);
+           Collection<ChessMove> possibleMoves = thisPiece.pieceMoves(this.board, startPosition);
+            Collection<ChessMove> opMoves = opponentsMoves(board, turn);
+           for (ChessMove move : possibleMoves) {
+               // if it is a king and this move puts it in check then remove that move
+               if (thisPiece.getPieceType() == ChessPiece.PieceType.KING) {
+                   if (willBeInCheck(turn, move.getEndPosition())){
+                       possibleMoves.remove(move);
+                   }
+               }
+               // now check if a piece moves and that puts the king in check
+           }
 
         }
         else {return null;}
@@ -82,21 +92,20 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         if (turn == TeamColor.WHITE){
-            Collection<ChessMove> opMoves = opponentsMoves(board, teamColor, 1, 1);
-            ChessPosition kingSpot = myKingPosition(board, teamColor, 1, 1);
+            Collection<ChessMove> opMoves = opponentsMoves(board, teamColor);
+            ChessPosition kingSpot = myKingPosition(board, teamColor);
             // now go through all of the ending positions of the opMoves and se if any of them match the kings current pos
             for (ChessMove move : opMoves) {
-                if (move.getEndPosition() == kingSpot) {
+                if (move.getEndPosition().equals(kingSpot)) {
                     return true;
                 }
             }
         }
         else {
-            // increment opMoves by -1. starting row 8
-            Collection<ChessMove> opMoves = opponentsMoves(board, teamColor, -1, 8);
-            ChessPosition kingSpot = myKingPosition(board, teamColor, -1, 8);
+            Collection<ChessMove> opMoves = opponentsMoves(board, teamColor);
+            ChessPosition kingSpot = myKingPosition(board, teamColor);
             for (ChessMove move : opMoves) {
-                if (move.getEndPosition() == kingSpot) {
+                if (move.getEndPosition().equals(kingSpot)) {
                     return true;
                 }
             }
@@ -145,34 +154,62 @@ public class ChessGame {
     }
 
 
-    public Collection<ChessMove> opponentsMoves(ChessBoard board, TeamColor Color, int rowincrement, int startingrow) {
+    public Collection<ChessMove> opponentsMoves(ChessBoard board, TeamColor Color) {
         Collection<ChessMove> opMoves = new HashSet<>();
         //gather all opponents moves
         for (int i = 1; i < 9; i++) {
-            ChessPosition currentposition = new ChessPosition(startingrow, i);
-            // if the piece there is the opponents
-            // do I need to make sure it is in bounds?? probably not
-            if (board.getPiece(currentposition) != null && board.getPiece(currentposition).getTeamColor() != Color) {
-                ChessPiece piece = board.getPiece(currentposition);
-                // add ALL the moves of that piece to the set
-                opMoves.addAll(piece.pieceMoves(board, currentposition));
+            for (int j = 1; j < 9; j++) {
+                ChessPosition currentposition = new ChessPosition(i, j);
+                // if the piece there is the opponents
+                // do I need to make sure it is in bounds?? probably not
+                if (board.getPiece(currentposition) != null && board.getPiece(currentposition).getTeamColor() != Color) {
+                    ChessPiece piece = board.getPiece(currentposition);
+                    // add ALL the moves of that piece to the set
+                    opMoves.addAll(piece.pieceMoves(board, currentposition));
+                }
             }
-            startingrow += rowincrement;
         }
         return opMoves;
     }
 
-    public ChessPosition myKingPosition(ChessBoard board, TeamColor Color, int rowincrement, int startingrow) {
+    public ChessPosition myKingPosition(ChessBoard board, TeamColor Color) {
         for (int i = 1; i < 9; i++) {
-            ChessPosition currentposition = new ChessPosition(startingrow, i);
-            // do I have to seperate these ifs so I dont check if a null has a color
-            if (board.getPiece(currentposition) != null && board.getPiece(currentposition).getTeamColor() == Color && board.getPiece(currentposition).getPieceType() == ChessPiece.PieceType.KING) {
-                return currentposition;
+            for (int j = 1; j < 9; j++) {
+                ChessPosition currentposition = new ChessPosition(i, j);
+                // do I have to seperate these ifs so I dont check if a null has a color
+                if (board.getPiece(currentposition) != null && board.getPiece(currentposition).getTeamColor() == Color && board.getPiece(currentposition).getPieceType() == ChessPiece.PieceType.KING) {
+                    return currentposition;
+                }
+                // this should never happen
             }
-            // this should never happen
-            else {return null;}
         }
         return null;
+    }
+
+    public boolean willBeInCheck(TeamColor teamColor, ChessPosition thisPosition) {
+        if (turn == TeamColor.WHITE){
+            Collection<ChessMove> opMoves = opponentsMoves(board, teamColor);
+            // now go through all of the ending positions of the opMoves and se if any of them match the kings current pos
+            for (ChessMove move : opMoves) {
+                if (move.getEndPosition().equals(thisPosition)) {
+                    return true;
+                }
+            }
+        }
+        else {
+            Collection<ChessMove> opMoves = opponentsMoves(board, teamColor);
+            for (ChessMove move : opMoves) {
+                if (move.getEndPosition().equals(thisPosition)) {
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
+    public boolean willMakeInCheck(ChessBoard board, ChessMove move) {
+        // clone the board
     }
 
     @Override
