@@ -55,7 +55,6 @@ public class ChessGame {
         if (board.getPiece(startPosition) != null) {
             ChessPiece thisPiece = board.getPiece(startPosition);
            Collection<ChessMove> possibleMoves = thisPiece.pieceMoves(this.board, startPosition);
-            //Collection<ChessMove> opMoves = opponentsMoves(board, turn);
             Iterator<ChessMove> iterator = possibleMoves.iterator();
             while (iterator.hasNext()) {
                 ChessBoard newboard = cloneBoard(board);
@@ -83,11 +82,30 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         // do I need to do something about the invalid move exception??
+        ChessPosition start = move.getStartPosition();
+        Collection<ChessMove> validMoves = validMoves(start);
+        if (validMoves == null) {
+            throw new InvalidMoveException();
+        }
+        if ((!(validMoves.contains(move)))) {
+            throw new InvalidMoveException();
+        }
+
+        ChessBoard newboard = cloneBoard(board);
         ChessPiece thisPiece = board.getPiece(move.getStartPosition());
         // add the piece
-        board.addPiece(move.getEndPosition(), thisPiece);
-        // this will remove the piece we just moved from its former position
-        board.addPiece(move.getStartPosition(), null);
+        if (thisPiece.getPieceType() == ChessPiece.PieceType.PAWN) {
+            if (move.getPromotionPiece() != null) {
+                board.addPiece(move.getEndPosition(), new ChessPiece(turn, move.getPromotionPiece()));
+                board.addPiece(move.getStartPosition(), null);
+            }
+        }
+        else {
+            board.addPiece(move.getEndPosition(), thisPiece);
+            // this will remove the piece we just moved from its former position
+            board.addPiece(move.getStartPosition(), null);
+        }
+
     }
 
     /**
