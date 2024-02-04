@@ -61,16 +61,11 @@ public class ChessGame {
                 ChessBoard newboard = cloneBoard(board);
                 ChessMove move = iterator.next();
 
-               if (thisPiece.getPieceType() == ChessPiece.PieceType.KING) {
-                   if (willBeInCheck(turn, move.getEndPosition())){
-                       iterator.remove();
-                   }
-               }
                // now check if a piece moves and that puts the king in check
                board.addPiece(move.getEndPosition(), thisPiece);
                board.addPiece(move.getStartPosition(), null);
                // I can make the move on this board and then set the board back to the copy I made bc thats how it was originally
-               if (isInCheck(turn)) {
+               if (isInCheck(thisPiece.getTeamColor())) {
                    iterator.remove();
                }
                board = newboard;
@@ -197,27 +192,6 @@ public class ChessGame {
         return null;
     }
 
-    public boolean willBeInCheck(TeamColor teamColor, ChessPosition thisPosition) {
-        if (turn == TeamColor.WHITE){
-            Collection<ChessMove> opMoves = opponentsMoves(board, teamColor);
-            // now go through all of the ending positions of the opMoves and se if any of them match the kings current pos
-            for (ChessMove move : opMoves) {
-                if (move.getEndPosition().equals(thisPosition)) {
-                    return true;
-                }
-            }
-        }
-        else {
-            Collection<ChessMove> opMoves = opponentsMoves(board, teamColor);
-            for (ChessMove move : opMoves) {
-                if (move.getEndPosition().equals(thisPosition)) {
-                    return true;
-                }
-            }
-
-        }
-        return false;
-    }
 
     public ChessBoard cloneBoard(ChessBoard board) {
         // clone the board
