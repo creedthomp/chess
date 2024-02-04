@@ -51,20 +51,31 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
+        //ChessBoard newboard = cloneBoard(board);
         if (board.getPiece(startPosition) != null) {
             ChessPiece thisPiece = board.getPiece(startPosition);
            Collection<ChessMove> possibleMoves = thisPiece.pieceMoves(this.board, startPosition);
-            Collection<ChessMove> opMoves = opponentsMoves(board, turn);
-           for (ChessMove move : possibleMoves) {
-               // if it is a king and this move puts it in check then remove that move
+            //Collection<ChessMove> opMoves = opponentsMoves(board, turn);
+            Iterator<ChessMove> iterator = possibleMoves.iterator();
+            while (iterator.hasNext()) {
+                ChessBoard newboard = cloneBoard(board);
+                ChessMove move = iterator.next();
+
                if (thisPiece.getPieceType() == ChessPiece.PieceType.KING) {
                    if (willBeInCheck(turn, move.getEndPosition())){
-                       possibleMoves.remove(move);
+                       iterator.remove();
                    }
                }
                // now check if a piece moves and that puts the king in check
+               board.addPiece(move.getEndPosition(), thisPiece);
+               board.addPiece(move.getStartPosition(), null);
+               // I can make the move on this board and then set the board back to the copy I made bc thats how it was originally
+               if (isInCheck(turn)) {
+                   iterator.remove();
+               }
+               board = newboard;
            }
-
+            return possibleMoves;
         }
         else {return null;}
     }
@@ -208,8 +219,19 @@ public class ChessGame {
         return false;
     }
 
-    public boolean willMakeInCheck(ChessBoard board, ChessMove move) {
+    public ChessBoard cloneBoard(ChessBoard board) {
         // clone the board
+        ChessBoard newboard = new ChessBoard();
+
+        for (int i = 1; i < 9; i++) {
+            for (int j = 1; j < 9; j++) {
+                ChessPosition spot = new ChessPosition(j, i);
+                if (board.getPiece(spot) != null) {
+                    newboard.addPiece(spot, board.getPiece(spot));
+                }
+            }
+        }
+        return newboard;
     }
 
     @Override
