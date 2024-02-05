@@ -84,26 +84,50 @@ public class ChessGame {
         // do I need to do something about the invalid move exception??
         ChessPosition start = move.getStartPosition();
         Collection<ChessMove> validMoves = validMoves(start);
+
         if (validMoves == null) {
             throw new InvalidMoveException();
         }
-        if ((!(validMoves.contains(move)))) {
+        if (board.getPiece(move.getStartPosition()).getTeamColor() != turn) {
+            throw new InvalidMoveException();
+        }
+        // if the move is valid
+        if (((validMoves.contains(move)))) {
+            ChessBoard newboard = cloneBoard(board);
+            ChessPiece thisPiece = board.getPiece(move.getStartPosition());
+            // add the piece
+            if (thisPiece.getPieceType() == ChessPiece.PieceType.PAWN) {
+                if (move.getPromotionPiece() != null) {
+                    board.addPiece(move.getEndPosition(), new ChessPiece(turn, move.getPromotionPiece()));
+                    board.addPiece(move.getStartPosition(), null);
+                }
+                else {
+                    board.addPiece(move.getEndPosition(), thisPiece);
+                    // this will remove the piece we just moved from its former position
+                    board.addPiece(move.getStartPosition(), null);
+                }
+
+            }
+            else {
+                board.addPiece(move.getEndPosition(), thisPiece);
+                // this will remove the piece we just moved from its former position
+                board.addPiece(move.getStartPosition(), null);
+            }
+
+            if (!((validMoves.contains(move)))) {
+                throw new InvalidMoveException();
+            }
+
+        }
+
+        if (!((validMoves.contains(move)))) {
             throw new InvalidMoveException();
         }
 
-        ChessBoard newboard = cloneBoard(board);
-        ChessPiece thisPiece = board.getPiece(move.getStartPosition());
-        // add the piece
-        if (thisPiece.getPieceType() == ChessPiece.PieceType.PAWN) {
-            if (move.getPromotionPiece() != null) {
-                board.addPiece(move.getEndPosition(), new ChessPiece(turn, move.getPromotionPiece()));
-                board.addPiece(move.getStartPosition(), null);
-            }
-        }
-        else {
-            board.addPiece(move.getEndPosition(), thisPiece);
-            // this will remove the piece we just moved from its former position
-            board.addPiece(move.getStartPosition(), null);
+        if (turn == TeamColor.WHITE) {
+            setTeamTurn(TeamColor.BLACK);
+        } else {
+            setTeamTurn(TeamColor.WHITE);
         }
 
     }
@@ -145,7 +169,7 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+
     }
 
     /**
@@ -156,7 +180,29 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        ChessPosition kingPosition = myKingPosition(board, teamColor);
+        Collection<ChessMove> moves = validMoves(kingPosition);
+
+        if (moves.isEmpty()) {
+            if (!isInCheck(teamColor)) {
+                if (teamColor == TeamColor.BLACK) {
+                    TeamColor opColor = TeamColor.WHITE;
+                    Collection<ChessMove> allMymoves = opponentsMoves(board, opColor);
+                    if (allMymoves.isEmpty()) {
+                        return true;
+                    }
+                }
+                else {
+                    TeamColor opColor = TeamColor.BLACK;
+                    Collection<ChessMove> allMymoves = opponentsMoves(board, opColor);
+                    if (allMymoves.isEmpty()) {
+                        return true;
+                    }
+                }
+
+            }
+        }
+        return false;
     }
 
     /**
