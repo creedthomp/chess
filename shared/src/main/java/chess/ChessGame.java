@@ -169,7 +169,14 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-
+        ChessPosition kingPosition = myKingPosition(board, teamColor);
+        Collection<ChessMove> moves = validMoves(kingPosition);
+        if (moves.isEmpty()) {
+            if (isInCheck(teamColor)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
