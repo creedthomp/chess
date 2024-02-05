@@ -192,20 +192,21 @@ public class ChessGame {
 
         if (moves.isEmpty()) {
             if (!isInCheck(teamColor)) {
-                if (teamColor == TeamColor.BLACK) {
-                    TeamColor opColor = TeamColor.WHITE;
-                    Collection<ChessMove> allMymoves = opponentsMoves(board, opColor);
-                    if (allMymoves.isEmpty()) {
-                        return true;
-                    }
-                }
-                else {
-                    TeamColor opColor = TeamColor.BLACK;
-                    Collection<ChessMove> allMymoves = opponentsMoves(board, opColor);
-                    if (allMymoves.isEmpty()) {
-                        return true;
-                    }
-                }
+                return true;
+//                if (teamColor == TeamColor.BLACK) {
+//                    TeamColor opColor = TeamColor.WHITE;
+//                    Collection<ChessMove> allMymoves = opponentsMoves(board, opColor);
+//                    if (allMymoves.isEmpty()) {
+//                        return true;
+//                    }
+//                }
+//                else {
+//                    TeamColor opColor = TeamColor.BLACK;
+//                    Collection<ChessMove> allMymoves = opponentsMoves(board, opColor);
+//                    if (allMymoves.isEmpty()) {
+//                        return true;
+//                    }
+//                }
 
             }
         }
