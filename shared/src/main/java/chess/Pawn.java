@@ -20,10 +20,19 @@ public class Pawn {
 
         //team white
         if (teamColor == ChessGame.TeamColor.WHITE) {
-            ChessPosition leftTakePosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() - 1);
-            ChessPosition rightTakePosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() + 1);
-            ChessPiece left = board.getPiece(leftTakePosition);
-            ChessPiece right = board.getPiece(rightTakePosition);
+            if (startPosition.getRow() + 1 < 9 && startPosition.getColumn() + 1 < 9) {
+                ChessPosition rightTakePosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() + 1);
+                ChessPiece right = board.getPiece(rightTakePosition);
+            }
+            if ((startPosition.getColumn() - 1) > 0) {
+                ChessPosition leftTakePosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() - 1);
+                ChessPiece left = board.getPiece(leftTakePosition);
+            }
+//            else {
+//            ChessPosition leftTakePosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() - 1);
+//            ChessPosition rightTakePosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() + 1);
+//            ChessPiece left = board.getPiece(leftTakePosition);
+//            ChessPiece right = board.getPiece(rightTakePosition);
             // one spot forward
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn());
             if ((board.getPiece(endPosition) == null)) {
@@ -37,30 +46,38 @@ public class Pawn {
                     moves.add(new ChessMove(startPosition, endPosition, null));
                 }            }
             // take piece left
-            if ((board.getPiece(leftTakePosition) != null)) {
-                if (left.getTeamColor() != teamColor) {
-                    if (endPosition.getRow() == 1) {
-                        moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.QUEEN));
-                        moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.BISHOP));
-                        moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.ROOK));
-                        moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.KNIGHT));
-                    }
-                    else {
-                        moves.add(new ChessMove(startPosition, leftTakePosition, null));
+            if ((startPosition.getColumn() - 1) > 0) {
+                ChessPosition leftTakePosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() - 1);
+                ChessPiece left = board.getPiece(leftTakePosition);
+
+                if ((board.getPiece(leftTakePosition) != null)) {
+                    if (left.getTeamColor() != teamColor) {
+                        if (endPosition.getRow() == 1) {
+                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.QUEEN));
+                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.BISHOP));
+                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.ROOK));
+                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.KNIGHT));
+                        } else {
+                            moves.add(new ChessMove(startPosition, leftTakePosition, null));
+                        }
                     }
                 }
             }
             //take piece right
-            if ((board.getPiece(rightTakePosition) != null)) {
-                if (right.getTeamColor() != teamColor) {
-                    if (endPosition.getRow() == 1) {
-                        moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.QUEEN));
-                        moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.BISHOP));
-                        moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.ROOK));
-                        moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.KNIGHT));
-                    }
-                    else {
-                        moves.add(new ChessMove(startPosition, rightTakePosition, null));
+            if (startPosition.getRow() + 1 < 9 && startPosition.getColumn() + 1 < 9) {
+                ChessPosition rightTakePosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() + 1);
+                ChessPiece right = board.getPiece(rightTakePosition);
+
+                if ((board.getPiece(rightTakePosition) != null)) {
+                    if (right.getTeamColor() != teamColor) {
+                        if (endPosition.getRow() == 1) {
+                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.QUEEN));
+                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.BISHOP));
+                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.ROOK));
+                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.KNIGHT));
+                        } else {
+                            moves.add(new ChessMove(startPosition, rightTakePosition, null));
+                        }
                     }
                 }
             }
@@ -79,10 +96,10 @@ public class Pawn {
 
         // team black
         if (teamColor == ChessGame.TeamColor.BLACK) {
-            ChessPosition leftTakePosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn() - 1);
-            ChessPosition rightTakePosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn() + 1);
-            ChessPiece left = board.getPiece(leftTakePosition);
-            ChessPiece right = board.getPiece(rightTakePosition);
+//            ChessPosition leftTakePosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn() - 1);
+//            ChessPosition rightTakePosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn() + 1);
+//            ChessPiece left = board.getPiece(leftTakePosition);
+//            ChessPiece right = board.getPiece(rightTakePosition);
             // one spot forward
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn());
             if ((board.getPiece(endPosition) == null)) {
@@ -97,30 +114,38 @@ public class Pawn {
                 }
             }
             // take piece left
-            if ((board.getPiece(leftTakePosition) != null)) {
-                if (left.getTeamColor() != teamColor) {
-                    if (endPosition.getRow() == 1) {
-                        moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.QUEEN));
-                        moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.BISHOP));
-                        moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.ROOK));
-                        moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.KNIGHT));
-                    }
-                    else {
-                        moves.add(new ChessMove(startPosition, leftTakePosition, null));
+            if ((startPosition.getColumn() - 1) > 0 && (startPosition.getRow() -1) > 0) {
+                ChessPosition leftTakePosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn() - 1);
+                ChessPiece left = board.getPiece(leftTakePosition);
+
+                if ((board.getPiece(leftTakePosition) != null)) {
+                    if (left.getTeamColor() != teamColor) {
+                        if (endPosition.getRow() == 1) {
+                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.QUEEN));
+                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.BISHOP));
+                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.ROOK));
+                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.KNIGHT));
+                        } else {
+                            moves.add(new ChessMove(startPosition, leftTakePosition, null));
+                        }
                     }
                 }
             }
             //take piece right
-            if ((board.getPiece(rightTakePosition) != null)) {
-                if (right.getTeamColor() != teamColor) {
-                    if (endPosition.getRow() == 1) {
-                        moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.QUEEN));
-                        moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.BISHOP));
-                        moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.ROOK));
-                        moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.KNIGHT));
-                    }
-                    else {
-                        moves.add(new ChessMove(startPosition, rightTakePosition, null));
+            if ((startPosition.getRow() - 1) > 0 && (startPosition.getColumn() + 1) < 9) {
+                ChessPosition rightTakePosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn() + 1);
+                ChessPiece right = board.getPiece(rightTakePosition);
+
+                if ((board.getPiece(rightTakePosition) != null)) {
+                    if (right.getTeamColor() != teamColor) {
+                        if (endPosition.getRow() == 1) {
+                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.QUEEN));
+                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.BISHOP));
+                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.ROOK));
+                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.KNIGHT));
+                        } else {
+                            moves.add(new ChessMove(startPosition, rightTakePosition, null));
+                        }
                     }
                 }
             }
