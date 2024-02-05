@@ -189,24 +189,12 @@ public class ChessGame {
     public boolean isInStalemate(TeamColor teamColor) {
         ChessPosition kingPosition = myKingPosition(board, teamColor);
         Collection<ChessMove> moves = validMoves(kingPosition);
-
+        ChessPiece king = board.getPiece(kingPosition);
         if (moves.isEmpty()) {
             if (!isInCheck(teamColor)) {
-                return true;
-//                if (teamColor == TeamColor.BLACK) {
-//                    TeamColor opColor = TeamColor.WHITE;
-//                    Collection<ChessMove> allMymoves = opponentsMoves(board, opColor);
-//                    if (allMymoves.isEmpty()) {
-//                        return true;
-//                    }
-//                }
-//                else {
-//                    TeamColor opColor = TeamColor.BLACK;
-//                    Collection<ChessMove> allMymoves = opponentsMoves(board, opColor);
-//                    if (allMymoves.isEmpty()) {
-//                        return true;
-//                    }
-//                }
+                if (!(king.pieceMoves(board, kingPosition).isEmpty())) {
+                    return true;
+                }
 
             }
         }
