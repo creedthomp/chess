@@ -1,0 +1,134 @@
+
+
+actor Client
+participant Server
+box over Server:RegistrationHandler
+box over Service:RegisterService
+participant Service
+
+participant DataAccess
+database db
+
+group #navy Registration #white
+Client -> Server: [POST] /user\n{username, password, email}
+Server -> Service: register(username, password, email)
+Service -> DataAccess: getUser(username)
+DataAccess -> db: SELECT username from user
+DataAccess-->Service:null
+Service -> DataAccess: createUser(username, password)
+DataAccess -> db: INSERT username, password, email INTO user
+Service -> DataAccess: createAuth(username)
+DataAccess -> db: INSERT username, authToken INTO auth
+DataAccess --> Service: authToken
+Service --> Server: authToken
+Server --> Client: 200\n{authToken}
+end
+
+
+
+box over Server:LoginHandler
+box over Service:LoginService
+box over DataAccess:UserDAO
+group #orange Login #white
+Client -> Server: [POST] /session\n{username, password}
+Server -> Service: login(username, password)
+Service -> DataAccess: loginUser(username)
+DataAccess -> db: SELECT username from user
+
+Service -> DataAccess: createAuth(username)
+DataAccess -> db: INSERT username, authToken INTO auth
+DataAccess --> Service: username, authToken
+Service --> Server: username, authToken
+Server --> Client: username, authToken
+end
+
+box over Server:LogoutHandler
+box over Service:LogoutService
+box over DataAccess:UserDAO
+group #green Logout #white
+Client -> Server: [DELETE] /session\nauthToken
+Server -> Service: deleteAuth(authToken)
+Service -> DataAccess: deleteAuth(authToken) 
+DataAccess -> db: DELETE authToken from auth
+DataAccess --> Service: Success [200]
+Service --> Server:Success [200]
+Server --> Client: Success [200]
+
+end
+
+box over Server:ListGamesHandler
+box over Service:ListGamesService
+box over DataAccess:AuthDAO
+box over DataAccess:GameDAO
+group #red List Games #white
+Client -> Server: [GET] /game\nauthToken
+
+
+
+Server -> Service: listGames()
+Service -> DataAccess: verifyToken()
+
+DataAccess -> db: SELECT authToken from auth
+
+DataAccess --> Service: verified
+
+Service -> DataAccess: getAllGames()
+DataAccess -> db: GET games from game 
+DataAccess --> Service: gameID, whiteUsername, blackUsername, gameName
+Service -->Server: gameID, whiteUsername, blackUsername, gameName
+Server -->Client: gameID, whiteUsername, blackUsername, gameName
+end
+
+
+box over Server:CreateGameHandler
+box over Service:CreateGameService
+box over DataAccess:AuthDAO
+box over DataAccess:GameDAO
+group #purple Create Game #white
+Client -> Server: [POST] /game\nauthToken\n{gameName}
+
+Server -> Service: createGame(gameName)
+Service -> DataAccess: verifyToken()
+DataAccess -> db: SELECT authToken from auth
+DataAccess --> Service: verified
+Service -> DataAccess: createGame(gameName)
+DataAccess -> db: SELECT game from game
+DataAccess --> Service: gameID
+Service -->Server: gameID
+Server-->Client: gameID
+end
+
+
+box over Server:JoinGameHandler
+box over Service:JoinGameService
+box over DataAccess:AuthDAO
+box over DataAccess:GameDAO
+group #yellow Join Game #black
+Client -> Server: [PUT] /game\nauthToken\n{ClientColor, gameID}
+
+Server ->Service: joinGame(ClientColor, gameID)
+Service -> DataAccess: verifyToken()
+DataAccess -> db: SELECT authToken from auth
+DataAccess --> Service: verified
+Service ->DataAccess: joinGame(ClientColor, gameID)
+DataAccess -> db: SELECT ClientColor from game
+DataAccess -> db: SELECT GameID from game
+DataAccess --> Service: Success [200]
+Service --> Server:Success [200]
+Server --> Client: Success [200]
+end
+
+box over Server:ClearHandler
+box over Service:ClearService
+box over DataAccess:AuthDAO
+box over DataAccess:GameDAO
+box over DataAccess:UserDAO
+group #gray Clear application #white
+Client -> Server: [DELETE] /db
+Server -> Service: clear()
+Service -> DataAccess: clear() 
+DataAccess -> db: DELETE auth
+DataAccess -> db: DELETE user
+DataAccess -> db: DELETE game
+
+end
