@@ -6,7 +6,8 @@ public class RegisterRequest {
     String email;
 
     // constructor. Do I need anything in the constructor?
-    public RegisterRequest() {}
+    public RegisterRequest() {
+    }
     public String getUsername() {
         return username;
     }

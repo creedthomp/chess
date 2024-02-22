@@ -1,15 +1,7 @@
 package dataAccess;
 
 public class AuthDAO {
-    boolean authorize() {
+     AuthDAO() {
 
     }
-
-
-
-}
-
-AuthToken createAuth(username) {
-
-}
 }
