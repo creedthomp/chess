@@ -22,4 +22,8 @@ public interface UserDAO {
     public default boolean findUsername(UserInformation user) throws DataAccessException {
         return false;
     }
+
+    public default boolean loginUser(String username, String password) {
+        return false;
+    }
 }

@@ -19,9 +19,20 @@ public class MemoryUserDAO implements UserDAO{
         return userList.contains(user);
     }
 
+    @Override
     public boolean findUsername(UserInformation user) throws DataAccessException{
         for (UserInformation userinfo : userList) {
             if (userinfo.getUsername().equals(user.getUsername())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean loginUser(String username, String password) {
+        for (UserInformation userinfo : userList) {
+            if ((userinfo.getUsername().equals(username)) && userinfo.getPassword().equals(password)) { // do I need to return different errors if different things happen??
                 return true;
             }
         }

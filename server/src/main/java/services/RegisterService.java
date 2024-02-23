@@ -15,11 +15,11 @@ public class RegisterService {
         UserDAO data = new MemoryUserDAO();
         RegisterResponse registerResponse = new RegisterResponse();
         // if one of the specified fields is blank
-        if ((registerRequest.getUsername().isEmpty()) || (registerRequest.getPassword().isEmpty()) || (registerRequest.getEmail().isEmpty())) {
+        if ((registerRequest.username.isEmpty()) || (registerRequest.password.isEmpty()) || (registerRequest.email.isEmpty())) {
             registerResponse.setMessage("Error: bad request");
             return registerResponse;
         }
-        UserInformation userInformation = new UserInformation(registerRequest.getUsername(), registerRequest.getPassword(), registerRequest.getEmail());
+        UserInformation userInformation = new UserInformation(registerRequest.username, registerRequest.password, registerRequest.email);
         // if the username is in the database
         if (data.findUsername(userInformation)) {
             registerResponse.setMessage("Error: already taken");
@@ -27,7 +27,7 @@ public class RegisterService {
         }
 
         data.createUser(userInformation);
-        AuthTokenInformation authTokenInformation = new AuthTokenInformation(registerRequest.getUsername());
+        AuthTokenInformation authTokenInformation = new AuthTokenInformation(registerRequest.username);
         //String token = authTokenInformation.getAuthToken();
         registerResponse.setUsername(authTokenInformation.getUsername());
         registerResponse.setAuthT(authTokenInformation.getAuthToken());
