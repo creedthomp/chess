@@ -1,7 +1,6 @@
 package server;
 
-import handlers.LoginHandler;
-import handlers.RegistrationHandler;
+import handlers.*;
 import spark.*;
 
 public class Server {
@@ -32,6 +31,7 @@ public class Server {
 
         Spark.post("/user", (req, res) -> new RegistrationHandler().handleThisRequest(req, res));
         Spark.post("/session", (req, res) -> new LoginHandler().handleThisRequest(req, res));
-        Spark.delete("/session", (req, res) -> new LoginHandler().handleThisRequest(req, res));
+        Spark.delete("/session", (req, res) -> new LogoutHandler().handleThisRequest(req, res));
+        Spark.get("/game", ((req, res) -> new ))
     }
 }

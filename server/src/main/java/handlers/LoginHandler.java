@@ -10,22 +10,20 @@ import spark.Response;
 
 public class LoginHandler {
     public String handleThisRequest(Request request, Response response) throws DataAccessException {
-        LoginService loginservice = new LoginService();
+        LoginService loginService = new LoginService();
 
         LoginRequest loginRequest = toGson(request);
 
-        LoginResponse loginResponse = LoginService.getResponse(loginRequest);
+        LoginResponse loginResponse = loginService.getResponse(loginRequest);
 
-            if (loginResponse.getMessage() != null) {
-                if (loginResponse.getMessage().equals("Error: unauthorized")) {
-                    response.status(401);
-                }
-                else{
-                    response.status(500);
-                }
+            if (loginResponse.getMessage() == null) {
+                response.status(200);
+            }
+            else if (loginResponse.getMessage().equals("Error: unauthorized")) {
+                response.status(401);
             }
             else{
-                response.status(200);
+                response.status(500);
             }
 
         return fromGson(loginResponse);

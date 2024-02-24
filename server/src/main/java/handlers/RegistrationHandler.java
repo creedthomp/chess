@@ -23,21 +23,20 @@ public class RegistrationHandler {
 
             RegisterResponse registerResponse = registerService.getResponse(rRequest);
 
-            if (registerResponse.getMessage() != null) {
-
-                if (registerResponse.getMessage().equals("Error: already taken")) {
-                    response.status(403);
-                }
-                else if (registerResponse.getMessage().equals("Error: bad request")) {
-                    response.status(400);
-                }
-                else{
-                    response.status(500);
-                }
-            }
-            else{
+            if (registerResponse.getMessage() == null) {
                 response.status(200);
             }
+
+            else if (registerResponse.getMessage().equals("Error: already taken")) {
+                response.status(403);
+            }
+            else if (registerResponse.getMessage().equals("Error: bad request")) {
+                response.status(400);
+            }
+            else{
+                response.status(500);
+            }
+
             return fromGson(registerResponse);
         }
         catch (DataAccessException exception) {

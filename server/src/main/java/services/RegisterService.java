@@ -1,8 +1,6 @@
 package services;
 
-import dataAccess.DataAccessException;
-import dataAccess.MemoryUserDAO;
-import dataAccess.UserDAO;
+import dataAccess.*;
 import models.AuthTokenInformation;
 import models.UserInformation;
 
@@ -13,6 +11,7 @@ public class RegisterService {
 
     public RegisterResponse getResponse(RegisterRequest registerRequest) throws DataAccessException {
         UserDAO data = new MemoryUserDAO();
+        AuthDAO authData = new MemoryAuthDAO();
         RegisterResponse registerResponse = new RegisterResponse();
         // if one of the specified fields is blank
         if ((registerRequest.username.isEmpty()) || (registerRequest.password.isEmpty()) || (registerRequest.email.isEmpty())) {
@@ -26,11 +25,15 @@ public class RegisterService {
             return registerResponse;
         }
 
+        // add user to the userList
         data.createUser(userInformation);
+        //create the authtoken
         AuthTokenInformation authTokenInformation = new AuthTokenInformation(registerRequest.username);
-        //String token = authTokenInformation.getAuthToken();
+        // prep the response
         registerResponse.setUsername(authTokenInformation.getUsername());
         registerResponse.setAuthT(authTokenInformation.getAuthToken());
+        // add the token to the authorized tokens list
+        authData.addAuth(authTokenInformation.getAuthToken());
         return registerResponse;
 
 
