@@ -22,4 +22,15 @@ public class MemoryAuthDAO implements AuthDAO{
         authList.remove(token);
     }
 
+    @Override
+    public String printAuth() throws DataAccessException {
+        String thi = "";
+        for (String thing : authList) {
+            thi += thing;
+        }
+        return thi;
+    }
+
+
+
 }

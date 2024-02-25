@@ -11,9 +11,9 @@ public class LogoutHandler {
     public String handleThisRequest(Request request, Response response) throws DataAccessException {
         LogoutService logoutService = new LogoutService();
 
-        LogoutRequest logoutRequest = toGson(request);
+        //LogoutRequest logoutRequest = toGson(request);
 
-        LogoutResponse logoutResponse = logoutService.getResponse(logoutRequest);
+        LogoutResponse logoutResponse = logoutService.getResponse(request.headers("authorization"));
 
         if (logoutResponse.getMessage() == null) {
             response.status(200);
@@ -35,6 +35,6 @@ public class LogoutHandler {
     }
     private LogoutRequest toGson(Request request) {
         Gson gson = new Gson();
-        return gson.fromJson(request.headers("authorization"), LogoutRequest.class);
+        return gson.fromJson(request.headers("Authorization"), LogoutRequest.class);
     }
 }

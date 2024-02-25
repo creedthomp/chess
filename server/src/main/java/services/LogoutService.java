@@ -8,14 +8,14 @@ public class LogoutService {
 
     public LogoutService(){}
 
-    public LogoutResponse getResponse(LogoutRequest logoutRequest) throws DataAccessException {
+    public LogoutResponse getResponse(String authToken) throws DataAccessException {
 
         MemoryAuthDAO authData = new MemoryAuthDAO();
         LogoutResponse logoutResponse = new LogoutResponse();
 
         // is the authToken authorized?
-        if ((authData.findAuth(logoutRequest.authT))) {
-            authData.removeAuth(logoutRequest.authT);
+        if ((authData.findAuth(authToken))) {
+            authData.removeAuth(authToken);
         }
 
         else {

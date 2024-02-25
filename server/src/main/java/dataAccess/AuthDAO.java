@@ -10,4 +10,6 @@ public interface AuthDAO {
     void addAuth(String token) throws DataAccessException;
 
     void removeAuth(String token) throws DataAccessException;
+
+    String printAuth() throws DataAccessException;
 }
