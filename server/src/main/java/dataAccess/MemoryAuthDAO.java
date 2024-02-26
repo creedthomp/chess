@@ -59,5 +59,7 @@ public class MemoryAuthDAO implements AuthDAO{
         throw new DataAccessException("Error: unauthorized");
     }
 
-
+    public void clear() {
+        authList.clear();
+    }
 }

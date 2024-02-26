@@ -31,8 +31,9 @@ public class JoinGameService {
                 }
                 // trying to make an observer
                 else if (request.teamColor == null) {
-                    game.setObserver(authDAO.findUsername(auth));
-                } else {
+                    return finalResponse;
+                }
+                else {
                     finalResponse.setMessage("Error: bad request");
                 }
             } else {

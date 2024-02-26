@@ -6,8 +6,10 @@ import java.util.HashSet;
 
 public class MemoryGameDAO implements GameDAO {
     public static HashSet<GameInformation> gameList = new HashSet<>();
+    private static int ID;
 
     public void addGame(GameInformation game) {
+        game.setGameID(ID++);
         gameList.add(game);
     }
 
@@ -29,9 +31,12 @@ public class MemoryGameDAO implements GameDAO {
             }
         }
         throw new DataAccessException("Game with ID " + gameID + " was not found.");
+    }
 
 
 
+    public void clear() {
+        gameList.clear();
     }
 
 }

@@ -15,4 +15,6 @@ public interface AuthDAO {
     String printAuth() throws DataAccessException;
 
     String findUsername(String token) throws DataAccessException;
+
+    default void clear() {}
 }

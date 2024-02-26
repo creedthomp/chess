@@ -3,24 +3,25 @@ package models;
 import chess.ChessGame;
 
 public class GameInformation {
-    private static int gameID;
+
+     int gameID;
     String whiteName;
     String blackName;
     String gameName;
-    String observer;
     ChessGame game;
 
     public GameInformation() {
         game = new ChessGame();
-        gameID +=1;
+     //   gameID += 1;
     }
 
     public int getGameID() {
         return gameID;
     }
 
-    public void setGameID(int gameID) {
-        GameInformation.gameID = gameID;
+    public void setGameID(int gameD) {
+        gameID = gameD;
+
     }
 
     public String getWhiteName() {
@@ -45,14 +46,6 @@ public class GameInformation {
 
     public void setGameName(String gameName) {
         this.gameName = gameName;
-    }
-
-    public String getObserver() {
-        return observer;
-    }
-
-    public void setObserver(String observer) {
-        this.observer = observer;
     }
 
     public ChessGame getGame() {

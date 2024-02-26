@@ -10,6 +10,7 @@ public class CreateGameService {
         GameDAO gameDAO = new MemoryGameDAO();
         FinalResponse finalResponse = new FinalResponse();
         GameInformation gameInformation = new GameInformation();
+
         try {
             if (authDAO.findAuth(auth)) {
                 if (request.getGameName() == null) {
@@ -17,9 +18,11 @@ public class CreateGameService {
                     return finalResponse;
                 }
                 gameInformation.setGameName(request.getGameName());
+                //gameInformation.setGameID(gameInformation.getGameID());
                 // add the game to the list of games
                 gameDAO.addGame(gameInformation);
                 int id = gameInformation.getGameID();
+
                 finalResponse.setGameID(id);
             } else {
                 finalResponse.setMessage("Error: unauthorized");

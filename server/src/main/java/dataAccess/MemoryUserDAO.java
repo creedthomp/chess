@@ -29,7 +29,7 @@ public class MemoryUserDAO implements UserDAO{
                 return true;
             }
         }
-        throw new DataAccessException("Error: user not found");
+        return false;//throw new DataAccessException("Error: user not found");
     }
 
     @Override
@@ -40,5 +40,9 @@ public class MemoryUserDAO implements UserDAO{
             }
         }
         throw new DataAccessException("Error: wrong username or password");
+    }
+
+    public void clear() {
+        userList.clear();
     }
 }

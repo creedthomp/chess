@@ -26,4 +26,8 @@ public interface UserDAO {
     public default boolean loginUser(String username, String password)throws DataAccessException {
         return false;
     }
+
+    default void clear() {}
+
+
 }

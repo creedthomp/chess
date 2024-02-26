@@ -26,30 +26,9 @@ public class CreateGameHandler extends ParentHandler {
         // set the response status
         setStatus(finalResponse.getMessage(), response);
 
-        return toJsonExcludingZeroGameID(finalResponse);
+        return fromGson(finalResponse);
     }
 
-    public String toJsonExcludingZeroGameID(FinalResponse finalResponse) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        // Only add the exclusion strategy if gameID is zero
-        if (finalResponse.getGameID() == 0) {
-            gsonBuilder.setExclusionStrategies(new ExclusionStrategy() {
-                @Override
-                public boolean shouldSkipField(FieldAttributes f) {
-                    // Exclude the gameID field
-                    return "gameID".equals(f.getName());
-                }
-
-                @Override
-                public boolean shouldSkipClass(Class<?> clazz) {
-                    return false;
-                }
-            });
-        }
-
-        Gson gson = gsonBuilder.create();
-        return gson.toJson(finalResponse);
-    }
 
 }
 
