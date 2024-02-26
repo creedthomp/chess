@@ -4,21 +4,21 @@ import dataAccess.*;
 
 public class ListGamesService {
 
-    public ListGamesResponse getResponse(ListGamesRequest request) throws DataAccessException {
+    public FinalResponse getResponse(String auth) throws DataAccessException {
         GameDAO gameDAO = new MemoryGameDAO();
 
         AuthDAO authData = new MemoryAuthDAO();
 
-        ListGamesResponse listGamesResponse = new ListGamesResponse();
+        FinalResponse finalResponse = new FinalResponse();
 
         // authorize the user
-        if (authData.findAuth(request.authT)) {
-            listGamesResponse.setGameList(gameDAO.getGameList());
+        if (authData.findAuth(auth)) {
+            finalResponse.setGameList(gameDAO.getGameList());
         }
         else {
-            listGamesResponse.setMessage("Error: unauthorized");
+            finalResponse.setMessage("Error: unauthorized");
         }
 
-        return listGamesResponse;
+        return finalResponse;
     }
 }

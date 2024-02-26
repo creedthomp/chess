@@ -1,16 +1,17 @@
 package models;
 
+import chess.ChessGame;
+
 public class GameInformation {
-    int gameID;
+    private static int gameID;
     String whiteName;
     String blackName;
     String gameName;
+    ChessGame game;
 
-    GameInformation(int gameID, String whiteName, String blackName, String gameName) {
-        this.blackName = blackName;
-        this.whiteName = whiteName;
-        this.gameID = gameID;
-        this.gameName = gameName;
+    public GameInformation() {
+        game = new ChessGame();
+        gameID +=1;
     }
 
     public int getGameID() {
@@ -18,7 +19,7 @@ public class GameInformation {
     }
 
     public void setGameID(int gameID) {
-        this.gameID = gameID;
+        GameInformation.gameID = gameID;
     }
 
     public String getWhiteName() {

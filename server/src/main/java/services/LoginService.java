@@ -8,24 +8,24 @@ public class LoginService {
     public LoginService() {}
 
 
-    public LoginResponse getResponse(LoginRequest loginRequest) throws DataAccessException {
+    public FinalResponse getResponse(LoginRequest loginRequest) throws DataAccessException {
         UserDAO dao = new MemoryUserDAO();
         AuthDAO authData = new MemoryAuthDAO();
-        LoginResponse loginResponse = new LoginResponse();
+        FinalResponse finalResponse = new FinalResponse();
 
         if (!(dao.loginUser(loginRequest.getUsername(), loginRequest.getPassword()))) {// does this work without getters and setters?
-            loginResponse.setMessage("Error: unauthorized");
-            return loginResponse;
+            finalResponse.setMessage("Error: unauthorized");
+            return finalResponse;
         }
 
         //create authtoken
         AuthTokenInformation authTokenInformation = new AuthTokenInformation(loginRequest.getUsername());
         //create response
-        loginResponse.setAuthT(authTokenInformation.getAuthToken());
-        loginResponse.setUsername(loginRequest.getUsername());
+        finalResponse.setAuthT(authTokenInformation.getAuthToken());
+        finalResponse.setUsername(loginRequest.getUsername());
         // add token
         authData.addAuth(authTokenInformation.getAuthToken());
 
-        return loginResponse;
+        return finalResponse;
     }
 }

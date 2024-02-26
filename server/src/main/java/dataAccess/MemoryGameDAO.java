@@ -15,6 +15,13 @@ public class MemoryGameDAO implements GameDAO {
         return gameList;
     }
 
+    public boolean findGame(GameInformation game) {
+        if (gameList.contains(game)) {
+            return true;
+        }
+        return false;
+    }
+
     public GameInformation getGame(int gameID) throws DataAccessException { // is gameID int
         for (GameInformation game : gameList) {
             if (game.getGameID() == gameID) {

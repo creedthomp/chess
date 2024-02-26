@@ -2,39 +2,24 @@ package handlers;
 
 import com.google.gson.Gson;
 import dataAccess.DataAccessException;
-import services.LoginRequest;
-import services.LoginResponse;
-import services.LoginService;
+import services.*;
 import spark.Request;
 import spark.Response;
 
-public class LoginHandler {
+public class LoginHandler extends ParentHandler {
     public String handleThisRequest(Request request, Response response) throws DataAccessException {
+        Gson gson = new Gson();
         LoginService loginService = new LoginService();
 
-        LoginRequest loginRequest = toGson(request);
+        LoginRequest loginRequest = gson.fromJson(request.body(), LoginRequest.class);
 
-        LoginResponse loginResponse = loginService.getResponse(loginRequest);
+        FinalResponse finalResponse = loginService.getResponse(loginRequest);
 
-            if (loginResponse.getMessage() == null) {
-                response.status(200);
-            }
-            else if (loginResponse.getMessage().equals("Error: unauthorized")) {
-                response.status(401);
-            }
-            else{
-                response.status(500);
-            }
+        // set the response status
+        setStatus(finalResponse.getMessage(), response);
 
-        return fromGson(loginResponse);
+        return fromGson(finalResponse);
 
     }
-    private String fromGson(LoginResponse response) {
-        Gson gson = new Gson();
-        return gson.toJson(response);
-    }
-    private LoginRequest toGson(Request request) {
-        Gson gson = new Gson();
-        return gson.fromJson(request.body(), LoginRequest.class);
-    }
+
 }

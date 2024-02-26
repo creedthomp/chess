@@ -8,10 +8,10 @@ public class LogoutService {
 
     public LogoutService(){}
 
-    public LogoutResponse getResponse(String authToken) throws DataAccessException {
+    public FinalResponse getResponse(String authToken) throws DataAccessException {
 
         MemoryAuthDAO authData = new MemoryAuthDAO();
-        LogoutResponse logoutResponse = new LogoutResponse();
+        FinalResponse finalResponse = new FinalResponse();
 
         // is the authToken authorized?
         if ((authData.findAuth(authToken))) {
@@ -19,10 +19,10 @@ public class LogoutService {
         }
 
         else {
-            logoutResponse.setMessage("Error: unauthorized");
+            finalResponse.setMessage("Error: unauthorized");
         }
 
-        return logoutResponse;
+        return finalResponse;
 
     }
 

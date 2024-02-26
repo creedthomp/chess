@@ -6,38 +6,20 @@ import services.*;
 import spark.Request;
 import spark.Response;
 
-public class ListGamesHandler {
+public class ListGamesHandler extends ParentHandler {
 
     public String handleThisRequest(Request request, Response response) throws DataAccessException {
         ListGamesService listGamesService = new ListGamesService();
 
-        ListGamesRequest listGamesRequest = toGson(request);
+        //ListGamesRequest listGamesRequest = toGson(request);
 
 
-        ListGamesResponse listGamesResponse = listGamesService.getResponse(listGamesRequest);
+        FinalResponse finalResponse = listGamesService.getResponse(request.headers("authorization"));
 
-        if (listGamesResponse.getMessage() == null) {
-            response.status(200);
-        }
+        // set the response status
+        setStatus(finalResponse.getMessage(), response);
 
-        else if (listGamesResponse.getMessage().equals("Error: unauthorized")) {
-            response.status(401);
-        }
-
-        else{
-            response.status(500);
-        }
-
-        return fromGson(listGamesResponse);
+        return fromGson(finalResponse);
     }
 
-
-    private String fromGson(ListGamesResponse response) {
-        Gson gson = new Gson();
-        return gson.toJson(response);
-    }
-    private ListGamesRequest toGson(Request request) {
-        Gson gson = new Gson();
-        return gson.fromJson(request.headers("authorization"), ListGamesRequest.class);
-    }
 }

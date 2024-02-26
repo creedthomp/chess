@@ -9,20 +9,20 @@ public class RegisterService {
     public RegisterService() {
     }
 
-    public RegisterResponse getResponse(RegisterRequest registerRequest) throws DataAccessException {
+    public FinalResponse getResponse(RegisterRequest registerRequest) throws DataAccessException {
         UserDAO data = new MemoryUserDAO();
         AuthDAO authData = new MemoryAuthDAO();
-        RegisterResponse registerResponse = new RegisterResponse();
+        FinalResponse response = new FinalResponse();
         // if one of the specified fields is blank
         if ((registerRequest.username.isEmpty()) || (registerRequest.password.isEmpty()) || (registerRequest.email.isEmpty())) {
-            registerResponse.setMessage("Error: bad request");
-            return registerResponse;
+            response.setMessage("Error: bad request");
+            return response;
         }
         UserInformation userInformation = new UserInformation(registerRequest.username, registerRequest.password, registerRequest.email);
         // if the username is in the database
         if (data.findUsername(userInformation)) {
-            registerResponse.setMessage("Error: already taken");
-            return registerResponse;
+            response.setMessage("Error: already taken");
+            return response;
         }
 
         // add user to the userList
@@ -30,11 +30,11 @@ public class RegisterService {
         //create the authtoken
         AuthTokenInformation authTokenInformation = new AuthTokenInformation(registerRequest.username);
         // prep the response
-        registerResponse.setUsername(authTokenInformation.getUsername());
-        registerResponse.setAuthT(authTokenInformation.getAuthToken());
+        response.setUsername(authTokenInformation.getUsername());
+        response.setAuthT(authTokenInformation.getAuthToken());
         // add the token to the authorized tokens list
         authData.addAuth(authTokenInformation.getAuthToken());
-        return registerResponse;
+        return response;
 
 
 
