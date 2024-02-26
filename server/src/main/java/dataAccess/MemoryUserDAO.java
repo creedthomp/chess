@@ -16,7 +16,10 @@ public class MemoryUserDAO implements UserDAO{
 
     @Override
     public boolean findUser(UserInformation user) throws DataAccessException {
-        return userList.contains(user);
+        if (userList.contains(user)) {
+            return true;
+        }
+        throw new DataAccessException("Error: ");
     }
 
     @Override
@@ -26,16 +29,16 @@ public class MemoryUserDAO implements UserDAO{
                 return true;
             }
         }
-        return false;
+        throw new DataAccessException("Error: user not found");
     }
 
     @Override
-    public boolean loginUser(String username, String password) {
+    public boolean loginUser(String username, String password) throws DataAccessException {
         for (UserInformation userinfo : userList) {
             if ((userinfo.getUsername().equals(username)) && userinfo.getPassword().equals(password)) { // do I need to return different errors if different things happen??
                 return true;
             }
         }
-        return false;
+        throw new DataAccessException("Error: wrong username or password");
     }
 }

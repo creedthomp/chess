@@ -12,17 +12,20 @@ public class LogoutService {
 
         MemoryAuthDAO authData = new MemoryAuthDAO();
         FinalResponse finalResponse = new FinalResponse();
+        try {
+            // is the authToken authorized?
+            if ((authData.findAuth(authToken))) {
+                authData.removeAuth(authToken);
+            } else {
+                finalResponse.setMessage("Error: unauthorized");
+            }
 
-        // is the authToken authorized?
-        if ((authData.findAuth(authToken))) {
-            authData.removeAuth(authToken);
+            return finalResponse;
         }
-
-        else {
-            finalResponse.setMessage("Error: unauthorized");
+        catch(DataAccessException exception) {
+            finalResponse.setMessage(exception.getMessage());
+            return finalResponse;
         }
-
-        return finalResponse;
 
     }
 

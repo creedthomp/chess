@@ -7,6 +7,7 @@ public class GameInformation {
     String whiteName;
     String blackName;
     String gameName;
+    String observer;
     ChessGame game;
 
     public GameInformation() {
@@ -44,5 +45,21 @@ public class GameInformation {
 
     public void setGameName(String gameName) {
         this.gameName = gameName;
+    }
+
+    public String getObserver() {
+        return observer;
+    }
+
+    public void setObserver(String observer) {
+        this.observer = observer;
+    }
+
+    public ChessGame getGame() {
+        return game;
+    }
+
+    public void setGame(ChessGame game) {
+        this.game = game;
     }
 }

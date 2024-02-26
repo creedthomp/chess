@@ -10,15 +10,19 @@ public class ListGamesService {
         AuthDAO authData = new MemoryAuthDAO();
 
         FinalResponse finalResponse = new FinalResponse();
+        try {
+            // authorize the user
+            if (authData.findAuth(auth)) {
+                finalResponse.setGameList(gameDAO.getGameList());
+            } else {
+                finalResponse.setMessage("Error: unauthorized");
+            }
 
-        // authorize the user
-        if (authData.findAuth(auth)) {
-            finalResponse.setGameList(gameDAO.getGameList());
+            return finalResponse;
         }
-        else {
-            finalResponse.setMessage("Error: unauthorized");
+        catch (DataAccessException exception) {
+            finalResponse.setMessage(exception.getMessage());
+            return finalResponse;
         }
-
-        return finalResponse;
     }
 }

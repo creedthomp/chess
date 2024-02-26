@@ -26,7 +26,7 @@ public class RegistrationHandler extends ParentHandler {
             // set the response status
             setStatus(finalResponse.getMessage(), response);
 
-            return fromGson(finalResponse);
+            return toJsonExcludingZeroGameID(finalResponse);
         }
         catch (DataAccessException exception) {
             throw new DataAccessException(exception.getMessage());

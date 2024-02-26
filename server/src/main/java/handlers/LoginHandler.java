@@ -18,7 +18,7 @@ public class LoginHandler extends ParentHandler {
         // set the response status
         setStatus(finalResponse.getMessage(), response);
 
-        return fromGson(finalResponse);
+        return toJsonExcludingZeroGameID(finalResponse);
 
     }
 

@@ -10,22 +10,27 @@ public class CreateGameService {
         GameDAO gameDAO = new MemoryGameDAO();
         FinalResponse finalResponse = new FinalResponse();
         GameInformation gameInformation = new GameInformation();
-        // ?try catch
-        if (authDAO.findAuth(auth)) {
-            if (request.getGameName() == null) {
-                finalResponse.setMessage("Error: bad request");
+        try {
+            if (authDAO.findAuth(auth)) {
+                if (request.getGameName() == null) {
+                    finalResponse.setMessage("Error: bad request");
+                    return finalResponse;
+                }
+                gameInformation.setGameName(request.getGameName());
+                // add the game to the list of games
+                gameDAO.addGame(gameInformation);
+                int id = gameInformation.getGameID();
+                finalResponse.setGameID(id);
+            } else {
+                finalResponse.setMessage("Error: unauthorized");
                 return finalResponse;
             }
-            gameInformation.setGameName(request.getGameName());
-            // add the game to the list of games
-            gameDAO.addGame(gameInformation);
-            finalResponse.setGameID(gameInformation.getGameID());
-        }
-        else {
-            finalResponse.setMessage("Error: unauthorized");
             return finalResponse;
         }
-        return finalResponse;
+        catch (DataAccessException exception) {
+            finalResponse.setMessage(exception.getMessage());
+            return finalResponse;
+        }
 
     }
 }

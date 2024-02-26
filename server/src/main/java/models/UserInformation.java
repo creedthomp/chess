@@ -7,6 +7,7 @@ public class UserInformation {
     String password;
     String email;
 
+
     public UserInformation(String username, String password, String email) {
         this.email = email;
         this.password = password;
@@ -35,6 +36,7 @@ public class UserInformation {
     public void setEmail(String email) {
         this.email = email;
     }
+
 
     @Override
     public boolean equals(Object o) {

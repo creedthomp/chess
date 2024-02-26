@@ -15,11 +15,11 @@ public class MemoryGameDAO implements GameDAO {
         return gameList;
     }
 
-    public boolean findGame(GameInformation game) {
+    public boolean findGame(GameInformation game) throws DataAccessException{
         if (gameList.contains(game)) {
             return true;
         }
-        return false;
+        throw new DataAccessException("Error: game not found");
     }
 
     public GameInformation getGame(int gameID) throws DataAccessException { // is gameID int

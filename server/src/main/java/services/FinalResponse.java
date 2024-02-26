@@ -10,7 +10,7 @@ public class FinalResponse {
     String message;
     String username;
 
-    int gameID;
+    int gameID = 0;
     String authT;
 
     FinalResponse() {}
