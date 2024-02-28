@@ -14,7 +14,7 @@
 //public class LogoutServiceTest {
 //
 //    @BeforeEach
-//    public void register() throws DataAccessException {
+//    public void register() throws DataAccessException{
 //        //clear
 //        ClearService clearService = new ClearService();
 //        clearService.getResponse();
