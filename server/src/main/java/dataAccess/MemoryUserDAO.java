@@ -10,26 +10,19 @@ public class MemoryUserDAO implements UserDAO{
     public MemoryUserDAO() {}
 
     @Override
-    public void createUser(UserInformation user) throws DataAccessException {
+    public void createUser(UserInformation user){
         userList.add(user);
     }
 
-    @Override
-    public boolean findUser(UserInformation user) throws DataAccessException {
-        if (userList.contains(user)) {
-            return true;
-        }
-        throw new DataAccessException("Error: ");
-    }
 
     @Override
-    public boolean findUsername(UserInformation user) throws DataAccessException{
+    public boolean findUsername(UserInformation user){
         for (UserInformation userinfo : userList) {
             if (userinfo.getUsername().equals(user.getUsername())) {
                 return true;
             }
         }
-        return false;//throw new DataAccessException("Error: user not found");
+        return false;
     }
 
     @Override

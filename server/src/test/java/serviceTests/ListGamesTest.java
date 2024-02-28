@@ -3,7 +3,6 @@ import dataAccess.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.CreateGameRequest;
-import requests.ListGamesRequest;
 import requests.RegisterRequest;
 import responses.FinalResponse;
 import services.ClearService;

@@ -19,12 +19,6 @@ public class MemoryGameDAO implements GameDAO {
         return gameList;
     }
 
-    public boolean findGame(GameInformation game) throws DataAccessException{
-        if (gameList.contains(game)) {
-            return true;
-        }
-        throw new DataAccessException("Error: game not found");
-    }
 
     public GameInformation getGame(int gameID) throws DataAccessException { // is gameID int
         for (GameInformation game : gameList) {
@@ -36,7 +30,6 @@ public class MemoryGameDAO implements GameDAO {
 
         throw new DataAccessException("Error: bad request");
     }
-
 
 
     public void clear() {

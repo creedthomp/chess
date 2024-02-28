@@ -15,9 +15,6 @@ public class FinalResponse {
 
     public FinalResponse() {}
 
-    public Collection<GameInformation> getGameList() {
-        return games;
-    }
 
     public void setGameList(Collection<GameInformation> gameList) {
         this.games = gameList;
