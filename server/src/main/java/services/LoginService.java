@@ -2,6 +2,8 @@ package services;
 
 import dataAccess.*;
 import models.AuthTokenInformation;
+import requests.LoginRequest;
+import responses.FinalResponse;
 
 public class LoginService {
 
@@ -13,10 +15,11 @@ public class LoginService {
         AuthDAO authData = new MemoryAuthDAO();
         FinalResponse finalResponse = new FinalResponse();
         try {
-            if (!(dao.loginUser(loginRequest.getUsername(), loginRequest.getPassword()))) {// does this work without getters and setters?
+            if (!(dao.loginUser(loginRequest.getUsername(), loginRequest.getPassword()))) {
                 finalResponse.setMessage("Error: unauthorized");
                 return finalResponse;
             }
+
 
             //create authtoken
             AuthTokenInformation authTokenInformation = new AuthTokenInformation(loginRequest.getUsername());

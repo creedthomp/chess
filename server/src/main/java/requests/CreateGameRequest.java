@@ -1,11 +1,11 @@
-package services;
+package requests;
 
 public class CreateGameRequest {
     String authT;
 
     String gameName;
 
-    CreateGameRequest() {
+    public CreateGameRequest() {
     }
 
     public String getAuthT() {

@@ -1,9 +1,9 @@
-package services;
+package requests;
 
 public class ListGamesRequest {
 
     String authT;
 
-    ListGamesRequest() {
+    public ListGamesRequest() {
     }
 }

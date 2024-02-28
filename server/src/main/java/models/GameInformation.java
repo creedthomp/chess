@@ -5,14 +5,14 @@ import chess.ChessGame;
 public class GameInformation {
 
      int gameID;
-    String whiteName;
-    String blackName;
+    String whiteUsername;
+    String blackUsername;
     String gameName;
     ChessGame game;
 
     public GameInformation() {
         game = new ChessGame();
-     //   gameID += 1;
+        //gameID += 1;
     }
 
     public int getGameID() {
@@ -25,19 +25,19 @@ public class GameInformation {
     }
 
     public String getWhiteName() {
-        return whiteName;
+        return whiteUsername;
     }
 
     public void setWhiteName(String whiteName) {
-        this.whiteName = whiteName;
+        this.whiteUsername = whiteName;
     }
 
     public String getBlackName() {
-        return blackName;
+        return blackUsername;
     }
 
     public void setBlackName(String blackName) {
-        this.blackName = blackName;
+        this.blackUsername = blackName;
     }
 
     public String getGameName() {

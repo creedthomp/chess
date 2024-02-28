@@ -19,8 +19,16 @@ public class MemoryAuthDAO implements AuthDAO{
         throw new DataAccessException("Error: unauthorized");
     }
 
+    public HashSet<AuthTokenInformation> getAuthList() {
+        return authList;
+    }
+
+    public static void setAuthList(HashSet<AuthTokenInformation> authList) {
+        MemoryAuthDAO.authList = authList;
+    }
+
     @Override
-    public void addAuth(AuthTokenInformation token) throws DataAccessException {
+    public void addAuth(AuthTokenInformation token){
         authList.add(token);
     }
 
@@ -40,14 +48,7 @@ public class MemoryAuthDAO implements AuthDAO{
         }
     }
 
-    @Override
-    public String printAuth() throws DataAccessException {
-        String thi = "";
-//        for (String thing : authList) {
-//            thi += thing;
-//        }
-        return thi;
-    }
+
 
     @Override
     public String findUsername(String token) throws DataAccessException {
@@ -58,6 +59,38 @@ public class MemoryAuthDAO implements AuthDAO{
         }
         throw new DataAccessException("Error: unauthorized");
     }
+
+    @Override
+    public String findAuthT(String user) throws DataAccessException {
+        for (AuthTokenInformation info : authList) {
+            if (info.getUsername().equals(user)) {
+                return info.getAuthToken();
+            }
+        }
+        throw new DataAccessException("Error: unauthorized");
+    }
+
+//    public boolean findInfo(String username) {
+//        for (AuthTokenInformation info : authList) {
+//            if (info.getUsername().equals(username)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//    public void removeUsername(String username) {
+//        AuthTokenInformation removeThis = null;
+//        for (AuthTokenInformation info : authList) {
+//            if (info.getUsername().equals(username)) {
+//                removeThis = info;
+//            }
+//        }
+//        if (!(removeThis == null)) {
+//            authList.remove(removeThis);
+//        }
+//    }
+
 
     public void clear() {
         authList.clear();

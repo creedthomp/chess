@@ -2,6 +2,10 @@ package services;
 
 import dataAccess.*;
 import models.GameInformation;
+import requests.JoinGameRequest;
+import responses.FinalResponse;
+
+import java.util.Objects;
 
 public class JoinGameService {
 
@@ -14,27 +18,28 @@ public class JoinGameService {
         try {
             if (authDAO.findAuth(auth)) {
                 GameInformation game = gameDAO.getGame(request.gameID);
-                // set the team color
-                if (request.teamColor.equals("WHITE")) {
+                if (request.playerColor == null) {
                     // make sure the color is empty
-                    if (game.getWhiteName() == null) {
-                        finalResponse.setMessage("Error: already taken");
-                        return finalResponse;
-                    }
-                    game.setWhiteName(authDAO.findUsername(auth));
-                } else if (request.teamColor.equals("BLACK")) {
-                    if (game.getBlackName() == null) {
+                    return finalResponse;
+                }
+                else if (Objects.equals(request.playerColor, "BLACK")) {
+                    // if the color is already taken
+                    if (!(game.getBlackName() == null)) {
                         finalResponse.setMessage("Error: already taken");
                         return finalResponse;
                     }
                     game.setBlackName(authDAO.findUsername(auth));
                 }
-                // trying to make an observer
-                else if (request.teamColor == null) {
-                    return finalResponse;
+                else if ((Objects.equals(request.playerColor, "WHITE"))) {
+                    // if the color is already taken
+                    if (!(game.getWhiteName() == null)) {
+                        finalResponse.setMessage("Error: already taken");
+                        return finalResponse;
+                    }
+                    game.setWhiteName(authDAO.findUsername(auth));
                 }
                 else {
-                    finalResponse.setMessage("Error: bad request");
+                    finalResponse.setMessage("Error: bad request" + request.playerColor);
                 }
             } else {
                 finalResponse.setMessage("Error: unauthorized");
@@ -47,6 +52,7 @@ public class JoinGameService {
             finalResponse.setMessage(exception.getMessage());
             return finalResponse;
         }
+
     }
 
 

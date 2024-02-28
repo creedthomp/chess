@@ -1,4 +1,4 @@
-package services;
+package responses;
 
 import models.GameInformation;
 
@@ -6,21 +6,21 @@ import java.util.Collection;
 
 public class FinalResponse {
 
-    Collection<GameInformation> gameList;
+    Collection<GameInformation> games;
     String message;
     String username;
 
     int gameID = 0;
-    String authT;
+    String authToken;
 
-    FinalResponse() {}
+    public FinalResponse() {}
 
     public Collection<GameInformation> getGameList() {
-        return gameList;
+        return games;
     }
 
     public void setGameList(Collection<GameInformation> gameList) {
-        this.gameList = gameList;
+        this.games = gameList;
     }
 
     public String getMessage() {
@@ -40,11 +40,11 @@ public class FinalResponse {
     }
 
     public String getAuthT() {
-        return authT;
+        return authToken;
     }
 
     public void setAuthT(String authT) {
-        this.authT = authT;
+        this.authToken = authT;
     }
 
     public int getGameID() {

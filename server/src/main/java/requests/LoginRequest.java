@@ -1,4 +1,4 @@
-package services;
+package requests;
 
 public class LoginRequest {
 
@@ -6,7 +6,7 @@ public class LoginRequest {
 
     String password;
 
-    LoginRequest(){}
+    public LoginRequest(){}
 
     public String getUsername() {
         return username;

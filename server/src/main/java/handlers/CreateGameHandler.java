@@ -1,12 +1,9 @@
 package handlers;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import dataAccess.DataAccessException;
-import services.CreateGameRequest;
+import requests.CreateGameRequest;
 import services.CreateGameService;
-import services.FinalResponse;
+import responses.FinalResponse;
 import spark.Request;
 import spark.Response;
 
@@ -26,7 +23,7 @@ public class CreateGameHandler extends ParentHandler {
         // set the response status
         setStatus(finalResponse.getMessage(), response);
 
-        return fromGson(finalResponse);
+        return toJsonExcludingZeroGameID(finalResponse);
     }
 
 

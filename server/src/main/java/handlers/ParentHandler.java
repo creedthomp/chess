@@ -4,8 +4,7 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import services.CreateGameRequest;
-import services.FinalResponse;
+import responses.FinalResponse;
 import spark.Request;
 import spark.Response;
 
@@ -40,13 +39,12 @@ public class ParentHandler {
 
     String toJsonExcludingZeroGameID(FinalResponse finalResponse) {
         GsonBuilder gsonBuilder = new GsonBuilder();
-        // Only add the exclusion strategy if gameID is zero
         if (finalResponse.getGameID() == 0) {
             gsonBuilder.setExclusionStrategies(new ExclusionStrategy() {
                 @Override
                 public boolean shouldSkipField(FieldAttributes f) {
-                    // Exclude the gameID field
-                    return "gameID".equals(f.getName());
+                    // Check if the field is 'gameID' in FinalResponse class
+                    return f.getDeclaringClass() == FinalResponse.class && f.getName().equals("gameID");
                 }
 
                 @Override

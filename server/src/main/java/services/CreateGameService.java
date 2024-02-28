@@ -2,6 +2,8 @@ package services;
 
 import dataAccess.*;
 import models.GameInformation;
+import requests.CreateGameRequest;
+import responses.FinalResponse;
 
 public class CreateGameService {
 
@@ -9,6 +11,7 @@ public class CreateGameService {
         AuthDAO authDAO = new MemoryAuthDAO();
         GameDAO gameDAO = new MemoryGameDAO();
         FinalResponse finalResponse = new FinalResponse();
+       // CreateGameResponse createGameResponse = new CreateGameResponse();
         GameInformation gameInformation = new GameInformation();
 
         try {

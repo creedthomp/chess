@@ -2,6 +2,8 @@ package handlers;
 
 import com.google.gson.Gson;
 import dataAccess.DataAccessException;
+import requests.LoginRequest;
+import responses.FinalResponse;
 import services.*;
 import spark.Request;
 import spark.Response;

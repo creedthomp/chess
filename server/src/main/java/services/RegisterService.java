@@ -3,6 +3,8 @@ package services;
 import dataAccess.*;
 import models.AuthTokenInformation;
 import models.UserInformation;
+import requests.RegisterRequest;
+import responses.FinalResponse;
 
 public class RegisterService {
 
@@ -15,7 +17,7 @@ public class RegisterService {
         FinalResponse response = new FinalResponse();
         try {
             // if one of the specified fields is blank
-            if ((registerRequest.username.isEmpty()) || (registerRequest.password.isEmpty()) || (registerRequest.email.isEmpty())) {
+            if ((registerRequest.username == null) || (registerRequest.password == null) || (registerRequest.email == null)) {
                 response.setMessage("Error: bad request");
                 return response;
             }

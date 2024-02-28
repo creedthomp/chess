@@ -2,8 +2,8 @@ package handlers;
 
 import com.google.gson.Gson;
 import dataAccess.DataAccessException;
-import services.FinalResponse;
-import services.JoinGameRequest;
+import responses.FinalResponse;
+import requests.JoinGameRequest;
 import spark.Request;
 import spark.Response;
 import services.JoinGameService;

@@ -39,7 +39,7 @@ public class MemoryUserDAO implements UserDAO{
                 return true;
             }
         }
-        throw new DataAccessException("Error: wrong username or password");
+        throw new DataAccessException("Error: unauthorized");
     }
 
     public void clear() {

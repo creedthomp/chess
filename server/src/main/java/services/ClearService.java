@@ -1,9 +1,10 @@
 package services;
 
 import dataAccess.*;
+import responses.FinalResponse;
 
 public class ClearService {
-    public FinalResponse getResponse(String authToken) throws DataAccessException {
+    public FinalResponse getResponse() throws DataAccessException {
         AuthDAO authDAO = new MemoryAuthDAO();
         GameDAO gameDAO = new MemoryGameDAO();
         UserDAO userDAO = new MemoryUserDAO();

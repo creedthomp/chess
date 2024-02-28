@@ -2,7 +2,7 @@ package services;
 
 import dataAccess.DataAccessException;
 import dataAccess.MemoryAuthDAO;
-import models.AuthTokenInformation;
+import responses.FinalResponse;
 
 public class LogoutService {
 
