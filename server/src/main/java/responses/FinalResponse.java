@@ -36,6 +36,9 @@ public class FinalResponse {
         this.username = username;
     }
 
+    public String getAuthT() {
+        return authToken;
+    }
 
     public void setAuthT(String authT) {
         this.authToken = authT;

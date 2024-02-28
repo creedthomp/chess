@@ -15,6 +15,9 @@ public class JoinGameRequest {
         this.gameID = gameID;
     }
 
+    public void setPlayerColor(String playerColor) {
+        this.playerColor = playerColor;
+    }
 
     @Override
     public boolean equals(Object o) {

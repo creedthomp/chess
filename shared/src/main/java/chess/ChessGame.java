@@ -243,7 +243,7 @@ public class ChessGame {
             for (int j = 1; j < 9; j++) {
                 ChessPosition currentposition = new ChessPosition(i, j);
                 // do I have to seperate these ifs so I dont check if a null has a color
-                if (board.getPiece(currentposition) != null && board.getPiece(currentposition).getTeamColor() == Color && board.getPiece(currentposition).getPieceType() == ChessPiece.PieceType.KING) {
+                if (board.getPiece(currentposition) != null && board.getPiece(currentposition).getTeamColor() == color && board.getPiece(currentposition).getPieceType() == ChessPiece.PieceType.KING) {
                     return currentposition;
                 }
                 // this should never happen
