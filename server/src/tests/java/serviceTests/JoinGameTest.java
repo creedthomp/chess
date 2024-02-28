@@ -12,8 +12,8 @@ import services.*;
 import static org.junit.jupiter.api.Assertions.*;
 public class JoinGameTest {
 
-    @BeforeAll
-    public static void register() throws DataAccessException {
+    @BeforeEach
+    public void register() throws DataAccessException {
         //clear
         ClearService clearService = new ClearService();
         clearService.getResponse();
