@@ -3,7 +3,7 @@ package services;
 import dataAccess.*;
 import responses.FinalResponse;
 
-public class ListGamesService {
+public class ListGamesService{
 
     public FinalResponse getResponse(String auth) throws DataAccessException {
         GameDAO gameDAO = new MemoryGameDAO();
