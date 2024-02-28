@@ -13,6 +13,7 @@ public class ClearService {
        gameDAO.clear();
        userDAO.clear();
 
+
        return finalResponse;
     }
 }

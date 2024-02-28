@@ -27,6 +27,7 @@ public class CreateGameTest {
     }
     @Test
     public void CreateGamePassTest() throws DataAccessException {
+
         CreateGameRequest request = new CreateGameRequest();
         CreateGameService service = new CreateGameService();
         GameDAO gameDAO = new MemoryGameDAO();
