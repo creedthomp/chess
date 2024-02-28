@@ -142,7 +142,7 @@ public class ChessGame {
         if (turn == TeamColor.WHITE){
             Collection<ChessMove> opMoves = opponentsMoves(board, teamColor);
             ChessPosition kingSpot = myKingPosition(board, teamColor);
-            // now go through all of the ending positions of the opMoves and se if any of them match the kings current pos
+            // now go through all the ending positions of the opMoves and se if any of them match the kings current pos
             for (ChessMove move : opMoves) {
                 if (move.getEndPosition().equals(kingSpot)) {
                     return true;
@@ -227,7 +227,7 @@ public class ChessGame {
             for (int j = 1; j < 9; j++) {
                 ChessPosition currentposition = new ChessPosition(i, j);
                 // if the piece there is the opponents
-                // do I need to make sure it is in bounds?? probably not
+
                 if (board.getPiece(currentposition) != null && board.getPiece(currentposition).getTeamColor() != Color) {
                     ChessPiece piece = board.getPiece(currentposition);
                     // add ALL the moves of that piece to the set
@@ -238,7 +238,7 @@ public class ChessGame {
         return opMoves;
     }
 
-    public ChessPosition myKingPosition(ChessBoard board, TeamColor Color) {
+    public ChessPosition myKingPosition(ChessBoard board, TeamColor color) {
         for (int i = 1; i < 9; i++) {
             for (int j = 1; j < 9; j++) {
                 ChessPosition currentposition = new ChessPosition(i, j);

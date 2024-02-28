@@ -28,10 +28,6 @@ public class ParentHandler {
         }
     }
 
-    public String fromGson(FinalResponse response) {
-        Gson gson = new Gson();
-        return gson.toJson(response);
-    }
 
     public String toGsonHead(Request request) {
         return request.headers("authorization");

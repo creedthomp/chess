@@ -31,15 +31,9 @@ public class Pawn {
 
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn());
             if ((board.getPiece(endPosition) == null)) {
-                if (endPosition.getRow() == 8) {
-                    moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.QUEEN));
-                    moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.BISHOP));
-                    moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.ROOK));
-                    moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.KNIGHT));
-                }
-                else {
-                    moves.add(new ChessMove(startPosition, endPosition, null));
-                }            }
+                moves.addAll(promotionPiece(8, startPosition, endPosition, endPosition));
+            }
+
             // take piece left
             if ((startPosition.getColumn() - 1) > 0) {
                 ChessPosition leftTakePosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() - 1);
@@ -47,14 +41,8 @@ public class Pawn {
 
                 if ((board.getPiece(leftTakePosition) != null)) {
                     if (left.getTeamColor() != teamColor) {
-                        if (endPosition.getRow() == 1) {
-                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.QUEEN));
-                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.BISHOP));
-                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.ROOK));
-                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.KNIGHT));
-                        } else {
-                            moves.add(new ChessMove(startPosition, leftTakePosition, null));
-                        }
+                        moves.addAll(promotionPiece(1, startPosition, endPosition, leftTakePosition));
+//
                     }
                 }
             }
@@ -65,14 +53,8 @@ public class Pawn {
 
                 if ((board.getPiece(rightTakePosition) != null)) {
                     if (right.getTeamColor() != teamColor) {
-                        if (endPosition.getRow() == 1) {
-                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.QUEEN));
-                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.BISHOP));
-                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.ROOK));
-                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.KNIGHT));
-                        } else {
-                            moves.add(new ChessMove(startPosition, rightTakePosition, null));
-                        }
+                        moves.addAll(promotionPiece(1, startPosition, endPosition, rightTakePosition));
+//
                     }
                 }
             }
@@ -93,15 +75,8 @@ public class Pawn {
         if (teamColor == ChessGame.TeamColor.BLACK) {
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn());
             if ((board.getPiece(endPosition) == null)) {
-                if (endPosition.getRow() == 1) {
-                    moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.QUEEN));
-                    moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.BISHOP));
-                    moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.ROOK));
-                    moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.KNIGHT));
-                }
-                else {
-                    moves.add(new ChessMove(startPosition, endPosition, null));
-                }
+                moves.addAll(promotionPiece(1, startPosition, endPosition, endPosition));
+//
             }
             // take piece left
             if ((startPosition.getColumn() - 1) > 0 && (startPosition.getRow() -1) > 0) {
@@ -110,14 +85,8 @@ public class Pawn {
 
                 if ((board.getPiece(leftTakePosition) != null)) {
                     if (left.getTeamColor() != teamColor) {
-                        if (endPosition.getRow() == 1) {
-                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.QUEEN));
-                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.BISHOP));
-                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.ROOK));
-                            moves.add(new ChessMove(startPosition, leftTakePosition, ChessPiece.PieceType.KNIGHT));
-                        } else {
-                            moves.add(new ChessMove(startPosition, leftTakePosition, null));
-                        }
+                        moves.addAll(promotionPiece(1, startPosition, endPosition, leftTakePosition));
+//
                     }
                 }
             }
@@ -128,14 +97,8 @@ public class Pawn {
 
                 if ((board.getPiece(rightTakePosition) != null)) {
                     if (right.getTeamColor() != teamColor) {
-                        if (endPosition.getRow() == 1) {
-                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.QUEEN));
-                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.BISHOP));
-                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.ROOK));
-                            moves.add(new ChessMove(startPosition, rightTakePosition, ChessPiece.PieceType.KNIGHT));
-                        } else {
-                            moves.add(new ChessMove(startPosition, rightTakePosition, null));
-                        }
+                        moves.addAll(promotionPiece(1, startPosition, endPosition, rightTakePosition));
+//
                     }
                 }
             }
@@ -148,6 +111,19 @@ public class Pawn {
                     moves.add(new ChessMove(startPosition, alternatePosition, null));
                 }
             }
+        }
+        return moves;
+    }
+
+    public ArrayList<ChessMove> promotionPiece(int row, ChessPosition startPosition, ChessPosition endPosition, ChessPosition takePosition) {
+        ArrayList<ChessMove> moves = new ArrayList<>();
+        if (endPosition.getRow() == row) {
+            moves.add(new ChessMove(startPosition, takePosition, ChessPiece.PieceType.QUEEN));
+            moves.add(new ChessMove(startPosition, takePosition, ChessPiece.PieceType.BISHOP));
+            moves.add(new ChessMove(startPosition, takePosition, ChessPiece.PieceType.ROOK));
+            moves.add(new ChessMove(startPosition, takePosition, ChessPiece.PieceType.KNIGHT));
+        } else {
+            moves.add(new ChessMove(startPosition, takePosition, null));
         }
         return moves;
     }

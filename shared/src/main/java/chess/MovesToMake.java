@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 public class MovesToMake {
     private ChessGame.TeamColor color;
+    boolean breakhelping = false;
     public MovesToMake(ChessGame.TeamColor color) {
         this.color = color;
     }
@@ -23,16 +24,9 @@ public class MovesToMake {
 
             if ((startPosition.getRow() + i) < 9 && (startPosition.getColumn() + i) < 9) {
                 ChessPosition endposition = new ChessPosition(startPosition.getRow() + i, startPosition.getColumn() + i);
-                // piece in goal spot?
-                if (board.getPiece(endposition) == null) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
-                }
-
-                else if (blocked(board, endposition)) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
-                    break;
-                }
-                else {
+                moves.addAll(makeMoveDhelp(board, startPosition, endposition));
+                if (breakhelping) {
+                    breakhelping = false;
                     break;
                 }
             }
@@ -42,18 +36,12 @@ public class MovesToMake {
 
             if ((startPosition.getRow() - i) > 0 && (startPosition.getColumn() - i) > 0) {
                 ChessPosition endposition = new ChessPosition(startPosition.getRow() - i, startPosition.getColumn() - i);
-                // piece in goal spot?
-                if (board.getPiece(endposition) == null) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
-                }
-
-                else if (blocked(board, endposition)) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
+                moves.addAll(makeMoveDhelp(board, startPosition, endposition));
+                if (breakhelping) {
+                    breakhelping = false;
                     break;
                 }
-                else {
-                    break;
-                }
+//
             }
         }
 
@@ -62,18 +50,12 @@ public class MovesToMake {
 
             if ((startPosition.getRow() + i) < 9 && (startPosition.getColumn() - i) > 0) {
                 ChessPosition endposition = new ChessPosition(startPosition.getRow() + i, startPosition.getColumn() - i);
-                // piece in goal spot?
-                if (board.getPiece(endposition) == null) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
+                moves.addAll(makeMoveDhelp(board, startPosition, endposition));
+                if (breakhelping) {
+                    breakhelping = false;
+                    break;
                 }
 
-                else if (blocked(board, endposition)) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
-                    break;
-                }
-                else {
-                    break;
-                }
             }
         }
 
@@ -82,18 +64,12 @@ public class MovesToMake {
 
             if ((startPosition.getRow() - i) > 0 && (startPosition.getColumn() + i) < 9) {
                 ChessPosition endposition = new ChessPosition(startPosition.getRow() - i, startPosition.getColumn() + i);
-                // piece in goal spot?
-                if (board.getPiece(endposition) == null) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
+                moves.addAll(makeMoveDhelp(board, startPosition, endposition));
+                if (breakhelping) {
+                    breakhelping = false;
+                    break;
                 }
 
-                else if (blocked(board, endposition)) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
-                    break;
-                }
-                else {
-                    break;
-                }
             }
         }
         return moves;
@@ -110,16 +86,9 @@ public class MovesToMake {
 
             if ((startPosition.getRow() + i) < 9 && (startPosition.getColumn()) < 9) {
                 ChessPosition endposition = new ChessPosition(startPosition.getRow() + i, startPosition.getColumn());
-                // piece in goal spot?
-                if (board.getPiece(endposition) == null) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
-                }
-
-                else if (blocked(board, endposition)) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
-                    break;
-                }
-                else {
+                moves.addAll(makeMoveShelp(board, startPosition, endposition));
+                if (breakhelping) {
+                    breakhelping = false;
                     break;
                 }
             }
@@ -129,16 +98,9 @@ public class MovesToMake {
 
             if ((startPosition.getRow()) > 0 && (startPosition.getColumn() - i) > 0) {
                 ChessPosition endposition = new ChessPosition(startPosition.getRow(), startPosition.getColumn() - i);
-                // piece in goal spot?
-                if (board.getPiece(endposition) == null) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
-                }
-
-                else if (blocked(board, endposition)) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
-                    break;
-                }
-                else {
+                moves.addAll(makeMoveShelp(board, startPosition, endposition));
+                if (breakhelping) {
+                    breakhelping = false;
                     break;
                 }
             }
@@ -148,17 +110,11 @@ public class MovesToMake {
         for (int i = 1; i < 8; i++) {
 
             if ((startPosition.getRow() - i) > 0 && (startPosition.getColumn()) > 0) {
-                ChessPosition endposition = new ChessPosition(startPosition.getRow() - i, startPosition.getColumn());
-                // piece in goal spot?
-                if (board.getPiece(endposition) == null) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
-                }
 
-                else if (blocked(board, endposition)) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
-                    break;
-                }
-                else {
+               ChessPosition endposition = new ChessPosition(startPosition.getRow() - i, startPosition.getColumn());
+                moves.addAll(makeMoveShelp(board, startPosition, endposition));
+                if (breakhelping) {
+                    breakhelping = false;
                     break;
                 }
             }
@@ -170,17 +126,12 @@ public class MovesToMake {
             if ((startPosition.getRow()) > 0 && (startPosition.getColumn() + i) < 9) {
                 ChessPosition endposition = new ChessPosition(startPosition.getRow(), startPosition.getColumn() + i);
                 // piece in goal spot?
-                if (board.getPiece(endposition) == null) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
-                }
-
-                else if (blocked(board, endposition)) {
-                    moves.add(new ChessMove(startPosition, endposition, null));
+                moves.addAll(makeMoveShelp(board, startPosition, endposition));
+                if (breakhelping) {
+                    breakhelping = false;
                     break;
                 }
-                else {
-                    break;
-                }
+//
             }
         }
         return moves;
@@ -208,5 +159,42 @@ public class MovesToMake {
         return moves;
     }
 
+    public  Collection<ChessMove> makeMoveShelp(ChessBoard board, ChessPosition startPosition, ChessPosition endposition) {
+        Collection<ChessMove> moves = new HashSet<>();
+        //ChessPosition endposition = new ChessPosition(startPosition.getRow(), startPosition.getColumn() + i);
+        // piece in goal spot?
+        if (board.getPiece(endposition) == null) {
+            moves.add(new ChessMove(startPosition, endposition, null));
+        } else if (blocked(board, endposition)) {
+            moves.add(new ChessMove(startPosition, endposition, null));
+            breakSwitch();
+        } else {
+            breakSwitch();
+        }
+        return moves;
+    }
 
+    public  Collection<ChessMove> makeMoveDhelp(ChessBoard board, ChessPosition startPosition, ChessPosition endposition) {
+        Collection<ChessMove> moves = new HashSet<>();
+        //ChessPosition endposition = new ChessPosition(startPosition.getRow(), startPosition.getColumn() + i);
+        // piece in goal spot?
+        if (board.getPiece(endposition) == null) {
+            moves.add(new ChessMove(startPosition, endposition, null));
+        } else if (blocked(board, endposition)) {
+            moves.add(new ChessMove(startPosition, endposition, null));
+            breakSwitch();
+        } else {
+            breakSwitch();
+        }
+        return moves;
+    }
+
+    public void breakSwitch() {
+        if (!breakhelping) {
+            breakhelping = true;
+        }
+        else {
+            breakhelping = false;
+        }
+    }
 }

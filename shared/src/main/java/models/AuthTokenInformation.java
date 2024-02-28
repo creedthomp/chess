@@ -13,9 +13,6 @@ public class AuthTokenInformation {
         return AuthToken;
     }
 
-    public void setAuthToken(String authToken) {
-        AuthToken = authToken;
-    }
 
     public String getUsername() {
         return username;

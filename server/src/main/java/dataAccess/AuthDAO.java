@@ -20,7 +20,7 @@ public interface AuthDAO {
         return null;
     }
 
-    String getAuth(String user) throws DataAccessException;
+
 
     default void clear() {}
 }
