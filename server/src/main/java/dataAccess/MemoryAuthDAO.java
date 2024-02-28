@@ -23,9 +23,7 @@ public class MemoryAuthDAO implements AuthDAO{
         return authList;
     }
 
-    public static void setAuthList(HashSet<AuthTokenInformation> authList) {
-        MemoryAuthDAO.authList = authList;
-    }
+
 
     @Override
     public void addAuth(AuthTokenInformation token){

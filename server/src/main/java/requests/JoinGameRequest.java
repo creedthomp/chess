@@ -9,13 +9,7 @@ public class JoinGameRequest {
 
     public JoinGameRequest() {}
 
-    public String getPlayerColor() {
-        return playerColor;
-    }
 
-    public int getGameID() {
-        return gameID;
-    }
 
     public void setGameID(int gameID) {
         this.gameID = gameID;

@@ -8,13 +8,7 @@ public class CreateGameRequest {
     public CreateGameRequest() {
     }
 
-    public String getAuthT() {
-        return authT;
-    }
 
-    public void setAuthT(String authT) {
-        this.authT = authT;
-    }
 
     public String getGameName() {
         return gameName;
