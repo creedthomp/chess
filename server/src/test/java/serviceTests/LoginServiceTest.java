@@ -51,6 +51,7 @@ public class LoginServiceTest {
         FinalResponse finalResponse = loginService.getResponse(loginRequest);
 
         assertNotNull(finalResponse.getMessage());
+        assertEquals("Error: unauthorized", finalResponse.getMessage());
     }
 
 }

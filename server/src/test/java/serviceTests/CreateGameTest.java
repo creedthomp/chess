@@ -51,6 +51,6 @@ public class CreateGameTest {
         FinalResponse finalResponse = service.getResponse(request, "bob");
 
         assertNotNull(finalResponse.getMessage());
-
+        assertEquals("Error: unauthorized", finalResponse.getMessage());
     }
 }

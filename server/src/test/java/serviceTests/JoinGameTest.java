@@ -34,8 +34,7 @@ public class JoinGameTest {
         FinalResponse finalResponse = service.getResponse(request, authDAO.getAuth("bob"));
     }
     @Test
-    public void ListGamePassTest() throws DataAccessException {
-        try {
+    public void JoinGamePassTest() throws DataAccessException {
             JoinGameService service = new JoinGameService();
             JoinGameRequest joinGameRequest = new JoinGameRequest();
             GameDAO gameDAO = new MemoryGameDAO();
@@ -47,21 +46,14 @@ public class JoinGameTest {
             FinalResponse finalResponse = service.getResponse(joinGameRequest, authDAO.getAuth("bob"));
 
             assertEquals("bob", gameDAO.getGame(1).getWhiteName());
-        }
-        catch (DataAccessException e) {
-            // this is so stupid. for some reason when I run it seperately it passes but with everything else it doesnt. get game is somehow returning an errror when I literally debug and it doesnt
-            assertNotNull(e.getMessage());
-        }
 
     }
 
     @Test
-    public void ListGameFailTest() throws DataAccessException {
+    public void JoinGameFailTest() throws DataAccessException {
         try {
             JoinGameService service = new JoinGameService();
             JoinGameRequest joinGameRequest = new JoinGameRequest();
-            GameDAO gameDAO = new MemoryGameDAO();
-            AuthDAO authDAO = new MemoryAuthDAO();
 
             FinalResponse finalResponse = service.getResponse(joinGameRequest, "bob");
 
@@ -69,6 +61,7 @@ public class JoinGameTest {
         }
         catch(DataAccessException e) {
             assertNotNull(e.getMessage());
+            assertEquals("Error: unauthorized", e.getMessage());
         }
     }
 }

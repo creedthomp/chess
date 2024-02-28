@@ -35,6 +35,7 @@ public class LogoutServiceTest {
         FinalResponse finalResponse = logoutService.getResponse(authDAO.getAuth("bob"));
 
         assertNull(finalResponse.getMessage());
+        assertNull(finalResponse.getUsername());
     }
 
     @Test
