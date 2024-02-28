@@ -18,7 +18,7 @@ public class Server {
         createRoutes();
 
         Spark.awaitInitialization();
-        System.out.println("Listening on port " + desiredPort);
+        //System.out.println("Listening on port " + desiredPort);
         return Spark.port();
     }
 

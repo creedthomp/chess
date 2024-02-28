@@ -2,9 +2,6 @@ package dataAccess;
 
 import models.UserInformation;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-
 public interface UserDAO {
 
 //    static public HashSet<UserInformation> userList = new HashSet<>();

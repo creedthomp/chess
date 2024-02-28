@@ -1,7 +1,6 @@
 package serviceTests;
 
 import dataAccess.*;
-import models.AuthTokenInformation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.RegisterRequest;
