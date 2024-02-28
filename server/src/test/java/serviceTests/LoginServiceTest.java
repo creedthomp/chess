@@ -18,7 +18,7 @@ public class LoginServiceTest {
     public void register() throws DataAccessException {
         //clear
         ClearService clearService = new ClearService();
-        clearService.getResponse();
+        clearService.clearData();
         // register a user
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.email = "bob";

@@ -28,7 +28,7 @@ public class JoinGameService {
                         finalResponse.setMessage("Error: already taken");
                         return finalResponse;
                     }
-                    game.setBlackName(authDAO.findUsername(auth));
+                    game.setBlackName(authDAO.getUsername(auth));
                 }
                 else if ((Objects.equals(request.playerColor, "WHITE"))) {
                     // if the color is already taken
@@ -36,7 +36,7 @@ public class JoinGameService {
                         finalResponse.setMessage("Error: already taken");
                         return finalResponse;
                     }
-                    game.setWhiteName(authDAO.findUsername(auth));
+                    game.setWhiteName(authDAO.getUsername(auth));
                 }
                 else {
                     finalResponse.setMessage("Error: bad request" + request.playerColor);

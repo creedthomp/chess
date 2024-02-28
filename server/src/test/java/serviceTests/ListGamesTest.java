@@ -18,7 +18,7 @@ public class ListGamesTest {
     public void register() throws DataAccessException {
         //clear
         ClearService clearService = new ClearService();
-        clearService.getResponse();
+        clearService.clearData();
         // register a user
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.email = "bob";
@@ -33,7 +33,7 @@ public class ListGamesTest {
         AuthDAO authDAO = new MemoryAuthDAO();
 
         request.setGameName("bobsGame");
-        FinalResponse finalResponse = service.getResponse(request, authDAO.findAuthT("bob"));
+        FinalResponse finalResponse = service.getResponse(request, authDAO.getAuth("bob"));
     }
     @Test
     public void ListGamePassTest() throws DataAccessException {
@@ -41,7 +41,7 @@ public class ListGamesTest {
         GameDAO gameDAO = new MemoryGameDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
 
-        FinalResponse finalResponse = service.getResponse(authDAO.findAuthT("bob"));
+        FinalResponse finalResponse = service.getResponse(authDAO.getAuth("bob"));
 
         assertEquals(1, gameDAO.getGameList().size());
 

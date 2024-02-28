@@ -28,12 +28,7 @@ public class Pawn {
                 ChessPosition leftTakePosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() - 1);
                 ChessPiece left = board.getPiece(leftTakePosition);
             }
-//            else {
-//            ChessPosition leftTakePosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() - 1);
-//            ChessPosition rightTakePosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() + 1);
-//            ChessPiece left = board.getPiece(leftTakePosition);
-//            ChessPiece right = board.getPiece(rightTakePosition);
-            // one spot forward
+
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn());
             if ((board.getPiece(endPosition) == null)) {
                 if (endPosition.getRow() == 8) {
@@ -96,11 +91,6 @@ public class Pawn {
 
         // team black
         if (teamColor == ChessGame.TeamColor.BLACK) {
-//            ChessPosition leftTakePosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn() - 1);
-//            ChessPosition rightTakePosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn() + 1);
-//            ChessPiece left = board.getPiece(leftTakePosition);
-//            ChessPiece right = board.getPiece(rightTakePosition);
-            // one spot forward
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() - 1, startPosition.getColumn());
             if ((board.getPiece(endPosition) == null)) {
                 if (endPosition.getRow() == 1) {

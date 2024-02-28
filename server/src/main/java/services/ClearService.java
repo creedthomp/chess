@@ -4,7 +4,7 @@ import dataAccess.*;
 import responses.FinalResponse;
 
 public class ClearService {
-    public FinalResponse getResponse() throws DataAccessException {
+    public FinalResponse clearData() throws DataAccessException {
         AuthDAO authDAO = new MemoryAuthDAO();
         GameDAO gameDAO = new MemoryGameDAO();
         UserDAO userDAO = new MemoryUserDAO();

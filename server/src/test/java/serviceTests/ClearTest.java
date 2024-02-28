@@ -23,7 +23,7 @@ public class ClearTest {
 
     @Test
     public void clearPassTest() throws DataAccessException {
-         new ClearService().getResponse();
+         new ClearService().clearData();
         AuthDAO authDAO = new MemoryAuthDAO();
         // compare to an empty list
         assertTrue(authDAO.getAuthList().isEmpty());

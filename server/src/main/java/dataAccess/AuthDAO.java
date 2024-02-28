@@ -14,19 +14,13 @@ public interface AuthDAO {
     void removeAuth(String token) throws DataAccessException;
 
 
-    String findUsername(String token) throws DataAccessException;
+    String getUsername(String token) throws DataAccessException;
 
-    public default String findAuthT(String user) throws DataAccessException {
-        return "string";
-    }
-
-//    default boolean findInfo(String username){
-//        return false;
-//    }
-//
-//    default void removeUsername(String username) {}
     default HashSet<AuthTokenInformation> getAuthList() {
         return null;
     }
+
+    String getAuth(String user) throws DataAccessException;
+
     default void clear() {}
 }

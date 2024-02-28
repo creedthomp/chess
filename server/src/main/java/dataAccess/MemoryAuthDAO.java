@@ -49,7 +49,7 @@ public class MemoryAuthDAO implements AuthDAO{
 
 
     @Override
-    public String findUsername(String token) throws DataAccessException {
+    public String getUsername(String token) throws DataAccessException {
         for (AuthTokenInformation info : authList) {
             if (info.getAuthToken().equals(token)) {
                 return info.getUsername();
@@ -59,7 +59,7 @@ public class MemoryAuthDAO implements AuthDAO{
     }
 
     @Override
-    public String findAuthT(String user) throws DataAccessException {
+    public String getAuth(String user) throws DataAccessException {
         for (AuthTokenInformation info : authList) {
             if (info.getUsername().equals(user)) {
                 return info.getAuthToken();
@@ -68,26 +68,7 @@ public class MemoryAuthDAO implements AuthDAO{
         throw new DataAccessException("Error: unauthorized");
     }
 
-//    public boolean findInfo(String username) {
-//        for (AuthTokenInformation info : authList) {
-//            if (info.getUsername().equals(username)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-//
-//    public void removeUsername(String username) {
-//        AuthTokenInformation removeThis = null;
-//        for (AuthTokenInformation info : authList) {
-//            if (info.getUsername().equals(username)) {
-//                removeThis = info;
-//            }
-//        }
-//        if (!(removeThis == null)) {
-//            authList.remove(removeThis);
-//        }
-//    }
+
 
 
     public void clear() {

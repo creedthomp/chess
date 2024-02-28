@@ -16,7 +16,7 @@ public class CreateGameTest {
     public void register() throws DataAccessException {
         //clear
         ClearService clearService = new ClearService();
-        clearService.getResponse();
+        clearService.clearData();
         // register a user
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.email = "bob";
@@ -34,7 +34,7 @@ public class CreateGameTest {
         AuthDAO authDAO = new MemoryAuthDAO();
 
         request.setGameName("bobsGame");
-        FinalResponse finalResponse = service.getResponse(request, authDAO.findAuthT("bob"));
+        FinalResponse finalResponse = service.getResponse(request, authDAO.getAuth("bob"));
 
         assertEquals(1, finalResponse.getGameID());
 

@@ -17,7 +17,7 @@ public class LogoutServiceTest {
     public void register() throws DataAccessException{
         //clear
         ClearService clearService = new ClearService();
-        clearService.getResponse();
+        clearService.clearData();
         // register a user
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.email = "bob";
@@ -32,7 +32,7 @@ public class LogoutServiceTest {
         AuthDAO authDAO = new MemoryAuthDAO();
         LogoutService logoutService = new LogoutService();
 
-        FinalResponse finalResponse = logoutService.getResponse(authDAO.findAuthT("bob"));
+        FinalResponse finalResponse = logoutService.getResponse(authDAO.getAuth("bob"));
 
         assertNull(finalResponse.getMessage());
     }
@@ -43,7 +43,7 @@ public class LogoutServiceTest {
         LogoutService logoutService = new LogoutService();
         try {
 
-            FinalResponse finalResponse = logoutService.getResponse(authDAO.findAuthT("notanauthtoken"));
+            FinalResponse finalResponse = logoutService.getResponse(authDAO.getAuth("notanauthtoken"));
 
             assertEquals("Error: unauthorized", finalResponse.getMessage());
         }

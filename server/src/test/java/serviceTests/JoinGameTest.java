@@ -16,7 +16,7 @@ public class JoinGameTest {
     public void register() throws DataAccessException {
         //clear
         ClearService clearService = new ClearService();
-        clearService.getResponse();
+        clearService.clearData();
         // register a user
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.email = "bob";
@@ -31,7 +31,7 @@ public class JoinGameTest {
         AuthDAO authDAO = new MemoryAuthDAO();
 
         request.setGameName("bobsGame");
-        FinalResponse finalResponse = service.getResponse(request, authDAO.findAuthT("bob"));
+        FinalResponse finalResponse = service.getResponse(request, authDAO.getAuth("bob"));
     }
     @Test
     public void ListGamePassTest() throws DataAccessException {
@@ -44,7 +44,7 @@ public class JoinGameTest {
             joinGameRequest.setGameID(1);
             joinGameRequest.setPlayerColor("WHITE");
 
-            FinalResponse finalResponse = service.getResponse(joinGameRequest, authDAO.findAuthT("bob"));
+            FinalResponse finalResponse = service.getResponse(joinGameRequest, authDAO.getAuth("bob"));
 
             assertEquals("bob", gameDAO.getGame(1).getWhiteName());
         }
