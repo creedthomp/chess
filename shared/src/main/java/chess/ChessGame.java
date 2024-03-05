@@ -220,7 +220,7 @@ public class ChessGame {
     }
 
 
-    public Collection<ChessMove> opponentsMoves(ChessBoard board, TeamColor Color) {
+    public Collection<ChessMove> opponentsMoves(ChessBoard board, TeamColor color) {
         Collection<ChessMove> opMoves = new HashSet<>();
         //gather all opponents moves
         for (int i = 1; i < 9; i++) {
@@ -228,7 +228,7 @@ public class ChessGame {
                 ChessPosition currentposition = new ChessPosition(i, j);
                 // if the piece there is the opponents
 
-                if (board.getPiece(currentposition) != null && board.getPiece(currentposition).getTeamColor() != Color) {
+                if (board.getPiece(currentposition) != null && board.getPiece(currentposition).getTeamColor() != color) {
                     ChessPiece piece = board.getPiece(currentposition);
                     // add ALL the moves of that piece to the set
                     opMoves.addAll(piece.pieceMoves(board, currentposition));

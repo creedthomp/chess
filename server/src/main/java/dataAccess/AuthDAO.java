@@ -7,15 +7,22 @@ import java.util.HashSet;
 public interface AuthDAO {
 
 
-    boolean findAuth(String token)throws DataAccessException;
+    default boolean findAuth(String token) throws DataAccessException {
+        return false;
+    }
 
-    void addAuth(AuthTokenInformation token) throws DataAccessException;
+    default void addAuth(AuthTokenInformation token) throws DataAccessException {
 
-    void removeAuth(String token) throws DataAccessException;
+    }
 
 
+    default void removeAuth(String token) throws DataAccessException {
 
-    String getUsername(String token) throws DataAccessException;
+    }
+
+    default String getUsername(String token) throws DataAccessException {
+        return null;
+    }
 
     default HashSet<AuthTokenInformation> getAuthList() {
         return null;
