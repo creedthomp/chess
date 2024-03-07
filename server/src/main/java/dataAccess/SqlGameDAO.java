@@ -47,7 +47,7 @@ public class SqlGameDAO implements GameDAO {
     @Override
     public GameInformation getGame(int gameID) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT  FROM game WHERE gameID= ?";
+            var statement = "SELECT * FROM game WHERE gameID= ?";
             try (var ps = conn.prepareStatement(statement)) {
                 ps.setInt(1, gameID);
                 try (var rs = ps.executeQuery()) {
