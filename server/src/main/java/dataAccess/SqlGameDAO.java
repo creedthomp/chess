@@ -8,12 +8,19 @@ import models.GameInformation;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class SqlGameDAO implements GameDAO {
     private static int ID = 1;
     public SqlGameDAO() throws DataAccessException {
-        configureDatabase();
+        try {
+            DatabaseManager databaseManager = new DatabaseManager();
+            databaseManager.configureDatabase(createStatements);
+        }
+        catch (SQLException ex) {
+            throw new DataAccessException("this is stupid");
+        }
     }
 
     public void addGame(GameInformation game) throws DataAccessException {
@@ -79,19 +86,19 @@ public class SqlGameDAO implements GameDAO {
         return gameInformation;
     }
 
-    private void configureDatabase() throws DataAccessException {
-        DatabaseManager.createDatabase();
-        try (var conn = DatabaseManager.getConnection()) {
-            for (var statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
-                }
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            throw new DataAccessException("Error: unable to configure database");
-        }
-    }
+//    private void configureDatabase() throws DataAccessException {
+//        DatabaseManager.createDatabase();
+//        try (var conn = DatabaseManager.getConnection()) {
+//            for (var statement : createStatements) {
+//                try (var preparedStatement = conn.prepareStatement(statement)) {
+//                    preparedStatement.executeUpdate();
+//                }
+//            }
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//            throw new DataAccessException("Error: unable to configure database");
+//        }
+//    }
     public void addWhite(int gameID, String username) throws DataAccessException {
         DatabaseManager databaseManager = new DatabaseManager();
         // I need to hash the password somewhere
@@ -121,4 +128,5 @@ public class SqlGameDAO implements GameDAO {
             );
             """
     };
+
 }
