@@ -8,8 +8,8 @@ import responses.FinalResponse;
 public class CreateGameService {
 
     public FinalResponse getResponse(CreateGameRequest request, String auth) throws DataAccessException {
-        AuthDAO authDAO = new MemoryAuthDAO();
-        GameDAO gameDAO = new MemoryGameDAO();
+        AuthDAO authDAO = new SqlAuthDAO();
+        GameDAO gameDAO = new SqlGameDAO();
         FinalResponse finalResponse = new FinalResponse();
        // CreateGameResponse createGameResponse = new CreateGameResponse();
         GameInformation gameInformation = new GameInformation();

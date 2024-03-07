@@ -11,8 +11,8 @@ public class LoginService {
 
 
     public FinalResponse getResponse(LoginRequest loginRequest) throws DataAccessException {
-        UserDAO dao = new MemoryUserDAO();
-        AuthDAO authData = new MemoryAuthDAO();
+        UserDAO dao = new SqlUserDAO();
+        AuthDAO authData = new SqlAuthDAO();
         FinalResponse finalResponse = new FinalResponse();
         try {
             if (!(dao.loginUser(loginRequest.getUsername(), loginRequest.getPassword()))) {

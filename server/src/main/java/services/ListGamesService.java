@@ -6,9 +6,9 @@ import responses.FinalResponse;
 public class ListGamesService{
 
     public FinalResponse getResponse(String auth) throws DataAccessException {
-        GameDAO gameDAO = new MemoryGameDAO();
+        GameDAO gameDAO = new SqlGameDAO();
 
-        AuthDAO authData = new MemoryAuthDAO();
+        AuthDAO authData = new SqlAuthDAO();
 
         FinalResponse finalResponse = new FinalResponse();
         try {

@@ -10,7 +10,13 @@ import static java.sql.Types.NULL;
 public class SqlUserDAO implements UserDAO {
 
     public SqlUserDAO() throws DataAccessException {
-        configureDatabase();
+        try {
+            DatabaseManager databaseManager = new DatabaseManager();
+            databaseManager.configureDatabase(createStatements);
+        }
+        catch (SQLException ex) {
+            throw new DataAccessException("this is dumb");
+        }
     }
 
     public void createUser(UserInformation user) throws DataAccessException {
@@ -36,7 +42,6 @@ public class SqlUserDAO implements UserDAO {
         }
     }
 
-    @Override
     public boolean loginUser(String username, String password) throws DataAccessException {
         try (var connection = DatabaseManager.getConnection()) {
             var statement = "SELECT username, password FROM User WHERE username = ? AND password = ?;";
@@ -60,24 +65,24 @@ public class SqlUserDAO implements UserDAO {
         databaseManager.executeUpdate(statement);
     }
 
-    private void configureDatabase() throws DataAccessException {
-        DatabaseManager.createDatabase();
-        try (var conn = DatabaseManager.getConnection()) {
-            for (var statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataAccessException("Error: unable to configure database");
-        }
-    }
+//    private void configureDatabase() throws DataAccessException {
+//        DatabaseManager.createDatabase();
+//        try (var conn = DatabaseManager.getConnection()) {
+//            for (var statement : createStatements) {
+//                try (var preparedStatement = conn.prepareStatement(statement)) {
+//                    preparedStatement.executeUpdate();
+//                }
+//            }
+//        } catch (SQLException ex) {
+//            throw new DataAccessException("Error: unable to configure database");
+//        }
+//    }
     private final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS user (
             `username` varchar(255) NOT NULL,
             `password` varchar(255) NOT NULL,
-            `email` varchar(255) NOT NULL
+            `email` varchar(255) NOT NULL,
             PRIMARY KEY(`username`)
             );
             """

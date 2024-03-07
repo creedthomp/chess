@@ -9,7 +9,13 @@ import java.util.HashSet;
 public class SqlAuthDAO implements AuthDAO {
 
     public SqlAuthDAO() throws DataAccessException {
-        configureDatabase();
+        try {
+            DatabaseManager databaseManager = new DatabaseManager();
+            databaseManager.configureDatabase(createStatements);
+        }
+        catch (SQLException ex) {
+            throw new DataAccessException("this is stupid");
+        }
     }
 
     public boolean findAuth(String token) throws DataAccessException {
@@ -23,7 +29,7 @@ public class SqlAuthDAO implements AuthDAO {
             }
         }
         catch (SQLException exception) {
-            throw new DataAccessException("Error unauthorized");
+            throw new DataAccessException("Error: unauthorized");
         }
     }
 
@@ -56,13 +62,13 @@ public class SqlAuthDAO implements AuthDAO {
 
     public void addAuth(AuthTokenInformation token) throws DataAccessException {
         DatabaseManager databaseManager = new DatabaseManager();
-        var statement = "INSERT INTO auth (username, authtoken) VALUES (?, ?, ?)";
+        var statement = "INSERT INTO auth (username, authtoken) VALUES (?, ?)";
         databaseManager.executeUpdate(statement, token.getUsername(), token.getAuthToken());
     }
-// changing this file
+
     public void removeAuth(String token) throws DataAccessException {
         DatabaseManager databaseManager = new DatabaseManager();
-        var statement = "DELETE FROM auth username, authtoken WHERE authtoken=?";
+        var statement = "DELETE FROM auth WHERE authtoken=?";
         // what happens if I try to delete something that is not there?
         databaseManager.executeUpdate(statement, token);
     }
@@ -117,18 +123,18 @@ public class SqlAuthDAO implements AuthDAO {
         databaseManager.executeUpdate(statement);
     }
 
-    private void configureDatabase() throws DataAccessException {
-        DatabaseManager.createDatabase();
-        try (var conn = DatabaseManager.getConnection()) {
-            for (var statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataAccessException("Error: unable to configure database");
-        }
-    }
+//    private void configureDatabase() throws DataAccessException {
+//        DatabaseManager.createDatabase();
+//        try (var conn = DatabaseManager.getConnection()) {
+//            for (var statement : createStatements) {
+//                try (var preparedStatement = conn.prepareStatement(statement)) {
+//                    preparedStatement.executeUpdate();
+//                }
+//            }
+//        } catch (SQLException ex) {
+//            throw new DataAccessException("Error: unable to configure database");
+//        }
+//    }
     private final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS auth (

@@ -12,8 +12,8 @@ public class RegisterService {
     }
 
     public FinalResponse getResponse(RegisterRequest registerRequest) throws DataAccessException {
-        UserDAO data = new MemoryUserDAO();
-        AuthDAO authData = new MemoryAuthDAO();
+        UserDAO data = new SqlUserDAO();
+        AuthDAO authData = new SqlAuthDAO();
         FinalResponse response = new FinalResponse();
         try {
             // if one of the specified fields is blank

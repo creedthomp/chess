@@ -11,16 +11,18 @@ import java.sql.SQLException;
 import java.util.HashSet;
 
 public class SqlGameDAO implements GameDAO {
-
+    private static int ID = 1;
     public SqlGameDAO() throws DataAccessException {
         configureDatabase();
     }
 
     public void addGame(GameInformation game) throws DataAccessException {
         DatabaseManager databaseManager = new DatabaseManager();
+        game.setGameID(ID++);
         // I need to hash the password somewhere
+        String gamejson = new Gson().toJson(game.getGame());
         var statement = "INSERT INTO game (gameID, whiteUser, blackUser, gameName, game) VALUES (?, ?, ?, ?, ?)";
-        databaseManager.executeUpdate(statement, game.getGameID(), game.getWhiteName(), game.getBlackName(), game.getGameName(), game.getGame());
+        databaseManager.executeUpdate(statement, game.getGameID(), game.getWhiteName(), game.getBlackName(), game.getGameName(), gamejson);
     }
 
     @Override
@@ -45,17 +47,18 @@ public class SqlGameDAO implements GameDAO {
     @Override
     public GameInformation getGame(int gameID) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT gameID, whiteUser, blackUser, gameName, game From game WHERE gameID= ?";
+            var statement = "SELECT  FROM game WHERE gameID= ?";
             try (var ps = conn.prepareStatement(statement)) {
                 ps.setInt(1, gameID);
                 try (var rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        return readGame(rs);
+                        GameInformation thisgame = readGame(rs);
+                        return thisgame;
                     }
                 }
             }
         } catch (Exception e) {
-            throw new DataAccessException("Error: unable to read data");
+            throw new DataAccessException("Error: bad request");
         }
         return null;
     }
@@ -85,8 +88,27 @@ public class SqlGameDAO implements GameDAO {
                 }
             }
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DataAccessException("Error: unable to configure database");
         }
+    }
+    public void addWhite(int gameID, String username) throws DataAccessException {
+        DatabaseManager databaseManager = new DatabaseManager();
+        // I need to hash the password somewhere
+        var statement = "UPDATE game SET whiteUser = ? WHERE gameID = ?";
+        databaseManager.executeUpdate(statement, username, gameID);
+    }
+
+    public void addBlack(int gameID, String username) throws DataAccessException {
+        DatabaseManager databaseManager = new DatabaseManager();
+        // I need to hash the password somewhere
+        var statement = "UPDATE game SET blackUser = ? WHERE gameID = ?";
+        databaseManager.executeUpdate(statement, username, gameID);
+    }
+    public void clear() throws DataAccessException {
+        DatabaseManager databaseManager = new DatabaseManager();
+        var statement = "TRUNCATE game";
+        databaseManager.executeUpdate(statement);
     }
     private final String[] createStatements = {
             """
@@ -94,9 +116,8 @@ public class SqlGameDAO implements GameDAO {
             `gameID` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `whiteUser` varchar(255) DEFAULT NULL,
             `blackUser` varchar(255) DEFAULT NULL,
-            `gameName` varchar(255) NOT NULL
+            `gameName` varchar(255) NOT NULL,
             `game` BLOB DEFAULT NULL
-            PRIMARY KEY(`gameID`)
             );
             """
     };

@@ -17,6 +17,13 @@ public interface GameDAO {
         return null;
     }
 
-    default void clear() {}
+    default void clear() throws DataAccessException {}
+
+    public default void addBlack(int gameID, String username) throws DataAccessException{
+
+    }
+    public default void addWhite(int gameID, String username) throws DataAccessException {
+
+    }
 
 }

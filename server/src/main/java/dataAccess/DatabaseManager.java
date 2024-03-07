@@ -40,9 +40,9 @@ public class DatabaseManager {
      */
     static void createDatabase() throws DataAccessException {
         try {
-            var statement = "CREATE DATABASE IF NOT EXISTS" + databaseName;
+            var statement = "CREATE DATABASE IF NOT EXISTS " + databaseName;
             var conn = DriverManager.getConnection(connectionUrl, user, password);
-            try (var preparedStatement = conn.prepareStatement(statement)) {
+            try (var preparedStatement = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -72,7 +72,7 @@ public class DatabaseManager {
         }
     }
 
-    private void configureDatabase(String[] statements) throws DataAccessException, SQLException {
+    void configureDatabase(String[] statements) throws DataAccessException, SQLException {
         DatabaseManager.createDatabase(); // I think this might be where I want to check if there is already a DB
         try (var connection = DatabaseManager.getConnection()) {
             for (var statement : statements) {
@@ -93,7 +93,7 @@ public class DatabaseManager {
 //        catch (SQLException exception) {
 //            throw new DataAccessException("Error: unable to update");
 //        }
-//    }
+//
 
     int executeUpdate(String statement, Object... params) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
@@ -116,6 +116,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             throw new DataAccessException("Error: unable to update");
+            //return 0;
         }
     }
 

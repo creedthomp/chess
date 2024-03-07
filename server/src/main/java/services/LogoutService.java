@@ -1,7 +1,9 @@
 package services;
 
+import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
 import dataAccess.MemoryAuthDAO;
+import dataAccess.SqlAuthDAO;
 import responses.FinalResponse;
 
 public class LogoutService {
@@ -10,7 +12,7 @@ public class LogoutService {
 
     public FinalResponse getResponse(String authToken) throws DataAccessException {
 
-        MemoryAuthDAO authData = new MemoryAuthDAO();
+        AuthDAO authData = new SqlAuthDAO();
         FinalResponse finalResponse = new FinalResponse();
         try {
             // is the authToken authorized?
