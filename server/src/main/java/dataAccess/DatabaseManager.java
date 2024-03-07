@@ -1,7 +1,11 @@
 package dataAccess;
 
+import chess.ChessGame;
+
 import java.sql.*;
 import java.util.Properties;
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
+import static java.sql.Types.NULL;
 
 public class DatabaseManager {
     private static final String databaseName;
@@ -36,7 +40,7 @@ public class DatabaseManager {
      */
     static void createDatabase() throws DataAccessException {
         try {
-            var statement = "CREATE DATABASE IF NOT EXISTS " + databaseName;
+            var statement = "CREATE DATABASE IF NOT EXISTS" + databaseName;
             var conn = DriverManager.getConnection(connectionUrl, user, password);
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.executeUpdate();
@@ -67,4 +71,52 @@ public class DatabaseManager {
             throw new DataAccessException(e.getMessage());
         }
     }
+
+    private void configureDatabase(String[] statements) throws DataAccessException, SQLException {
+        DatabaseManager.createDatabase(); // I think this might be where I want to check if there is already a DB
+        try (var connection = DatabaseManager.getConnection()) {
+            for (var statement : statements) {
+                try (var preparedStatement = connection.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        }
+        catch (SQLException exception) {
+            throw new DataAccessException("Unable to configure database");
+        }
+    }
+
+//    public static void executeStatement(String execute) throws DataAccessException {
+//        try (Statement statement = DatabaseManager.getConnection().createStatement()) {
+//            statement.executeUpdate(execute);
+//        }
+//        catch (SQLException exception) {
+//            throw new DataAccessException("Error: unable to update");
+//        }
+//    }
+
+    int executeUpdate(String statement, Object... params) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
+                for (var i = 0; i < params.length; i++) {
+                    var param = params[i];
+                    if (param instanceof String p) ps.setString(i + 1, p);
+                    else if (param instanceof Integer p) ps.setInt(i + 1, p);
+                    else if (param instanceof ChessGame p) ps.setString(i + 1, p.toString());
+                    else if (param == null) ps.setNull(i + 1, NULL);
+                }
+                ps.executeUpdate();
+
+                var rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+
+                return 0;
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Error: unable to update");
+        }
+    }
+
 }
