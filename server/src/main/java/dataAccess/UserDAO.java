@@ -19,7 +19,7 @@ public interface UserDAO {
         return false;
     }
 
-    default void clear() {}
+    default void clear() throws DataAccessException {}
 
 
 }

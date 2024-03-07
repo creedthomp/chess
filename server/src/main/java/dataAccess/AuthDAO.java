@@ -24,7 +24,7 @@ public interface AuthDAO {
         return null;
     }
 
-    default HashSet<AuthTokenInformation> getAuthList() {
+    default HashSet<AuthTokenInformation> getAuthList() throws DataAccessException {
         return null;
     }
 
@@ -32,5 +32,5 @@ public interface AuthDAO {
         return "string";
     }
 
-    default void clear() {}
+    default void clear() throws DataAccessException {}
 }

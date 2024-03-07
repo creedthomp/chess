@@ -46,4 +46,8 @@ public class UserInformation {
     public int hashCode() {
         return Objects.hash(username, password, email);
     }
+
+    public String getEmail() {
+        return email;
+    }
 }

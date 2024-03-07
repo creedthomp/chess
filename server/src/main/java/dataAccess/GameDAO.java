@@ -5,11 +5,11 @@ import models.GameInformation;
 import java.util.HashSet;
 
 public interface GameDAO {
-    public default void addGame(GameInformation game){}
+    public default void addGame(GameInformation game) throws DataAccessException {}
 
 
 
-    public default HashSet<GameInformation> getGameList() {
+    public default HashSet<GameInformation> getGameList() throws DataAccessException {
         return null;
     }
 

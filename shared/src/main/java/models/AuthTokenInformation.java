@@ -9,10 +9,14 @@ public class AuthTokenInformation {
         this.AuthToken = UUID.randomUUID().toString();
         this.username = username;
     }
+
     public String getAuthToken() {
         return AuthToken;
     }
 
+    public void setAuthToken(String authToken) {
+        AuthToken = authToken;
+    }
 
     public String getUsername() {
         return username;
