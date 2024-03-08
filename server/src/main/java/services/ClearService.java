@@ -9,6 +9,7 @@ public class ClearService {
         GameDAO gameDAO = new SqlGameDAO();
         UserDAO userDAO = new SqlUserDAO();
         FinalResponse finalResponse = new FinalResponse();
+
        authDAO.clear();
        gameDAO.clear();
        userDAO.clear();

@@ -55,7 +55,7 @@ public class SqlUserDAO implements UserDAO {
             }
         }
         catch (SQLException exception) {
-            throw new DataAccessException("Error: user not found");
+            throw new DataAccessException("Error: unauthorized");
         }
     }
 
