@@ -1,4 +1,4 @@
-package DaoTests;
+package dataAccessTests;
 
 import dataAccess.*;
 import models.AuthTokenInformation;

@@ -1,9 +1,7 @@
-package DaoTests;
+package dataAccessTests;
 
 import dataAccess.*;
-import models.AuthTokenInformation;
 import models.GameInformation;
-import models.UserInformation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
