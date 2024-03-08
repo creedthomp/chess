@@ -44,7 +44,7 @@ public class SqlUserDAO implements UserDAO {
 
     public boolean loginUser(String username, String password) throws DataAccessException {
         try (var connection = DatabaseManager.getConnection()) {
-            var statement = "SELECT username, password FROM User WHERE username = ? AND password = ?;";
+            var statement = "SELECT username, password FROM user WHERE username = ? AND password = ?;";
             try (var ps = connection.prepareStatement(statement)) {
                 ps.setString(1, username);
                 ps.setString(2, password);
