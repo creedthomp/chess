@@ -30,9 +30,9 @@ public class CreateGameTest {
 
         CreateGameRequest request = new CreateGameRequest();
         CreateGameService service = new CreateGameService();
-        GameDAO gameDAO = new MemoryGameDAO();
-        AuthDAO authDAO = new MemoryAuthDAO();
-
+        GameDAO gameDAO = new SqlGameDAO();
+        AuthDAO authDAO = new SqlAuthDAO();
+        gameDAO.clear();
         request.setGameName("bobsGame");
         FinalResponse finalResponse = service.getResponse(request, authDAO.getAuth("bob"));
 
@@ -44,8 +44,8 @@ public class CreateGameTest {
     public void CreateGameFailTest() throws DataAccessException {
         CreateGameRequest request = new CreateGameRequest();
         CreateGameService service = new CreateGameService();
-        GameDAO gameDAO = new MemoryGameDAO();
-        AuthDAO authDAO = new MemoryAuthDAO();
+        GameDAO gameDAO = new SqlGameDAO();
+        AuthDAO authDAO = new SqlAuthDAO();
 
         request.setGameName("bobsGame");
         FinalResponse finalResponse = service.getResponse(request, "bob");

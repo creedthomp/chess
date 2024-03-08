@@ -24,7 +24,7 @@ public class ClearTest {
     @Test
     public void clearPassTest() throws DataAccessException {
          new ClearService().clearData();
-        AuthDAO authDAO = new MemoryAuthDAO();
+        AuthDAO authDAO = new SqlAuthDAO();
         // compare to an empty list
         assertTrue(authDAO.getAuthList().isEmpty());
     }
