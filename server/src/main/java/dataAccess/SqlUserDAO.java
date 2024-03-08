@@ -28,7 +28,7 @@ public class SqlUserDAO implements UserDAO {
 
     public boolean findUsername(UserInformation user) throws DataAccessException {
         try (var connection = DatabaseManager.getConnection()) {
-            var statement = "SELECT username FROM User WHERE username = ?";
+            var statement = "SELECT username FROM user WHERE username = ?";
             try (var ps = connection.prepareStatement(statement)) {
                 ps.setString(1, user.getUsername());
                 try (var rs = ps.executeQuery()) {
