@@ -5,6 +5,7 @@ target
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+server/src/main/resources/db.properties
 
 ### Mac OS ###
 .DS_Store
