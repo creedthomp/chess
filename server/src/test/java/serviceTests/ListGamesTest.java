@@ -28,35 +28,43 @@ public class ListGamesTest {
 
         CreateGameRequest request = new CreateGameRequest();
         CreateGameService service = new CreateGameService();
-        GameDAO gameDAO = new MemoryGameDAO();
-        AuthDAO authDAO = new MemoryAuthDAO();
+        GameDAO gameDAO = new SqlGameDAO();
+        AuthDAO authDAO = new SqlAuthDAO();
 
         request.setGameName("bobsGame");
         FinalResponse finalResponse = service.getResponse(request, authDAO.getAuth("bob"));
+
     }
     @Test
     public void ListGamePassTest() throws DataAccessException {
-        ListGamesService service = new ListGamesService();
-        GameDAO gameDAO = new MemoryGameDAO();
-        AuthDAO authDAO = new MemoryAuthDAO();
+        try {
+            ListGamesService service = new ListGamesService();
+            GameDAO gameDAO = new SqlGameDAO();
+            AuthDAO authDAO = new SqlAuthDAO();
 
-        FinalResponse finalResponse = service.getResponse(authDAO.getAuth("bob"));
+            FinalResponse finalResponse = service.getResponse(authDAO.getAuth("bob"));
 
-        assertEquals(1, gameDAO.getGameList().size());
+            assertEquals(1, gameDAO.getGameList().size());
+        }
+        catch (DataAccessException ex) {
+            throw new DataAccessException(ex.getMessage());
+        }
 
     }
 
     @Test
     public void ListGameFailTest() throws DataAccessException {
-        CreateGameRequest request = new CreateGameRequest();
-        CreateGameService service = new CreateGameService();
-        GameDAO gameDAO = new MemoryGameDAO();
-        AuthDAO authDAO = new MemoryAuthDAO();
 
-        FinalResponse finalResponse = service.getResponse(request, "bob");
+            CreateGameRequest request = new CreateGameRequest();
+            CreateGameService service = new CreateGameService();
+            GameDAO gameDAO = new SqlGameDAO();
+            AuthDAO authDAO = new SqlAuthDAO();
 
-        assertNotNull(finalResponse.getMessage());
-        assertEquals("Error: unauthorized", finalResponse.getMessage());
+            FinalResponse finalResponse = service.getResponse(request, "bob");
+
+            assertNotNull(finalResponse.getMessage());
+            assertEquals("Error: unauthorized", finalResponse.getMessage());
+
 
     }
 }

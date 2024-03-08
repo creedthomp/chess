@@ -8,8 +8,12 @@ import services.RegisterService;
 
 import static org.junit.jupiter.api.Assertions.*;
 public class RegisterServiceTest {
-    UserDAO userDAO = new MemoryUserDAO();
-    AuthDAO authDAO = new MemoryAuthDAO();
+    UserDAO userDAO = new SqlUserDAO();
+    AuthDAO authDAO = new SqlAuthDAO();
+
+    public RegisterServiceTest() throws DataAccessException {
+    }
+
     @Test
     public void RegisterPassTest() throws DataAccessException {
         RegisterRequest registerRequest = new RegisterRequest();

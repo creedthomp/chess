@@ -86,19 +86,6 @@ public class SqlGameDAO implements GameDAO {
         return gameInformation;
     }
 
-//    private void configureDatabase() throws DataAccessException {
-//        DatabaseManager.createDatabase();
-//        try (var conn = DatabaseManager.getConnection()) {
-//            for (var statement : createStatements) {
-//                try (var preparedStatement = conn.prepareStatement(statement)) {
-//                    preparedStatement.executeUpdate();
-//                }
-//            }
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//            throw new DataAccessException("Error: unable to configure database");
-//        }
-//    }
     public void addWhite(int gameID, String username) throws DataAccessException {
         DatabaseManager databaseManager = new DatabaseManager();
         // I need to hash the password somewhere
@@ -113,9 +100,11 @@ public class SqlGameDAO implements GameDAO {
         databaseManager.executeUpdate(statement, username, gameID);
     }
     public void clear() throws DataAccessException {
+        ID = 1;
         DatabaseManager databaseManager = new DatabaseManager();
         var statement = "TRUNCATE game";
         databaseManager.executeUpdate(statement);
+
     }
     private final String[] createStatements = {
             """

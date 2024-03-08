@@ -3,6 +3,7 @@ package serviceTests;
 import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
 import dataAccess.MemoryAuthDAO;
+import dataAccess.SqlAuthDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.RegisterRequest;
@@ -29,7 +30,7 @@ public class LogoutServiceTest {
 
     @Test
     public void logoutPassTest() throws DataAccessException {
-        AuthDAO authDAO = new MemoryAuthDAO();
+        AuthDAO authDAO = new SqlAuthDAO();
         LogoutService logoutService = new LogoutService();
 
         FinalResponse finalResponse = logoutService.getResponse(authDAO.getAuth("bob"));
@@ -40,7 +41,7 @@ public class LogoutServiceTest {
 
     @Test
     public void logoutFailTest() throws DataAccessException {
-        AuthDAO authDAO = new MemoryAuthDAO();
+        AuthDAO authDAO = new SqlAuthDAO();
         LogoutService logoutService = new LogoutService();
         try {
 

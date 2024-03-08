@@ -123,18 +123,6 @@ public class SqlAuthDAO implements AuthDAO {
         databaseManager.executeUpdate(statement);
     }
 
-//    private void configureDatabase() throws DataAccessException {
-//        DatabaseManager.createDatabase();
-//        try (var conn = DatabaseManager.getConnection()) {
-//            for (var statement : createStatements) {
-//                try (var preparedStatement = conn.prepareStatement(statement)) {
-//                    preparedStatement.executeUpdate();
-//                }
-//            }
-//        } catch (SQLException ex) {
-//            throw new DataAccessException("Error: unable to configure database");
-//        }
-//    }
     private final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS auth (
