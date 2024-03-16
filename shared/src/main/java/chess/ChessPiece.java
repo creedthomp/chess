@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
+
 /**
  * Represents a single chess piece
  * <p>
@@ -57,32 +58,32 @@ public class ChessPiece {
 
         switch (this.type) {
             case BISHOP:
-                Bishop bishop = new Bishop(pieceColor);
+                chess.Bishop bishop = new chess.Bishop(pieceColor);
                 moves = bishop.finalMoves(board, myPosition);
                 break;
 
             case KING:
-                King king = new King(pieceColor);
+                chess.King king = new chess.King(pieceColor);
                 moves = king.finalMoves(board, myPosition);
                 break;
 
             case ROOK:
-                Rook rook = new Rook(pieceColor);
+                chess.Rook rook = new chess.Rook(pieceColor);
                 moves = rook.finalMoves(board, myPosition);
                 break;
 
             case KNIGHT:
-                Knight knight = new Knight(pieceColor);
+                chess.Knight knight = new chess.Knight(pieceColor);
                 moves = knight.finalMoves(board, myPosition);
                 break;
 
             case PAWN:
-                Pawn pawn = new Pawn(pieceColor);
+                chess.Pawn pawn = new chess.Pawn(pieceColor);
                 moves = pawn.finalMoves(board, myPosition);
                 break;
 
             case QUEEN:
-                Queen queen = new Queen(pieceColor);
+                chess.Queen queen = new chess.Queen(pieceColor);
                 moves = queen.finalMoves(board, myPosition);
                 break;
         }
