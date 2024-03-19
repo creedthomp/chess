@@ -7,6 +7,8 @@ import responses.FinalResponse;
 import requests.*;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -72,7 +74,7 @@ public class ServerFacade {
             return readBody(http, responseClass);
         }
         catch (Exception e) {
-            throw new ResponseException(500, e.getMessage());
+            throw new DataAccessException(e.getMessage());
         }
     }
 
@@ -89,15 +91,26 @@ public class ServerFacade {
     private void throwIfNotSuccessful(HttpURLConnection http) throws IOException, DataAccessException {
         var status = http.getResponseCode();
         if (status == 403) {
-            throw new ResponseException(status, "Error: already taken");
+            throw new DataAccessException("Error: already taken");
+//            throw new DataAccessException(status , "Error: already taken");
         }
         if (!isSuccessful(status)) {
-            throw new ResponseException(status, "failure: " + status);
+            // should I change the format to be like the ones above
+            throw new DataAccessException("failure: " + status);
         }
     }
 
     private static <T> T readBody(HttpURLConnection http, Class<T> responseClass) throws IOException {
-
+        T response = null;
+        if (http.getContentLength() < 0) {
+            try (InputStream respBody = http.getInputStream()) {
+                InputStreamReader reader = new InputStreamReader(respBody);
+                if (responseClass != null) {
+                    response = new Gson().fromJson(reader, responseClass);
+                }
+            }
+        }
+        return response;
     }
 
 
