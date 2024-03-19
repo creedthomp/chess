@@ -1,4 +1,8 @@
 import models.UserInformation;
+import requests.CreateGameRequest;
+import requests.JoinGameRequest;
+import requests.LoginRequest;
+import requests.RegisterRequest;
 import ui.chessBoardUI;
 import ui.postLoginUI;
 import ui.preLoginUI;
@@ -88,22 +92,29 @@ public class client {
     }
 
     private static void register(Scanner scanner) {
+        RegisterRequest registerRequest = new RegisterRequest();
         System.out.println("Enter Username: ");
         String username = scanner.next();
+        registerRequest.username = username;
         System.out.println("Enter Password: ");
         String password = scanner.next();
+        registerRequest.password = password;
         System.out.println("Enter Email: ");
         String email = scanner.next();
+        registerRequest.email = email;
         UserInformation userInfo = new UserInformation(username, password, email);
         // should add this to the db now
         loggedInMenu();
     }
 
     private static void login(Scanner scanner) {
+        LoginRequest loginRequest = new LoginRequest();
         System.out.println("Enter Username: ");
         String username = scanner.next();
+        loginRequest.setUsername(username);
         System.out.println("Enter Password: ");
         String password = scanner.next();
+        loginRequest.setPassword(password);
         signedIn = true;
         loggedInMenu();
     }
@@ -118,8 +129,10 @@ public class client {
     }
 
     private static void createGame(Scanner scanner) {
+        CreateGameRequest createGameRequest = new CreateGameRequest();
         System.out.println("Enter gameName: ");
         String gameName = scanner.next();
+        createGameRequest.setGameName(gameName);
     }
 
     private static void listGames() {
@@ -128,11 +141,14 @@ public class client {
     }
 
     private static void joinGame(Scanner scanner) {
+        JoinGameRequest joinGameRequest = new JoinGameRequest();
         System.out.println("Enter Game ID to join: ");
         String gameIDString = scanner.next();
         String team = getteam(scanner);
+        joinGameRequest.setPlayerColor(team);
         try {
             int gameID = Integer.parseInt(gameIDString);
+            joinGameRequest.setGameID(gameID);
             // Now you can use gameID as an integer.
         } catch (NumberFormatException e) {
             System.out.println("Invalid Game ID. Please enter a valid number.");

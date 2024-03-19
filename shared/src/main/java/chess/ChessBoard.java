@@ -25,7 +25,9 @@ public class ChessBoard {
         squares[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
-
+    public ChessPiece[][] getBoard() {
+        return squares;
+    }
 
 
 
@@ -39,6 +41,8 @@ public class ChessBoard {
     public ChessPiece getPiece(ChessPosition position) {
         return squares[position.getRow() - 1][position.getColumn() - 1];
     }
+
+
 
 
     /**
