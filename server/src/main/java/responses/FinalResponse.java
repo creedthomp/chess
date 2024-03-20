@@ -20,6 +20,9 @@ public class FinalResponse {
         this.games = gameList;
     }
 
+    public Collection<GameInformation> getGameList() {
+        return games;
+    }
     public String getMessage() {
         return message;
     }
