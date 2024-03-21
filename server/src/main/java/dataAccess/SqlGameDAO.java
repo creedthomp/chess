@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
 
 public class SqlGameDAO implements GameDAO {
     private static int ID = 1;
@@ -25,7 +26,7 @@ public class SqlGameDAO implements GameDAO {
 
     public void addGame(GameInformation game) throws DataAccessException {
         DatabaseManager databaseManager = new DatabaseManager();
-        game.setGameID(ID++);
+        game.setGameID(new Random().nextInt(10000));
         // I need to hash the password somewhere
         String gamejson = new Gson().toJson(game.getGame());
         var statement = "INSERT INTO game (gameID, whiteUser, blackUser, gameName, game) VALUES (?, ?, ?, ?, ?)";

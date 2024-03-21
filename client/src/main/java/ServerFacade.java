@@ -95,8 +95,14 @@ public class ServerFacade {
 //            throw new DataAccessException(status , "Error: already taken");
         }
         if (!isSuccessful(status)) {
+            try (InputStream respBody = http.getErrorStream()) {
+                InputStreamReader reader = new InputStreamReader(respBody);
+
+                    FinalResponse response = new Gson().fromJson(reader, FinalResponse.class);
+                throw new DataAccessException("failure: " + response.getMessage());
+            }
             // should I change the format to be like the ones above
-            throw new DataAccessException("failure: " + status);
+            //throw new DataAccessException("failure: " + status);
         }
     }
 

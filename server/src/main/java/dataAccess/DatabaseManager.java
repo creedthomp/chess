@@ -115,6 +115,7 @@ public class DatabaseManager {
                 return 0;
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new DataAccessException("Error: unable to update");
             //return 0;
         }
