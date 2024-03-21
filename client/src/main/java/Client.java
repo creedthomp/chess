@@ -110,14 +110,13 @@ public class Client {
         // should add this to the db now
         //loggedInMenu();
         try {
-            FinalResponse response = server.register(registerRequest);
-            authToken = response;
+            authToken = server.register(registerRequest);
             signedIn = true;
             loggedInMenu();
         }
         catch (DataAccessException exception) {
             System.out.println(exception.getMessage());
-            //System.out.println("idk why error");
+            System.out.println("idk why error");
             notLoggedInMenu();
         }
     }
@@ -136,7 +135,6 @@ public class Client {
             loggedInMenu();
         }
         catch (DataAccessException exception) {
-            System.out.println(exception.getMessage());
             System.out.println("User has not been registered");
             notLoggedInMenu();
         }
@@ -162,7 +160,6 @@ public class Client {
             loggedInMenu();
         }
         catch (DataAccessException exception) {
-            System.out.println("Error: for some reason");
             System.out.println(exception.getMessage());
             loggedInMenu();
         }
@@ -202,8 +199,7 @@ public class Client {
             chessBoardUI.printBothBoards();
         }
         catch (DataAccessException exception) {
-            System.out.println("Error: GameID does not exist");
-            System.out.println(exception.getMessage());
+            System.out.println("Error: bad request");
             loggedInMenu();
         }
         //chessBoardUI.printBothBoards();
