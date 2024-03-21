@@ -6,6 +6,7 @@ import requests.JoinGameRequest;
 import requests.LoginRequest;
 import requests.RegisterRequest;
 import responses.FinalResponse;
+import ui.ServerFacade;
 import ui.chessBoardUI;
 import ui.postLoginUI;
 import ui.preLoginUI;
@@ -89,7 +90,7 @@ public class Client {
                 loggedInMenu();
                 break;
             default:
-                System.out.println("Invalid Response");
+                System.out.println("Invalid Response. Please enter a number.");
                 loggedInMenu();
         }
 

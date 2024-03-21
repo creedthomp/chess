@@ -1,8 +1,8 @@
+package ui;
 
 import com.google.gson.Gson;
 import dataAccess.DataAccessException;
 import requests.RegisterRequest;
-import responses.*;
 import responses.FinalResponse;
 import requests.*;
 
@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Objects;
 

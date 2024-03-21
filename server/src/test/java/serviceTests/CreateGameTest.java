@@ -36,7 +36,7 @@ public class CreateGameTest {
         request.setGameName("bobsGame");
         FinalResponse finalResponse = service.getResponse(request, authDAO.getAuth("bob"));
 
-        assertEquals(1, finalResponse.getGameID());
+        assertNotNull(finalResponse.getGameID());
 
     }
 

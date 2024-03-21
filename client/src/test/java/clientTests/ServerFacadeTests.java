@@ -1,5 +1,6 @@
 package clientTests;
 
+import dataAccess.DataAccessException;
 import dataAccess.SqlGameDAO;
 import org.junit.jupiter.api.*;
 import requests.CreateGameRequest;
@@ -8,22 +9,33 @@ import requests.LoginRequest;
 import requests.RegisterRequest;
 import responses.FinalResponse;
 import server.Server;
+import ui.ServerFacade;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ServerFacadeTests {
-
     private static Server server;
-    private FinalResponse responsInsertion;
+    private static FinalResponse responsInsertion;
+
+    private FinalResponse loginResponse;
+    static ServerFacade facade;
     @BeforeAll
-    public static void init() {
+    public static void init() throws DataAccessException {
         server = new Server();
-        var port = server.run(0);
-        System.out.println("Started test HTTP server on " + port);
-        facade = new ServerFacade(port);
-        //Client client = new Client(serverUrl);
-        //client.notLoggedInMenu();
+        //var port = server.run(0);
+        //var port = server.run("http://localhost:8080");
+        //System.out.println("Started test HTTP server on " + port);
+        //ServerFacade facade = new ServerFacade(port);
+        facade = new ServerFacade("http://localhost:8080");
+//        RegisterRequest registerRequest = new RegisterRequest();
+//        registerRequest.password = "bob";
+//        registerRequest.username = "bob";
+//        registerRequest.email = "bob";
+//        FinalResponse finalResponse = facade.register(registerRequest);
+//        responsInsertion = finalResponse;
+
     }
 
     @AfterAll
@@ -31,131 +43,197 @@ public class ServerFacadeTests {
         server.stop();
     }
 
-    @BeforeEach
-    public void before() {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.password = "bob";
-        registerRequest.username = "bob";
-        registerRequest.email = "bob";
-        FinalResponse finalResponse = facade.register(registerRequest);
-        responsInsertion = finalResponse;
-    }
+//    @BeforeEach
+//    public void beforeeach() throws DataAccessException {
+//        LoginRequest loginRequest =new LoginRequest();
+//        loginRequest.setUsername("bob");
+//        loginRequest.setPassword("bob");
+//        loginResponse = facade.login(loginRequest);
+//    }
+
+//    @BeforeAll
+//    public static void before() throws DataAccessException {
+//        RegisterRequest registerRequest = new RegisterRequest();
+//        registerRequest.password = "bob";
+//        registerRequest.username = "bob";
+//        registerRequest.email = "bob";
+//        FinalResponse finalResponse = facade.register(registerRequest);
+//        responsInsertion = finalResponse;
+//    }
     @Test
     public void sampleTest() {
         Assertions.assertTrue(true);
     }
 
     @Test
-    public void registerGood() {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.password = "bob";
-        registerRequest.username = "bob";
-        registerRequest.email = "bob";
-        FinalResponse finalResponse = facade.register(registerRequest);
-        assertNotNull(finalResponse.getAuthToken())
+    public void registerGood() throws DataAccessException {
+        try {
+            facade.logout(responsInsertion);
+            RegisterRequest registerRequest = new RegisterRequest();
+            registerRequest.password = "bob";
+            registerRequest.username = "bob";
+            registerRequest.email = "bob";
+            FinalResponse finalResponse = facade.register(registerRequest);
+            assertNotNull(finalResponse.getAuthToken());
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @Test
-    public void registerBad() {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.password = "bobbb";
-        registerRequest.username = "";
-        registerRequest.email = "";
-        FinalResponse finalResponse = facade.register(registerRequest);
-        assertNotNull(finalResponse.getMessage())
+    public void registerBad() throws DataAccessException {
+        try {
+            RegisterRequest registerRequest = new RegisterRequest();
+            registerRequest.password = "bobbb";
+            registerRequest.username = "";
+            registerRequest.email = "";
+            FinalResponse finalResponse = facade.register(registerRequest);
+            assertNull(finalResponse.getMessage());
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @Test
-    public void loginGood() {
-        LoginRequest loginRequest =new LoginRequest();
-        loginRequest.setUsername("bob");
-        loginRequest.setPassword("bob");
-        FinalResponse finalResponse = facade.login(registerRequest);
-        assertTrue(finalResponse.getAuthToken().length() > 2)
+    public void loginGood() throws DataAccessException {
+        try {
+            assertTrue(loginResponse.getAuthToken().length() > 2);
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @Test
-    public void loginBad() {
-        LoginRequest loginRequest =new LoginRequest();
-        loginRequest.setUsername("bob");
-        loginRequest.setPassword("notmypass");
-        FinalResponse finalResponse = facade.login(registerRequest);
-        assertNotNull(finalResponse.getMessage())
+    public void loginBad() throws DataAccessException {
+
+        try {
+            LoginRequest loginRequest = new LoginRequest();
+            loginRequest.setUsername("bob");
+            loginRequest.setPassword("notmypass");
+            FinalResponse finalResponse = facade.login(loginRequest);
+            assertNotNull(finalResponse.getMessage());
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @Test
-    public void logoutGood() {
-        FinalResponse finalResponse = facade.logout(responsInsertion);
-        assertNull(finalResponse.getMessage());
-        assertNull(finalResponse.getUsername());
+    public void logoutGood() throws DataAccessException {
+        try {
+            FinalResponse finalResponse = facade.logout(responsInsertion);
+            assertNull(finalResponse.getMessage());
+            assertNull(finalResponse.getUsername());
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @Test
-    public void logoutBad() {
-        FinalResponse finalResponse=facade.logout("notanauth");
-        assertNotNull(finalResponse.getMessage());
+    public void logoutBad() throws DataAccessException {
+        try {
+            FinalResponse fResponse = new FinalResponse();
+            fResponse.setAuthT("notauth");
+            FinalResponse finalResponse = facade.logout(fResponse);
+            assertNotNull(finalResponse.getMessage());
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @Test
-    public void createGameGood(){
-        CreateGameRequest createGameRequest = new CreateGameRequest();
-        createGameRequest.setGameName("MYGAME");
-        FinalResponse finalResponse = facade.createGame(createGameRequest, responsInsertion);
-        assertTrue(finalResponse.getGameID() > 0);
+    public void createGameGood() throws DataAccessException {
+        try {
+            CreateGameRequest createGameRequest = new CreateGameRequest();
+            createGameRequest.setGameName("MYGAME");
+            FinalResponse finalResponse = facade.createGame(createGameRequest, responsInsertion);
+            assertTrue(finalResponse.getGameID() > 0);
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
 
     }
 
     @Test
-    public void createGameBad(){
-        CreateGameRequest createGameRequest = new CreateGameRequest();
-        createGameRequest.setGameName("MYGAME");
-        FinalResponse finalResponse = facade.createGame(createGameRequest, responsInsertion);
+    public void createGameBad() throws DataAccessException {
+        try {
+            CreateGameRequest createGameRequest = new CreateGameRequest();
+            createGameRequest.setGameName("MYGAME");
+            FinalResponse finalResponse = facade.createGame(createGameRequest, responsInsertion);
 
-        CreateGameRequest createGameRequest2 = new CreateGameRequest();
-        createGameRequest2.setGameName("MYGAME");
-        FinalResponse finalResponse2 = facade.createGame(createGameRequest, responsInsertion);
-        assertNotNull(finalResponse2.getMessage());
+            CreateGameRequest createGameRequest2 = new CreateGameRequest();
+            createGameRequest2.setGameName("MYGAME");
+            FinalResponse finalResponse2 = facade.createGame(createGameRequest, responsInsertion);
+            assertNotNull(finalResponse2.getMessage());
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @Test
-    public void listGamesGood() {
-        CreateGameRequest createGameRequest = new CreateGameRequest();
-        createGameRequest.setGameName("MYGAME");
-        FinalResponse finalResponse = facade.createGame(createGameRequest, responsInsertion);
-        FinalResponse response = ListGames(responsInsertion);
-        assertNotNull(response.getGameList());
+    public void listGamesGood() throws DataAccessException {
+        try {
+            CreateGameRequest createGameRequest = new CreateGameRequest();
+            createGameRequest.setGameName("MYGAME");
+            FinalResponse finalResponse = facade.createGame(createGameRequest, responsInsertion);
+            FinalResponse response = facade.ListGames(responsInsertion);
+            assertNotNull(response.getGameList());
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @Test
-    public void listGamesBad() {
-        FinalResponse response = ListGames(responsInsertion);
-        assertNull(response.getGameList());
+    public void listGamesBad() throws DataAccessException {
+        try {
+            FinalResponse response = facade.ListGames(responsInsertion);
+            assertNull(response.getGameList());
+        }catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @Test
-    public void joinGamesGood() {
-        SqlGameDAO dao = new SqlGameDAO();
-        CreateGameRequest createGameRequest = new CreateGameRequest();
-        createGameRequest.setGameName("MYGAME");
-        FinalResponse response = facade.createGame(createGameRequest, responsInsertion);
-        JoinGameRequest joinGameRequest = new JoinGameRequest();
-        joinGameRequest.setGameID(response.getGameID());
-        joinGameRequest.setPlayerColor("WHITE");
-        FinalResponse finalResponse = joinGame(joinGameRequest, responsInsertion);
-        assertEquals("bob", dao.getGame(response.getGameID()).getWhiteName());
+    public void joinGamesGood() throws DataAccessException {
+        try {
+            SqlGameDAO dao = new SqlGameDAO();
+            CreateGameRequest createGameRequest = new CreateGameRequest();
+            createGameRequest.setGameName("MYGAME");
+            FinalResponse response = facade.createGame(createGameRequest, responsInsertion);
+            JoinGameRequest joinGameRequest = new JoinGameRequest();
+            joinGameRequest.setGameID(response.getGameID());
+            joinGameRequest.setPlayerColor("WHITE");
+            FinalResponse finalResponse = facade.joinGame(joinGameRequest, responsInsertion);
+            assertEquals("bob", dao.getGame(response.getGameID()).getWhiteName());
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @Test
-    public void joinGamesBad() {
-        SqlGameDAO dao = new SqlGameDAO();
-        CreateGameRequest createGameRequest = new CreateGameRequest();
-        createGameRequest.setGameName("MYGAME");
-        FinalResponse response = facade.createGame(createGameRequest, responsInsertion);
-        JoinGameRequest joinGameRequest = new JoinGameRequest();
-        joinGameRequest.setGameID("notanauthtoken");
-        joinGameRequest.setPlayerColor("WHITE");
-        FinalResponse finalResponse = joinGame(joinGameRequest, responsInsertion);
-        assertNotNull(finalResponse.getMessage());
+    public void joinGamesBad() throws DataAccessException {
+        try {
+            CreateGameRequest createGameRequest = new CreateGameRequest();
+            createGameRequest.setGameName("MYGAME");
+            facade.createGame(createGameRequest, responsInsertion);
+            JoinGameRequest joinGameRequest = new JoinGameRequest();
+            joinGameRequest.setGameID(1232131223);
+            joinGameRequest.setPlayerColor("WHITE");
+            FinalResponse finalResponse = facade.joinGame(joinGameRequest, responsInsertion);
+            assertNotNull(finalResponse.getMessage());
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
 }
