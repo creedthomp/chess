@@ -2,15 +2,19 @@ package ui;
 
 import Websocket.WebSocketFacade;
 import chess.*;
+import dataAccess.DataAccessException;
+import webSocketMessages.serverMessages.ServerMessage;
 
 import javax.websocket.Session;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Scanner;
 
+import static chess.ChessGame.TeamColor.BLACK;
+import static chess.ChessGame.TeamColor.WHITE;
 import static java.lang.System.out;
 import static ui.EscapeSequences.SET_TEXT_COLOR_RED;
-import static ui.EscapeSequences.SET_TEXT_COLOR_WHITE;
+import static ui.EscapeSequences.*;
 
 public class gameplayUI {
     private final WebSocketFacade ws;
@@ -19,14 +23,30 @@ public class gameplayUI {
     String authToken;
     ChessGame game;
     ChessBoard board;
+    ChessGame.TeamColor team = null;
+    boolean observing = false;
+    int gameID;
 
-    public gameplayUI(String auth, ChessGame gameChess) {
+    public gameplayUI(String auth, ChessGame gameChess, WebSocketFacade webs) {
         game = gameChess;
         board = game.getBoard();
         board.resetBoard();
         authToken = auth;
+        ws = webs;
+        //gameID = gID;
     }
 
+    public void setObserve(boolean bool) {
+        observing = bool;
+    }
+
+    public void setGameID(int gID) {
+        gameID = gID;
+    }
+
+    public void setTeamColor(ChessGame.TeamColor color) {
+        team = color;
+    }
     public void displayGameplayCommands() {
 
         System.out.println();
@@ -36,60 +56,73 @@ public class gameplayUI {
         System.out.println("4. Redraw Chess Board");
         System.out.println("5. Leave");
         System.out.println("6. Resign");
-        //getGameplayInput(scanner);
+        //getGameplayInput(scanner)
     }
 
-    public void getGameplayInput(String team) throws InvalidMoveException {
+    public void joinGame(ChessGame.TeamColor team) throws DataAccessException {
+        this.team = team;
+        if (Objects.equals(null , team)) {
+            ws.joinObserver(authToken,gameID);
+        }
+        else if (Objects.equals(BLACK, team)) {
+            ws.joinPlayer(authToken ,gameID, ChessGame.TeamColor.BLACK);
+        }
+        else {
+            ws.joinPlayer(authToken,gameID, WHITE);
+        }
+    }
+
+    public void getGameplayInput() throws InvalidMoveException, DataAccessException {
         Scanner scanner = new Scanner(System.in);
         displayGameplayCommands();
         String input = scanner.nextLine();
         switch (input) {
             case "1":
-                help(team);
+                help();
                 break;
             case "2":
-                highlightMoves(scanner, team);
+                highlightMoves(scanner);
                 break;
             case "3":
-                makeMove(scanner, team);
+                makeMove(scanner);
                 break;
             case "4":
-                redrawBoard(scanner, team);
+                redrawBoard(scanner);
                 break;
             case "5":
                 leave();
                 break;
             case "6":
-                resign(team);
+                resign();
                 break;
         }
     }
 
-    void help(String team) throws InvalidMoveException {
+    void help() throws InvalidMoveException, DataAccessException {
         System.out.println();
         System.out.println("Select make move and enter a start and end position (e6->b7)");
         System.out.println("or");
         System.out.println("Select highlight moves and enter the position of a piece to see all possible moves (e6)");
-        getGameplayInput(team);
+        getGameplayInput();
     }
 
-    void highlightMoves(Scanner scanner, String team) throws InvalidMoveException {
+    void highlightMoves(Scanner scanner) throws InvalidMoveException, DataAccessException {
         chessBoardUI chessboard = new chessBoardUI();
         System.out.println("Enter a position: ");
         String position = scanner.nextLine();
         ChessPosition actualPos = getPosition(position);
         // TO DO: check the team color for backwards true or false. call menu again to loop, message saying dont make a move until other player has gone
         if (actualPos.getRow() == -1 || actualPos.getColumn() == -1) {
-            getGameplayInput(team);
+            getGameplayInput();
         }
         else {
-            chessboard.printBoard(board, backwards(team), actualPos);
+            chessboard.printBoard(board, backwards(), actualPos);
             System.out.println(SET_TEXT_COLOR_RED + "DO NOT ENTER AN INPUT UNTIL OPPONENT HAS GONE" + SET_TEXT_COLOR_WHITE);
-            getGameplayInput(team);
+            getGameplayInput();
         }
     }
 
-    void makeMove(Scanner scanner, String team) throws InvalidMoveException {
+    void makeMove(Scanner scanner) throws InvalidMoveException, DataAccessException {
         chessBoardUI chessboard = new chessBoardUI();
         ChessMove chessMove;
         System.out.println("Enter a start and end position (e6->b7): ");
@@ -97,36 +130,38 @@ public class gameplayUI {
         String[] parts = move.split("->");
         ChessPosition startPosition = getPosition(parts[0]);
         ChessPosition endPosition = getPosition(parts[1]);
-        chessMove = getMove(scanner, startPosition, endPosition, team);
+        chessMove = getMove(scanner, startPosition, endPosition);
         if (validateMove(chessMove)) {
             game.makeMove(chessMove);
         }
         else {
             System.out.println("Error: Invalid Move");
         }
-        chessboard.printBoard(board, backwards(team), null);
+        ws.makeMove(authToken, gameID, chessMove);
+        chessboard.printBoard(board, backwards(), null);
         System.out.println(SET_TEXT_COLOR_RED + "DO NOT ENTER AN INPUT UNTIL OPPONENT HAS GONE" + SET_TEXT_COLOR_WHITE);
-        getGameplayInput(team);
+        getGameplayInput();
         // maybe add try catch for the invalid moves
     }
 
-    void redrawBoard(Scanner scanner, String team) throws InvalidMoveException {
+    void redrawBoard(Scanner scanner) throws InvalidMoveException, DataAccessException {
         chessBoardUI chessboard = new chessBoardUI();
-        chessboard.printBoard(board, backwards(team), null);
-        getGameplayInput(team);
+        chessboard.printBoard(board, backwards(), null);
+        getGameplayInput();
     }
 
-    void leave() {
-
+    void leave() throws DataAccessException {
+        ws.leave(authToken, gameID);
     }
 
-    void resign(String team) {
+    void resign() throws DataAccessException {
         // delete game??
+        ws.resign(authToken, gameID);
         switch (team) {
-            case "BLACK":
+            case BLACK:
                 System.out.println("WHITE WINS");
                 break;
-            case "WHITE":
+            case WHITE:
                 System.out.println("BLACK WINS");
                 break;
         }
@@ -209,8 +244,8 @@ public class gameplayUI {
         return new ChessPosition(col, row);
     }
 
-    boolean backwards(String team) {
-        return Objects.equals(team, "WHITE");
+    boolean backwards() {
+        return Objects.equals(team, WHITE);
     }
 
     void promote() {
@@ -235,11 +270,11 @@ public class gameplayUI {
         return null;
     }
 
-    ChessMove getMove(Scanner scanner, ChessPosition startPosition, ChessPosition endPosition, String team) {
+    ChessMove getMove(Scanner scanner, ChessPosition startPosition, ChessPosition endPosition) {
         ChessMove chessMove;
         ChessPiece piece = board.getPiece(startPosition);
         if (Objects.equals(piece.getPieceType(),ChessPiece.PieceType.PAWN)) {
-            if (((endPosition.getRow() == 7) && (Objects.equals(team, "WHITE"))) || ((endPosition.getRow() == 0) && (Objects.equals(team, "BLACK")))) {
+            if (((endPosition.getRow() == 7) && (Objects.equals(team, WHITE))) || ((endPosition.getRow() == 0) && (Objects.equals(team, BLACK)))) {
                 promote();
                 String promotion = scanner.nextLine();
                 chessMove = new ChessMove(startPosition, endPosition, getPromote(promotion));
@@ -259,6 +294,18 @@ public class gameplayUI {
             }
         }
         return false;
+    }
+
+    public void notify(ServerMessage notification) {
+        chessBoardUI chessboard = new chessBoardUI();
+        chessboard.printBoard(board, backwards(), null);
+        System.out.println("\n");
+        switch (notification.getServerMessageType()) {
+            case LOAD_GAME -> chessboard.printBoard(board, backwards(), null);
+            case ERROR -> System.out.println(SET_TEXT_COLOR_RED + notification.getError());
+            case NOTIFICATION -> System.out.println(SET_TEXT_COLOR_MAGENTA + notification.getMessage());
+            default -> System.out.println("error");
+        }
     }
 
 }
