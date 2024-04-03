@@ -30,6 +30,7 @@ public class Pawn {
             }
 
             ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn());
+            ChessPiece endPiece = (board.getPiece(endPosition));
             if ((board.getPiece(endPosition) == null)) {
                 moves.addAll(promotionPiece(8, startPosition, endPosition, endPosition));
             }

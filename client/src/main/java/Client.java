@@ -1,3 +1,5 @@
+import Websocket.WebSocketFacade;
+import chess.ChessGame;
 import dataAccess.DataAccessException;
 import models.GameInformation;
 import models.UserInformation;
@@ -6,24 +8,28 @@ import requests.JoinGameRequest;
 import requests.LoginRequest;
 import requests.RegisterRequest;
 import responses.FinalResponse;
-import ui.ServerFacade;
-import ui.chessBoardUI;
-import ui.postLoginUI;
-import ui.preLoginUI;
+import ui.*;
+import webSocketMessages.serverMessages.ServerMessage;
 
+import java.util.Objects;
 import java.util.Scanner;
 
-public class Client {
+public class Client implements NotificationHandler {
     private final ServerFacade server;
     private final String serverUrl;
 
-    private static boolean signedIn = false;
+    private final WebSocketFacade ws;
+
+    private static boolean signedIn;
 
     private static FinalResponse authToken;
 
-    public Client(String serverUrl) {
+    private ChessGame game;
+
+    public Client(String serverUrl) throws DataAccessException {
         this.server = new ServerFacade(serverUrl);
         this.serverUrl = serverUrl;
+        ws = new WebSocketFacade(serverUrl, this);
     }
 
 //    public static void run() throws DataAccessException {
@@ -37,6 +43,9 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         preLogin.printPreLoginMenu();
         String input = scanner.nextLine(); // Read the input once
+        if (signedIn == true) {
+            loggedInMenu();
+        }
         switch (input) {
             case "1":
                 register(scanner);
@@ -107,9 +116,6 @@ public class Client {
         System.out.println("Enter Email: ");
         String email = scanner.next();
         registerRequest.email = email;
-        UserInformation userInfo = new UserInformation(username, password, email);
-        // should add this to the db now
-        //loggedInMenu();
         try {
             authToken = server.register(registerRequest);
             signedIn = true;
@@ -117,7 +123,7 @@ public class Client {
         }
         catch (DataAccessException exception) {
             System.out.println(exception.getMessage());
-            System.out.println("idk why error");
+            //System.out.println("idk why error");
             notLoggedInMenu();
         }
     }
@@ -157,7 +163,12 @@ public class Client {
         String gameName = scanner.next();
         createGameRequest.setGameName(gameName);
         try {
-            server.createGame(createGameRequest, authToken);
+            FinalResponse response = server.createGame(createGameRequest, authToken);
+            for (GameInformation gameInformation : response.getGameList()) {
+                if (Objects.equals(gameInformation.getGameID(), response.getGameID())){
+                    game = gameInformation.getGame();
+                }
+            }
             loggedInMenu();
         }
         catch (DataAccessException exception) {
@@ -182,14 +193,18 @@ public class Client {
     }
 
     private void joinGame(Scanner scanner) throws DataAccessException {
+        gameplayUI gameplayui = new gameplayUI(authToken.getAuthT(), game, ws);
+        chessBoardUI chessBoardui = new chessBoardUI();
+        int gameID = 0;
         JoinGameRequest joinGameRequest = new JoinGameRequest();
         System.out.println("Enter Game ID to join: ");
         String gameIDString = scanner.next();
         String team = getteam(scanner);
         joinGameRequest.setPlayerColor(team);
         try {
-            int gameID = Integer.parseInt(gameIDString);
+            gameID = Integer.parseInt(gameIDString);
             joinGameRequest.setGameID(gameID);
+            gameplayui.setGameID(gameID);
             // Now you can use gameID as an integer.
         } catch (NumberFormatException e) {
             System.out.println("Invalid Game ID. Please enter a valid number.");
@@ -197,9 +212,30 @@ public class Client {
         try {
             server.joinGame(joinGameRequest, authToken);
             signedIn = true;
-            chessBoardUI.printBothBoards();
+
+            // probably change stuff right here for ws
+            if (team.isEmpty()) {
+                gameplayui.setObserve(true);
+                gameplayui.joinGame(null);
+                gameplayui.getGameplayInput();
+            }
+            else {
+                gameplayui.setObserve(false);
+                if (Objects.equals(team, "BLACK")) {
+                    gameplayui.joinGame(ChessGame.TeamColor.BLACK);
+                   // ws.joinPlayer(authToken.getAuthToken(),gameID, ChessGame.TeamColor.BLACK);
+                    gameplayui.getGameplayInput();
+                }
+                else {
+                    gameplayui.joinGame(ChessGame.TeamColor.WHITE);
+                   //ws.joinPlayer(authToken.getAuthToken(),gameID, ChessGame.TeamColor.WHITE);
+                    gameplayui.getGameplayInput();
+                }
+                //gameplayui.getGameplayInput(team);
+            }
+            //chessBoardUI.printBothBoards();
         }
-        catch (DataAccessException exception) {
+        catch (Exception exception) { // error here
             System.out.println("Error: bad request");
             loggedInMenu();
         }
@@ -263,4 +299,8 @@ public class Client {
         return "";
     }
 
+    @Override
+    public void notify(ServerMessage notification) {
+        System.out.println(notification.getMessage());
+    }
 }

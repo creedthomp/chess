@@ -1,19 +1,24 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
+import Websocket.WebSocketFacade;
+import chess.*;
 
 import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Vector;
 
 import static ui.EscapeSequences.*;
 public class chessBoardUI {
+
+
+    //Session session;
     private static boolean isBackwards = false;
+
+    private boolean highlight = false;
     // i think I can change from main now that prints right
     public static void main(String[] args) {
 //        var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
@@ -33,31 +38,41 @@ public class chessBoardUI {
 //       out.print(SET_BG_COLOR_BLACK);
 //       out.print(SET_TEXT_COLOR_WHITE);
 
-        printBothBoards();
+        //printBothBoards();
     }
 
     //I should make  ChessPiece[][] this a param eventually
-    public static void printBothBoards(){
+    public void printBoard(ChessBoard board, boolean backwards, ChessPosition highlightPos){
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         out.print(ERASE_SCREEN);
-        ChessBoard pieces = new ChessBoard();
-        pieces.resetBoard();
-        ChessPiece[][] board = pieces.getBoard();
 
-        setDarkerGray(out);
-        printBorders(out, new String[]{" a ", " b ", " c ", " d ", " e ", " f ", " g ", " h "});
-        drawBoard(out, new String[]{" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 "}, board);
-        printBorders(out, new String[]{" a ", " b ", " c ", " d ", " e ", " f ", " g ", " h "});
-        out.println();
-        printBorders(out, new String[]{" h ", " g ", " f ", " e ", " d ", " c ", " b ", " a "});
-        isBackwards = true;
-        drawBoard(out, new String[]{" 8 ", " 7 ", " 6 ", " 5 ", " 4 ", " 3 ", " 2 ", " 1 "}, board);
-        printBorders(out, new String[]{" h ", " g ", " f ", " e ", " d ", " c ", " b ", " a "});
-        isBackwards = false;
+        if (backwards) {
+            setDarkerGray(out);
+            printBorders(out, new String[]{" a ", " b ", " c ", " d ", " e ", " f ", " g ", " h "});
+            isBackwards = true;
+            drawBoard(out, new String[]{" 8 ", " 7 ", " 6 ", " 5 ", " 4 ", " 3 ", " 2 ", " 1 "}, board, highlightPos);
+            printBorders(out, new String[]{" a ", " b ", " c ", " d ", " e ", " f ", " g ", " h "});
+            isBackwards = false;
+            out.println();
+        }
+        else {
+            printBorders(out, new String[]{" h ", " g ", " f ", " e ", " d ", " c ", " b ", " a "});
+            //isBackwards = true;
+            drawBoard(out, new String[]{" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 "}, board, highlightPos);
+            printBorders(out, new String[]{" h ", " g ", " f ", " e ", " d ", " c ", " b ", " a "});
+            //isBackwards = false;
+            out.println();
+
+        }
         out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_WHITE);
     }
-    private static void drawBoard(PrintStream out, String[] labelList, ChessPiece[][] board) {
+    private void drawBoard(PrintStream out, String[] labelList, ChessBoard kindaBoard, ChessPosition highlightPos) {
+        Collection<ChessMove> potentialMoves = null;
+        if (highlightPos != null) {
+            potentialMoves = getMoves(kindaBoard, highlightPos);
+        }
+        ChessPiece[][] board = kindaBoard.getBoard();
         int counter;
         if (isBackwards) {
             counter = 7;
@@ -66,10 +81,10 @@ public class chessBoardUI {
         }
         for (String label : labelList) {
             if (counter % 2 == 0) {
-                drawOneRow(out, SET_BG_COLOR_LIGHT_GREY, label, board[counter]);
+                drawOneRow(out, SET_BG_COLOR_LIGHT_GREY, label, board[counter], counter, potentialMoves);
             }
             else {
-                drawOneRow(out, SET_BG_COLOR_DARK_GREY, label, board[counter]);
+                drawOneRow(out, SET_BG_COLOR_DARK_GREY, label, board[counter], counter, potentialMoves);
             }
 
             if (isBackwards) {
@@ -82,8 +97,8 @@ public class chessBoardUI {
     }
 
 
-    private static void drawOneRow(PrintStream out, String color, String label, ChessPiece[] rowList) {
-        if (isBackwards) {
+    private static void drawOneRow(PrintStream out, String color, String label, ChessPiece[] rowList, int row, Collection<ChessMove> potentialMoves) {
+        if (!isBackwards) {
             rowList = reverseRow(rowList);
         }
         for (int i = 0; i < 3; i++) {
@@ -104,9 +119,9 @@ public class chessBoardUI {
                 }
                 else{
                     if (rowList[j] == null) {
-                        printTheMiddleSquare(out, rowList[j], ChessGame.TeamColor.WHITE);
+                        printTheMiddleSquare(out, rowList[j], ChessGame.TeamColor.WHITE, potentialMoves, new ChessPosition(row, j), color);
                     } else {
-                        printTheMiddleSquare(out, rowList[j], rowList[j].getTeamColor());
+                        printTheMiddleSquare(out, rowList[j], rowList[j].getTeamColor(), potentialMoves, new ChessPosition(row, j), color);
                     
                     }
                 }
@@ -136,8 +151,8 @@ public class chessBoardUI {
             out.print(EMPTY.repeat(3));
     }
 
-    private static void printTheMiddleSquare(PrintStream out, ChessPiece piece, ChessGame.TeamColor color) { // probably need to add a chess board as a param
-            String printPiece = "";
+    private static void printTheMiddleSquare(PrintStream out, ChessPiece piece, ChessGame.TeamColor color, Collection<ChessMove> potentialMoves, ChessPosition positionToCheck, String currentColor) { // probably need to add a chess board as a param
+            String printPiece = "   ";
             if (color == ChessGame.TeamColor.BLACK){
                 out.print(SET_TEXT_COLOR_BLACK);
             }
@@ -156,11 +171,14 @@ public class chessBoardUI {
                     default -> printPiece = "   ";
                 }
             }
-            else {
-                printPiece = "   ";
+
+            if ((potentialMoves == null) || (potentialMoves.isEmpty())) {
+                printThePiece(out, printPiece, false, currentColor);
             }
-            out.print(printPiece);
-            out.print(EMPTY);
+
+            else {
+                printThePiece(out, printPiece, containsThisSquare(potentialMoves, positionToCheck), currentColor);
+            }
     }
 
     private static void printBorders(PrintStream out, String[] list) {
@@ -199,6 +217,46 @@ public class chessBoardUI {
         }
         return backwards;
     }
-        
+
+    Collection<ChessMove> getMoves(ChessBoard kindaBoard, ChessPosition pos) {
+        ChessPosition newPos = new ChessPosition(pos.getRow(), pos.getColumn());
+        Collection<ChessMove> validMoves;
+        ChessPiece piece = kindaBoard.getPiece(newPos);
+        validMoves = piece.pieceMoves(kindaBoard, newPos);
+        return validMoves;
+    }
+
+    static boolean containsThisSquare(Collection<ChessMove> potentialMoves, ChessPosition pos) {
+        for (ChessMove move : potentialMoves) {
+            ChessPosition newEnd = new ChessPosition(move.getEndPosition().getRow() - 1, move.getEndPosition().getColumn() - 1);
+            if (Objects.equals(newEnd, pos)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static void printThePiece(PrintStream out, String piece, boolean highlight, String color) {
+        if (highlight) {
+            out.print(SET_BG_COLOR_GREEN);
+            out.print(piece);
+            switch (color) {
+                case SET_BG_COLOR_LIGHT_GREY:
+                    setLightGray(out);
+                    out.print(EMPTY);
+                    break;
+                case SET_BG_COLOR_DARK_GREY:
+                    setDarkGray(out);
+                    out.print(EMPTY);
+                    break;
+            }
+
+        }
+        else {
+            out.print(piece);
+            out.print(EMPTY);
+        }
+    }
+
 
 }
