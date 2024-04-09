@@ -14,11 +14,11 @@ import webSocketMessages.serverMessages.ServerMessage;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class Client implements NotificationHandler {
+public class Client {
     private final ServerFacade server;
     private final String serverUrl;
 
-    private final WebSocketFacade ws;
+    //private final WebSocketFacade ws;
 
     private static boolean signedIn;
 
@@ -29,7 +29,6 @@ public class Client implements NotificationHandler {
     public Client(String serverUrl) throws DataAccessException {
         this.server = new ServerFacade(serverUrl);
         this.serverUrl = serverUrl;
-        ws = new WebSocketFacade(serverUrl, this);
     }
 
 //    public static void run() throws DataAccessException {
@@ -89,7 +88,7 @@ public class Client implements NotificationHandler {
                 joinGame(scanner);
                 break;
             case "5":
-               logout();
+                logout();
                 break;
             case "6":
                 quit();
@@ -120,8 +119,7 @@ public class Client implements NotificationHandler {
             authToken = server.register(registerRequest);
             signedIn = true;
             loggedInMenu();
-        }
-        catch (DataAccessException exception) {
+        } catch (DataAccessException exception) {
             System.out.println(exception.getMessage());
             //System.out.println("idk why error");
             notLoggedInMenu();
@@ -139,12 +137,12 @@ public class Client implements NotificationHandler {
         try {
             authToken = server.login(loginRequest);
             signedIn = true;
-            loggedInMenu();
-        }
-        catch (DataAccessException exception) {
+            //loggedInMenu();
+        } catch (DataAccessException exception) {
             System.out.println("User has not been registered");
             notLoggedInMenu();
         }
+        loggedInMenu();
     }
 
     private void quit() {
@@ -163,15 +161,11 @@ public class Client implements NotificationHandler {
         String gameName = scanner.next();
         createGameRequest.setGameName(gameName);
         try {
-            FinalResponse response = server.createGame(createGameRequest, authToken);
-            for (GameInformation gameInformation : response.getGameList()) {
-                if (Objects.equals(gameInformation.getGameID(), response.getGameID())){
-                    game = gameInformation.getGame();
-                }
-            }
+            server.createGame(createGameRequest, authToken);
             loggedInMenu();
         }
         catch (DataAccessException exception) {
+            //System.out.println("Error: for some reason");
             System.out.println(exception.getMessage());
             loggedInMenu();
         }
@@ -185,16 +179,15 @@ public class Client implements NotificationHandler {
             for (GameInformation game : response.getGameList()) {
                 System.out.println("Game Name: " + game.getGameName() + ", White: " + game.getWhiteName() + ", Black: " + game.getBlackName() + ", Game ID: " + game.getGameID());
             }
-        }
-        catch (DataAccessException ex) {
+        } catch (DataAccessException ex) {
             System.out.println("Error: unauthorized");
             System.out.println(ex.getMessage());
         }
     }
 
     private void joinGame(Scanner scanner) throws DataAccessException {
-        gameplayUI gameplayui = new gameplayUI(authToken.getAuthT(), game, ws);
-        chessBoardUI chessBoardui = new chessBoardUI();
+        gameplayUI gameplayui = null;
+        //chessBoardUI chessBoardui = new chessBoardUI();
         int gameID = 0;
         JoinGameRequest joinGameRequest = new JoinGameRequest();
         System.out.println("Enter Game ID to join: ");
@@ -203,40 +196,42 @@ public class Client implements NotificationHandler {
         joinGameRequest.setPlayerColor(team);
         try {
             gameID = Integer.parseInt(gameIDString);
+            game = getGame(gameID);
             joinGameRequest.setGameID(gameID);
-            gameplayui.setGameID(gameID);
+
             // Now you can use gameID as an integer.
         } catch (NumberFormatException e) {
             System.out.println("Invalid Game ID. Please enter a valid number.");
         }
         try {
+            gameplayui = new gameplayUI(authToken.getAuthT(), game, serverUrl);
+            gameplayui.setGameID(gameID);
             server.joinGame(joinGameRequest, authToken);
             signedIn = true;
 
-            // probably change stuff right here for ws
+            // this is setting up gameplay depending on color
             if (team.isEmpty()) {
                 gameplayui.setObserve(true);
                 gameplayui.joinGame(null);
+                // delete this so observer doesn't actually get to input things
                 gameplayui.getGameplayInput();
-            }
-            else {
+            } else {
                 gameplayui.setObserve(false);
                 if (Objects.equals(team, "BLACK")) {
                     gameplayui.joinGame(ChessGame.TeamColor.BLACK);
-                   // ws.joinPlayer(authToken.getAuthToken(),gameID, ChessGame.TeamColor.BLACK);
+                    // ws.joinPlayer(authToken.getAuthToken(),gameID, ChessGame.TeamColor.BLACK);
                     gameplayui.getGameplayInput();
-                }
-                else {
+                } else {
                     gameplayui.joinGame(ChessGame.TeamColor.WHITE);
-                   //ws.joinPlayer(authToken.getAuthToken(),gameID, ChessGame.TeamColor.WHITE);
+                    //ws.joinPlayer(authToken.getAuthToken(),gameID, ChessGame.TeamColor.WHITE);
                     gameplayui.getGameplayInput();
                 }
                 //gameplayui.getGameplayInput(team);
             }
             //chessBoardUI.printBothBoards();
-        }
-        catch (Exception exception) { // error here
+        } catch (Exception exception) { // error here
             System.out.println("Error: bad request");
+            System.out.println("Invalid Game ID. Please enter a valid number.");
             loggedInMenu();
         }
         //chessBoardUI.printBothBoards();
@@ -273,8 +268,7 @@ public class Client implements NotificationHandler {
         try {
             server.logout(authToken);
             signedIn = false;
-        }
-        catch (DataAccessException exception) {
+        } catch (DataAccessException exception) {
             System.out.println("Error: unauthorized?");
         }
     }
@@ -299,8 +293,15 @@ public class Client implements NotificationHandler {
         return "";
     }
 
-    @Override
-    public void notify(ServerMessage notification) {
-        System.out.println(notification.getMessage());
+    ChessGame getGame(int gameID) throws DataAccessException {
+        FinalResponse response = server.ListGames(authToken);
+        for (GameInformation gameInformation : response.getGameList()) {
+            if (Objects.equals(gameInformation.getGameID(), gameID)) {
+                game = gameInformation.getGame();
+                return game;
+            }
+        }
+        return null;
     }
+
 }

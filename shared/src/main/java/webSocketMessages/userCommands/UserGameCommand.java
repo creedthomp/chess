@@ -27,6 +27,7 @@ public class UserGameCommand {
 
     private ChessMove move;
 
+    private ChessGame game;
 
 
     public enum CommandType {
@@ -37,7 +38,7 @@ public class UserGameCommand {
         RESIGN
     }
 
-    public String getAuthString() {
+    public String getAuthToken() {
         return authToken;
     }
 
@@ -57,6 +58,14 @@ public class UserGameCommand {
         return move;
     }
 
+    public ChessGame getGame() {
+        return game;
+    }
+
+    public void setGame(ChessGame game) {
+        this.game = game;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -64,11 +73,11 @@ public class UserGameCommand {
         if (!(o instanceof UserGameCommand))
             return false;
         UserGameCommand that = (UserGameCommand) o;
-        return getCommandType() == that.getCommandType() && Objects.equals(getAuthString(), that.getAuthString());
+        return getCommandType() == that.getCommandType() && Objects.equals(getAuthToken(), that.getAuthToken());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCommandType(), getAuthString());
+        return Objects.hash(getCommandType(), getAuthToken());
     }
 }

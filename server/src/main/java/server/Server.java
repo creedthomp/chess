@@ -2,9 +2,9 @@ package server;
 
 import handlers.*;
 import spark.*;
-
+import server.WebSocket.WebSocketHandler;
 public class Server {
-
+    private WebSocketHandler webSocketHandler;
     public static void main(String[] args) {
         new Server().run(8080);
     }
@@ -28,7 +28,7 @@ public class Server {
     }
 
     private static void createRoutes() {
-
+        Spark.webSocket("/connect", WebSocketHandler.class);
         Spark.post("/user", (req, res) -> new RegistrationHandler().handleThisRequest(req, res));
         Spark.post("/session", (req, res) -> new LoginHandler().handleThisRequest(req, res));
         Spark.delete("/session", (req, res) -> new LogoutHandler().handleThisRequest(req, res));
@@ -36,5 +36,6 @@ public class Server {
         Spark.post("/game", ((req, res) -> new CreateGameHandler().handleThisRequest(req,res)));
         Spark.put("/game", ((req, res) -> new JoinGameHandler().handleThisRequest(req, res)));
         Spark.delete("/db", ((req, res) -> new ClearHandler().handleThisRequest(req, res)));
+
     }
 }

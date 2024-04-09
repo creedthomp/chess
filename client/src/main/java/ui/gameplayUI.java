@@ -16,7 +16,7 @@ import static java.lang.System.out;
 import static ui.EscapeSequences.SET_TEXT_COLOR_RED;
 import static ui.EscapeSequences.*;
 
-public class gameplayUI {
+public class gameplayUI implements NotificationHandler {
     private final WebSocketFacade ws;
     Session session;
     // MAYBE ADD A PLAYER COLOR
@@ -27,12 +27,12 @@ public class gameplayUI {
     boolean observing = false;
     int gameID;
 
-    public gameplayUI(String auth, ChessGame gameChess, WebSocketFacade webs) {
+    public gameplayUI(String auth, ChessGame gameChess, String serverURL) throws DataAccessException {
         game = gameChess;
         board = game.getBoard();
         board.resetBoard();
         authToken = auth;
-        ws = webs;
+        ws = new WebSocketFacade(serverURL, this);
         //gameID = gID;
     }
 
@@ -60,15 +60,23 @@ public class gameplayUI {
     }
 
     public void joinGame(ChessGame.TeamColor team) throws DataAccessException {
+        chessBoardUI chessboard = new chessBoardUI();
         this.team = team;
         if (Objects.equals(null , team)) {
             ws.joinObserver(authToken,gameID);
+            chessboard.printBoard(board, true, null);
+            System.out.println(SET_TEXT_COLOR_GREEN + "Successfully observing game" + SET_TEXT_COLOR_WHITE);
         }
         else if (Objects.equals(BLACK, team)) {
             ws.joinPlayer(authToken ,gameID, ChessGame.TeamColor.BLACK);
+            chessboard.printBoard(board, backwards(), null);
+            System.out.println(SET_TEXT_COLOR_GREEN + "Successfully joined game as BLACK" + SET_TEXT_COLOR_WHITE);
+            System.out.println(SET_TEXT_COLOR_RED + "DO NOT MAKE A MOVE UNTIL WHITE HAS GONE" + SET_TEXT_COLOR_WHITE);
         }
         else {
             ws.joinPlayer(authToken,gameID, WHITE);
+            chessboard.printBoard(board, backwards(), null);
+            System.out.println(SET_TEXT_COLOR_GREEN + "Successfully joined game as WHITE" + SET_TEXT_COLOR_WHITE);
         }
     }
 
@@ -107,18 +115,26 @@ public class gameplayUI {
     }
 
     void highlightMoves(Scanner scanner) throws InvalidMoveException, DataAccessException {
+        // if you are in check
         chessBoardUI chessboard = new chessBoardUI();
-        System.out.println("Enter a position: ");
-        String position = scanner.nextLine();
-        ChessPosition actualPos = getPosition(position);
-        // TO DO: check the team color for backwards true or false. call menu again to loop, message saying dont make a move until other player has gone
-        if (actualPos.getRow() == -1 || actualPos.getColumn() == -1) {
+        if (game.isInCheck(team)) {
+            ChessPosition kingPosition = game.myKingPosition(game.getBoard(), team);
+            chessboard.printBoard(board, backwards(), kingPosition);
+            System.out.println("ALERT: You are in check and must move the King!");
             getGameplayInput();
         }
+        // if you are not in check
         else {
-            chessboard.printBoard(board, backwards(), actualPos);
-            System.out.println(SET_TEXT_COLOR_RED + "DO NOT ENTER AN INPUT UNTIL OPPONENT HAS GONE" + SET_TEXT_COLOR_WHITE);
-            getGameplayInput();
+            System.out.println("Enter a position: ");
+            String position = scanner.nextLine();
+            ChessPosition actualPos = getPosition(position);
+            // TO DO: check the team color for backwards true or false. call menu again to loop, message saying dont make a move until other player has gone
+            if (actualPos.getRow() == -1 || actualPos.getColumn() == -1) {
+                getGameplayInput();
+            } else {
+                chessboard.printBoard(board, backwards(), actualPos);
+                getGameplayInput();
+            }
         }
     }
 
@@ -137,10 +153,15 @@ public class gameplayUI {
         else {
             System.out.println("Error: Invalid Move");
         }
-        ws.makeMove(authToken, gameID, chessMove);
+        ws.makeMove(authToken, gameID, chessMove, game);
         chessboard.printBoard(board, backwards(), null);
-        System.out.println(SET_TEXT_COLOR_RED + "DO NOT ENTER AN INPUT UNTIL OPPONENT HAS GONE" + SET_TEXT_COLOR_WHITE);
-        getGameplayInput();
+        System.out.println(SET_TEXT_COLOR_RED + "DO NOT MAKE A MOVE UNTIL OPPONENT HAS GONE" + SET_TEXT_COLOR_WHITE);
+        if (checkMate()) {
+            System.out.println("GAME OVER");
+        }
+        else {
+            getGameplayInput();
+        }
         // maybe add try catch for the invalid moves
     }
 
@@ -245,7 +266,7 @@ public class gameplayUI {
     }
 
     boolean backwards() {
-        return Objects.equals(team, WHITE);
+        return !Objects.equals(team, BLACK);
     }
 
     void promote() {
@@ -296,6 +317,22 @@ public class gameplayUI {
         return false;
     }
 
+
+    public boolean checkMate() {
+        if (Objects.equals(team, BLACK)) {
+            if (game.isInStalemate(WHITE) || game.isInCheckmate(WHITE)) {
+                return true;
+            }
+        }
+
+        else {
+            if (game.isInStalemate(BLACK) || game.isInCheckmate(BLACK)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void notify(ServerMessage notification) {
         chessBoardUI chessboard = new chessBoardUI();
         chessboard.printBoard(board, backwards(), null);
@@ -304,8 +341,9 @@ public class gameplayUI {
             case LOAD_GAME -> chessboard.printBoard(board, backwards(), null);
             case ERROR -> System.out.println(SET_TEXT_COLOR_RED + notification.getError());
             case NOTIFICATION -> System.out.println(SET_TEXT_COLOR_MAGENTA + notification.getMessage());
-            default -> System.out.println("error");
+            default -> System.out.println("error: in notify");
         }
     }
+
 
 }

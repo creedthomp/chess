@@ -31,6 +31,10 @@ public class WebSocketFacade extends Endpoint {
             this.session = container.connectToServer(this, socketURI);
 
             //set message handler
+//            this.session.addMessageHandler((MessageHandler.Whole<String>) message -> {
+//                ServerMessage notification = new Gson().fromJson(message, ServerMessage.class);
+//                notificationHandler.notify(notification);
+//            });
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String message) {
@@ -38,6 +42,7 @@ public class WebSocketFacade extends Endpoint {
                     notificationHandler.notify(notification);
                 }
             });
+
         } catch (DeploymentException | IOException | URISyntaxException ex) {
             throw new DataAccessException(ex.getMessage());
         }
@@ -48,27 +53,30 @@ public class WebSocketFacade extends Endpoint {
     }
 
     public void resign(String authToken, int gameID) throws DataAccessException {
-        commandHelp(authToken, gameID, CommandType.RESIGN, null, null);
+        commandHelp(authToken, gameID, CommandType.RESIGN, null, null, null);
     }
     public void leave(String authToken, int gameID) throws DataAccessException {
-        commandHelp(authToken, gameID, CommandType.LEAVE, null, null);
+        commandHelp(authToken, gameID, CommandType.LEAVE, null, null, null);
     }
     public void joinPlayer(String authToken, int gameID, ChessGame.TeamColor playerColor) throws DataAccessException {
-        commandHelp(authToken, gameID, CommandType.JOIN_PLAYER, playerColor, null);
+        commandHelp(authToken, gameID, CommandType.JOIN_PLAYER, playerColor, null, null);
     }
 
     public void joinObserver(String authToken, int gameID) throws DataAccessException {
-        commandHelp(authToken, gameID, CommandType.JOIN_OBSERVER, null, null);
+        commandHelp(authToken, gameID, CommandType.JOIN_OBSERVER, null, null, null);
     }
 
-    public void makeMove(String authToken, int gameID, ChessMove move) throws DataAccessException {
-        commandHelp(authToken, gameID, CommandType.MAKE_MOVE, null, move);
+    public void makeMove(String authToken, int gameID, ChessMove move, ChessGame game) throws DataAccessException {
+        commandHelp(authToken, gameID, CommandType.MAKE_MOVE, null, move, game);
     }
 
 
-    private void commandHelp(String authToken, int gameID, UserGameCommand.CommandType type, ChessGame.TeamColor playerColor, ChessMove move ) throws DataAccessException {
+    private void commandHelp(String authToken, int gameID, UserGameCommand.CommandType type, ChessGame.TeamColor playerColor, ChessMove move, ChessGame game ) throws DataAccessException {
         try {
             var action = new UserGameCommand(authToken, gameID, type, playerColor, move);
+            if (game != null) {
+                action.setGame(game);
+            }
             this.session.getBasicRemote().sendText(new Gson().toJson(action));
         } catch (IOException ex) {
             throw new DataAccessException(ex.getMessage());

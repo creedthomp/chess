@@ -24,6 +24,13 @@ public class SqlGameDAO implements GameDAO {
         }
     }
 
+    public void updateGame(ChessGame game, int gameID) throws DataAccessException {
+        DatabaseManager databaseManager = new DatabaseManager();
+        String gamejson = new Gson().toJson(game);
+        var statement = "UPDATE game SET game = ? WHERE gameID = ?";
+        databaseManager.executeUpdate(statement, gamejson, gameID);
+    }
+
     public void addGame(GameInformation game) throws DataAccessException {
         DatabaseManager databaseManager = new DatabaseManager();
         game.setGameID(new Random().nextInt(10000));
@@ -37,7 +44,7 @@ public class SqlGameDAO implements GameDAO {
     public HashSet<GameInformation> getGameList() throws DataAccessException {
         HashSet<GameInformation> authList = new HashSet<>();
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT gameID, whiteUser, blackUser, gameName, game FROM game";
+            var statement = "SELECT * FROM game";
             try (var ps = conn.prepareStatement(statement)) {
                 try (var rs = ps.executeQuery()) {
                     while (rs.next()) {

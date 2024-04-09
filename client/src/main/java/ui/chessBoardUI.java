@@ -45,7 +45,7 @@ public class chessBoardUI {
     public void printBoard(ChessBoard board, boolean backwards, ChessPosition highlightPos){
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         out.print(ERASE_SCREEN);
-
+        //WHITE
         if (backwards) {
             setDarkerGray(out);
             printBorders(out, new String[]{" a ", " b ", " c ", " d ", " e ", " f ", " g ", " h "});
@@ -55,6 +55,7 @@ public class chessBoardUI {
             isBackwards = false;
             out.println();
         }
+        //BLACK
         else {
             printBorders(out, new String[]{" h ", " g ", " f ", " e ", " d ", " c ", " b ", " a "});
             //isBackwards = true;
