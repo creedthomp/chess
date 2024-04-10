@@ -333,6 +333,7 @@ public class gameplayUI implements NotificationHandler {
         return false;
     }
 
+    @Override
     public void notify(ServerMessage notification) {
         chessBoardUI chessboard = new chessBoardUI();
         chessboard.printBoard(board, backwards(), null);

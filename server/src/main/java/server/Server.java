@@ -1,8 +1,9 @@
 package server;
 
 import handlers.*;
-import spark.*;
 import server.WebSocket.WebSocketHandler;
+import spark.*;
+
 public class Server {
     private WebSocketHandler webSocketHandler;
     public static void main(String[] args) {

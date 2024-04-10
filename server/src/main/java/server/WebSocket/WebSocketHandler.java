@@ -67,7 +67,8 @@ public class WebSocketHandler {
         connections.add(username, session, gameID);
         var message = String.format("%s joined the game as %s", username, color);
         // this might just be a normal notification
-        sendGameMessage(username, game, message);
+        sendGameMessage(username, game);
+        sendNotificationToAll(username, message);
     }
 
     private void joinObserver(String authToken, Session session, int gameID) throws DataAccessException, IOException {
@@ -97,15 +98,15 @@ public class WebSocketHandler {
                 sendNotificationToAll(username, endMessage);
             }
         }
-        sendGameMessage(username, game, message);
+        sendGameMessage(username, game);
         sendNotificationToSome(username, message);
     }
 
-    public void sendGameMessage(String username, ChessGame game, String message) throws IOException {
+    public void sendGameMessage(String username, ChessGame game) throws IOException {
         Gson gson = new Gson();
         String gameJson = gson.toJson(game);
         ServerMessage serverMessage = new ServerMessage(ServerMessageType.LOAD_GAME, null,null, gameJson );
-        connections.broadcastAll(username, serverMessage);
+        connections.broadcast(username, serverMessage);
     }
 
     public void sendNotificationToAll(String username, String message) throws IOException {
