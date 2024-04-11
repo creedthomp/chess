@@ -7,11 +7,11 @@ import java.util.HashSet;
 
 public class MemoryGameDAO implements GameDAO {
     public static HashSet<GameInformation> gameList = new HashSet<>();
-    private static int ID = 1;
+    private static int theID = 1;
 
     public void addGame(GameInformation game) {
 
-        game.setGameID(ID++);
+        game.setGameID(theID++);
 
         gameList.add(game);
     }
@@ -35,7 +35,7 @@ public class MemoryGameDAO implements GameDAO {
 
     public void clear() {
         gameList.clear();
-        ID = 1;
+        theID = 1;
     }
 
 }

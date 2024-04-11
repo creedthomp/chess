@@ -1,18 +1,14 @@
 package ui;
 
-import Websocket.WebSocketFacade;
 import chess.*;
 
-import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Set;
-import java.util.Vector;
 
 import static ui.EscapeSequences.*;
-public class chessBoardUI {
+public class ChessBoardUI {
 
 
     //Session session;

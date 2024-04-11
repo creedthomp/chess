@@ -1,6 +1,6 @@
 package ui;
 
-public class postLoginUI {
+public class PostLoginUI {
 
     public void printPostLoginMenu() {
         System.out.println();

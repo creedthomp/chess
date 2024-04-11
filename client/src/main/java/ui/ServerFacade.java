@@ -40,7 +40,7 @@ public class ServerFacade {
         return this.makeRequest("POST", "/game", request, FinalResponse.class, response);
     }
 
-    public FinalResponse ListGames(FinalResponse response) throws DataAccessException {
+    public FinalResponse listGames(FinalResponse response) throws DataAccessException {
         return this.makeRequest("GET", "/game", response, FinalResponse.class, response);
     }
 
@@ -49,10 +49,7 @@ public class ServerFacade {
     }
 
 
-// is this needed?
-//    public FinalResponse clear() {
-//        return this.makeRequest("PUT", "/game", request, FinalResponse.class, response);
-//    }
+
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass, FinalResponse response) throws DataAccessException {
         try {

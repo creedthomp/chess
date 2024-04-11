@@ -28,14 +28,10 @@ public class Client {
         this.serverUrl = serverUrl;
     }
 
-//    public static void run() throws DataAccessException {
-//        Client client = new Client(serverUrl);
-//        client.notLoggedInMenu();
-//    }
 
     //maybe put this in the params ServerFacade server
     void notLoggedInMenu() throws DataAccessException {
-        preLoginUI preLogin = new preLoginUI();
+        PreLoginUI preLogin = new PreLoginUI();
         Scanner scanner = new Scanner(System.in);
         preLogin.printPreLoginMenu();
         String input = scanner.nextLine(); // Read the input once
@@ -65,7 +61,7 @@ public class Client {
 
     // maybe change params
     private void loggedInMenu() throws DataAccessException {
-        postLoginUI postlogin = new postLoginUI();
+        PostLoginUI postlogin = new PostLoginUI();
         Scanner scanner = new Scanner(System.in);
         postlogin.printPostLoginMenu();
         String input = scanner.nextLine(); // Read the input once
@@ -172,7 +168,7 @@ public class Client {
         // list games somehow
         try {
             //System.out.println("temporary list  ");
-            FinalResponse response = server.ListGames(authToken);
+            FinalResponse response = server.listGames(authToken);
             for (GameInformation game : response.getGameList()) {
                 System.out.println("Game Name: " + game.getGameName() + ", White: " + game.getWhiteName() + ", Black: " + game.getBlackName() + ", Game ID: " + game.getGameID());
             }
@@ -183,7 +179,7 @@ public class Client {
     }
 
     private void joinGame(Scanner scanner) throws DataAccessException {
-        gameplayUI gameplayui = null;
+        GameplayUI gameplayui = null;
         //chessBoardUI chessBoardui = new chessBoardUI();
         int gameID = 0;
         JoinGameRequest joinGameRequest = new JoinGameRequest();
@@ -201,7 +197,7 @@ public class Client {
             System.out.println("Invalid Game ID. Please enter a valid number.");
         }
         try {
-            gameplayui = new gameplayUI(authToken.getAuthT(), game, serverUrl);
+            gameplayui = new GameplayUI(authToken.getAuthT(), game, serverUrl);
             gameplayui.setGameID(gameID);
             server.joinGame(joinGameRequest, authToken);
             signedIn = true;
@@ -234,31 +230,6 @@ public class Client {
         //chessBoardUI.printBothBoards();
     }
 
-//    private void observe(Scanner scanner) throws DataAccessException {
-//        JoinGameRequest joinGameRequest = new JoinGameRequest();
-//        System.out.println("Enter Game ID to join: ");
-//        String gameIDString = scanner.next();
-//        String team = "";
-//        joinGameRequest.setPlayerColor(team);
-//        try {
-//            int gameID = Integer.parseInt(gameIDString);
-//            joinGameRequest.setGameID(gameID);
-//            // Now you can use gameID as an integer.
-//        } catch (NumberFormatException e) {
-//            System.out.println("Invalid Game ID. Please enter a valid number.");
-//            //observe(scanner);
-//        }
-//        try {
-//            server.joinGame(joinGameRequest, authToken);
-//            signedIn = true;
-//            chessBoardUI.printBothBoards();
-//        }
-//        catch (DataAccessException exception) {
-//            System.out.println("Error: bad request");
-//            loggedInMenu();
-//        }
-//
-//    }
 
     private void logout() {
         //logout somehow
@@ -291,7 +262,7 @@ public class Client {
     }
 
     ChessGame getGame(int gameID) throws DataAccessException {
-        FinalResponse response = server.ListGames(authToken);
+        FinalResponse response = server.listGames(authToken);
         for (GameInformation gameInformation : response.getGameList()) {
             if (Objects.equals(gameInformation.getGameID(), gameID)) {
                 game = gameInformation.getGame();

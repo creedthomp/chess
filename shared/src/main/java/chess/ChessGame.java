@@ -14,15 +14,15 @@ import java.util.Objects;
 public class ChessGame {
     private TeamColor turn;
     private ChessBoard board;
-    public status state;
-    public enum status {
+    public Status state;
+    public enum Status {
         PLAYING,
         OVER
     }
     public ChessGame() {
     this.turn = TeamColor.WHITE;
     this.board = new ChessBoard();
-    state = status.PLAYING;
+    state = Status.PLAYING;
     }
 
     /**
@@ -99,7 +99,7 @@ public class ChessGame {
         }
         // if the move is valid
         if (((validMoves.contains(move)))) {
-            ChessBoard newboard = cloneBoard(board);
+            //ChessBoard newboard = cloneBoard(board);
             ChessPiece thisPiece = board.getPiece(move.getStartPosition());
             // add the piece
             if (thisPiece.getPieceType() == ChessPiece.PieceType.PAWN) {

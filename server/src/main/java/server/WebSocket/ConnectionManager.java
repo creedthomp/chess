@@ -28,7 +28,8 @@ public class ConnectionManager {
                 if (!c.visitorName.equals(excludeVisitorName)) {
                     c.send(gson.toJson(notification));
                 }
-            } else {
+            }
+            else {
                 removeList.add(c);
             }
         }

@@ -87,14 +87,6 @@ public class DatabaseManager {
         }
     }
 
-//    public static void executeStatement(String execute) throws DataAccessException {
-//        try (Statement statement = DatabaseManager.getConnection().createStatement()) {
-//            statement.executeUpdate(execute);
-//        }
-//        catch (SQLException exception) {
-//            throw new DataAccessException("Error: unable to update");
-//        }
-//
 
     int executeUpdate(String statement, Object... params) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {

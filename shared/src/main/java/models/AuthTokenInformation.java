@@ -2,20 +2,20 @@ package models;
 import java.util.UUID;
 public class AuthTokenInformation {
 
-    String AuthToken;
+    String authToken;
     String username;
 
     public AuthTokenInformation(String username) {
-        this.AuthToken = UUID.randomUUID().toString();
+        this.authToken = UUID.randomUUID().toString();
         this.username = username;
     }
 
     public String getAuthToken() {
-        return AuthToken;
+        return authToken;
     }
 
     public void setAuthToken(String authToken) {
-        AuthToken = authToken;
+        authToken = authToken;
     }
 
     public String getUsername() {

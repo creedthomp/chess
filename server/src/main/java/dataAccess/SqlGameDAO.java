@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class SqlGameDAO implements GameDAO {
-    private static int ID = 1;
+    //private static int theID = 1;
     public SqlGameDAO() throws DataAccessException {
         try {
             DatabaseManager databaseManager = new DatabaseManager();

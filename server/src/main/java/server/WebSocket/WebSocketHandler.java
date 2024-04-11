@@ -22,7 +22,7 @@ import java.util.Objects;
 
 import static chess.ChessGame.TeamColor.BLACK;
 import static chess.ChessGame.TeamColor.WHITE;
-import static chess.ChessGame.status.OVER;
+import static chess.ChessGame.Status.OVER;
 
 @WebSocket
 public class WebSocketHandler {
@@ -61,6 +61,7 @@ public class WebSocketHandler {
         String username = authDAO.getUsername(authtoken);
         var message = String.format("%s left the game", username);
         leaveHelp(gameID, username);
+        connections.remove(username);
         sendNotificationToAll(username, message);
     }
 

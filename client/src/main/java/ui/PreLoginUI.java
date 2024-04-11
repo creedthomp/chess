@@ -1,6 +1,6 @@
 package ui;
 
-public class preLoginUI {
+public class PreLoginUI {
 
     public void printPreLoginMenu() {
         System.out.println();
@@ -11,16 +11,6 @@ public class preLoginUI {
 
     }
 
-//    public String registerUsername() {
-//
-//    }
-//
-//    public String registerUsername() {
-//
-//    }
-//
-//    public String registerUsername() {
-//
-//    }
+
 
 }

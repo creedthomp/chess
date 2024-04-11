@@ -11,10 +11,10 @@ import java.util.Scanner;
 
 import static chess.ChessGame.TeamColor.BLACK;
 import static chess.ChessGame.TeamColor.WHITE;
-import static chess.ChessGame.status.OVER;
+import static chess.ChessGame.Status.OVER;
 import static ui.EscapeSequences.*;
 
-public class gameplayUI implements NotificationHandler {
+public class GameplayUI implements NotificationHandler {
     private final WebSocketFacade ws;
     Session session;
     // MAYBE ADD A PLAYER COLOR
@@ -25,13 +25,17 @@ public class gameplayUI implements NotificationHandler {
     boolean observing = false;
     int gameID;
 
-    public gameplayUI(String auth, ChessGame gameChess, String serverURL) throws DataAccessException {
+    public GameplayUI(String auth, ChessGame gameChess, String serverURL) throws DataAccessException {
         game = gameChess;
         board = game.getBoard();
         board.resetBoard();
         authToken = auth;
         ws = new WebSocketFacade(serverURL, this);
         //gameID = gID;
+    }
+
+    public GameplayUI(WebSocketFacade ws) {
+        this.ws = ws;
     }
 
     public void setObserve(boolean bool) {
@@ -42,9 +46,6 @@ public class gameplayUI implements NotificationHandler {
         gameID = gID;
     }
 
-    public void setTeamColor(ChessGame.TeamColor color) {
-        team = color;
-    }
     public void displayGameplayCommands() {
 
         System.out.println();
@@ -58,7 +59,7 @@ public class gameplayUI implements NotificationHandler {
     }
 
     public void joinGame(ChessGame.TeamColor team) throws DataAccessException {
-        chessBoardUI chessboard = new chessBoardUI();
+        ChessBoardUI chessboard = new ChessBoardUI();
         this.team = team;
         if (Objects.equals(null , team)) {
             ws.joinObserver(authToken,gameID);
@@ -114,7 +115,7 @@ public class gameplayUI implements NotificationHandler {
 
     void highlightMoves(Scanner scanner) throws InvalidMoveException, DataAccessException {
         // if you are in check
-        chessBoardUI chessboard = new chessBoardUI();
+        ChessBoardUI chessboard = new ChessBoardUI();
         if (game.isInCheck(team)) {
             ChessPosition kingPosition = game.myKingPosition(game.getBoard(), team);
             chessboard.printBoard(board, backwards(), kingPosition);
@@ -137,7 +138,7 @@ public class gameplayUI implements NotificationHandler {
     }
 
     void makeMove(Scanner scanner) throws InvalidMoveException, DataAccessException {
-        chessBoardUI chessboard = new chessBoardUI();
+        ChessBoardUI chessboard = new ChessBoardUI();
         ChessMove chessMove;
         System.out.println("Enter a start and end position (e6->b7): ");
         String move = scanner.nextLine();
@@ -158,7 +159,7 @@ public class gameplayUI implements NotificationHandler {
     }
 
     void redrawBoard(Scanner scanner) throws InvalidMoveException, DataAccessException {
-        chessBoardUI chessboard = new chessBoardUI();
+        ChessBoardUI chessboard = new ChessBoardUI();
         chessboard.printBoard(board, backwards(), null);
         getGameplayInput();
     }
@@ -298,38 +299,10 @@ public class gameplayUI implements NotificationHandler {
         return chessMove;
     }
 
-//    boolean validateMove(ChessMove move) {
-//        ChessPosition start = move.getStartPosition();
-//        Collection<ChessMove> valid = game.validMoves(start);
-//        for (ChessMove chessMove : valid) {
-//            if (Objects.equals(chessMove, move)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
-
-//    public boolean checkMate() {
-//        if (Objects.equals(team, BLACK)) {
-//            if (game.isInStalemate(WHITE) || game.isInCheckmate(WHITE)) {
-//                game.state = OVER;
-//                return true;
-//            }
-//        }
-//
-//        else {
-//            if (game.isInStalemate(BLACK) || game.isInCheckmate(BLACK)) {
-//                game.state = OVER;
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
     @Override
     public void notify(ServerMessage notification) {
-        chessBoardUI chessboard = new chessBoardUI();
+        ChessBoardUI chessboard = new ChessBoardUI();
         //chessboard.printBoard(board, backwards(), null);
         System.out.println("\n");
         switch (notification.getServerMessageType()) {
