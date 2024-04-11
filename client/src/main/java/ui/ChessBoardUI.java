@@ -17,27 +17,7 @@ public class ChessBoardUI {
     private boolean highlight = false;
     // i think I can change from main now that prints right
     public static void main(String[] args) {
-//        var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
-//        out.print(ERASE_SCREEN);
-//
-//        ChessBoard pieces = new ChessBoard();
-//        pieces.resetBoard();
-//        setDarkerGray(out);
-//        printBorders(out, new String[]{" a ", " b ", " c ", " d ", " e ", " f ", " g ", " h "});
-//        drawBoard(out, new String[]{" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 "}, pieces);
-//        printBorders(out, new String[]{" a ", " b ", " c ", " d ", " e ", " f ", " g ", " h "});
-//
-//        printBorders(out, new String[]{" h ", " g ", " f ", " e ", " d ", " c ", " b ", " a "});
-//        drawBoard(out, new String[]{" 8 ", " 7 ", " 6 ", " 5 ", " 4 ", " 3 ", " 2 ", " 1 "}, pieces);
-//        printBorders(out, new String[]{" h ", " g ", " f ", " e ", " d ", " c ", " b ", " a "});
-//
-//       out.print(SET_BG_COLOR_BLACK);
-//       out.print(SET_TEXT_COLOR_WHITE);
-
-        //printBothBoards();
     }
-
-    //I should make  ChessPiece[][] this a param eventually
     public void printBoard(ChessBoard board, boolean backwards, ChessPosition highlightPos){
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         out.print(ERASE_SCREEN);

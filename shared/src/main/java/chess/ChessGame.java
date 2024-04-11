@@ -145,17 +145,7 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        if (turn == TeamColor.WHITE){
-            Collection<ChessMove> opMoves = opponentsMoves(board, teamColor);
-            ChessPosition kingSpot = myKingPosition(board, teamColor);
-            // now go through all the ending positions of the opMoves and se if any of them match the kings current pos
-            for (ChessMove move : opMoves) {
-                if (move.getEndPosition().equals(kingSpot)) {
-                    return true;
-                }
-            }
-        }
-        else {
+
             Collection<ChessMove> opMoves = opponentsMoves(board, teamColor);
             ChessPosition kingSpot = myKingPosition(board, teamColor);
             for (ChessMove move : opMoves) {
@@ -164,7 +154,7 @@ public class ChessGame {
                 }
             }
 
-        }
+     //   }
         return false;
     }
 
