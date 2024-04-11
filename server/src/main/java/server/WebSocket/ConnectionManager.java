@@ -45,6 +45,7 @@ public class ConnectionManager {
         for (var c : connections.values()) {
             if (c.session.isOpen()) {
                 if (c.visitorName.equals(visitorName)) {
+                    // do I need to turn this back to GSON??
                     c.send(gson.toJson(notification));
                 }
             } else {

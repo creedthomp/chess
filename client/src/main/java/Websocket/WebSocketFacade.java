@@ -66,8 +66,8 @@ public class WebSocketFacade extends Endpoint {
         commandHelp(authToken, gameID, CommandType.JOIN_OBSERVER, null, null, null);
     }
 
-    public void makeMove(String authToken, int gameID, ChessMove move, ChessGame game) throws DataAccessException {
-        commandHelp(authToken, gameID, CommandType.MAKE_MOVE, null, move, game);
+    public void makeMove(String authToken, int gameID, ChessMove move, ChessGame game, ChessGame.TeamColor color) throws DataAccessException {
+        commandHelp(authToken, gameID, CommandType.MAKE_MOVE, color, move, game);
     }
 
 

@@ -12,6 +12,7 @@ public class GameInformation {
 
     public GameInformation() {
         game = new ChessGame();
+        game.getBoard().resetBoard();
         //gameID += 1;
     }
 

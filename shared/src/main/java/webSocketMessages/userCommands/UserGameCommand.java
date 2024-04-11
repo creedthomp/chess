@@ -12,13 +12,16 @@ import java.util.Objects;
  * methods.
  */
 public class UserGameCommand {
-    public UserGameCommand(String authToken, int gameID, CommandType type, ChessGame.TeamColor playerColor, ChessMove move ) {
+    public UserGameCommand(String authToken, int gameID, CommandType type, ChessGame.TeamColor playerColor, ChessMove move) {
         this.authToken = authToken;
         this.commandType = type;
         this.gameID = gameID;
         this.playerColor = playerColor;
         this.move = move;
+        this.username = username;
     }
+
+    private String username;
 
     private String authToken;
     private int gameID;
@@ -36,6 +39,14 @@ public class UserGameCommand {
         MAKE_MOVE,
         LEAVE,
         RESIGN
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getAuthToken() {

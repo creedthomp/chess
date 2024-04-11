@@ -14,9 +14,15 @@ import java.util.Objects;
 public class ChessGame {
     private TeamColor turn;
     private ChessBoard board;
+    public status state;
+    public enum status {
+        PLAYING,
+        OVER
+    }
     public ChessGame() {
     this.turn = TeamColor.WHITE;
     this.board = new ChessBoard();
+    state = status.PLAYING;
     }
 
     /**

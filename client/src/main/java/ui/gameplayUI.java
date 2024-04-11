@@ -12,8 +12,7 @@ import java.util.Scanner;
 
 import static chess.ChessGame.TeamColor.BLACK;
 import static chess.ChessGame.TeamColor.WHITE;
-import static java.lang.System.out;
-import static ui.EscapeSequences.SET_TEXT_COLOR_RED;
+import static chess.ChessGame.status.OVER;
 import static ui.EscapeSequences.*;
 
 public class gameplayUI implements NotificationHandler {
@@ -64,18 +63,18 @@ public class gameplayUI implements NotificationHandler {
         this.team = team;
         if (Objects.equals(null , team)) {
             ws.joinObserver(authToken,gameID);
-            chessboard.printBoard(board, true, null);
+            //chessboard.printBoard(board, true, null);
             System.out.println(SET_TEXT_COLOR_GREEN + "Successfully observing game" + SET_TEXT_COLOR_WHITE);
         }
         else if (Objects.equals(BLACK, team)) {
             ws.joinPlayer(authToken ,gameID, ChessGame.TeamColor.BLACK);
-            chessboard.printBoard(board, backwards(), null);
+            //chessboard.printBoard(board, backwards(), null);
             System.out.println(SET_TEXT_COLOR_GREEN + "Successfully joined game as BLACK" + SET_TEXT_COLOR_WHITE);
             System.out.println(SET_TEXT_COLOR_RED + "DO NOT MAKE A MOVE UNTIL WHITE HAS GONE" + SET_TEXT_COLOR_WHITE);
         }
         else {
             ws.joinPlayer(authToken,gameID, WHITE);
-            chessboard.printBoard(board, backwards(), null);
+            //chessboard.printBoard(board, backwards(), null);
             System.out.println(SET_TEXT_COLOR_GREEN + "Successfully joined game as WHITE" + SET_TEXT_COLOR_WHITE);
         }
     }
@@ -147,16 +146,10 @@ public class gameplayUI implements NotificationHandler {
         ChessPosition startPosition = getPosition(parts[0]);
         ChessPosition endPosition = getPosition(parts[1]);
         chessMove = getMove(scanner, startPosition, endPosition);
-        if (validateMove(chessMove)) {
-            game.makeMove(chessMove);
-        }
-        else {
-            System.out.println("Error: Invalid Move");
-        }
-        ws.makeMove(authToken, gameID, chessMove, game);
+        ws.makeMove(authToken, gameID, chessMove, game, team);
         chessboard.printBoard(board, backwards(), null);
         System.out.println(SET_TEXT_COLOR_RED + "DO NOT MAKE A MOVE UNTIL OPPONENT HAS GONE" + SET_TEXT_COLOR_WHITE);
-        if (checkMate()) {
+        if (game.state == OVER) {
             System.out.println("GAME OVER");
         }
         else {
@@ -306,37 +299,39 @@ public class gameplayUI implements NotificationHandler {
         return chessMove;
     }
 
-    boolean validateMove(ChessMove move) {
-        ChessPosition start = move.getStartPosition();
-        Collection<ChessMove> valid = game.validMoves(start);
-        for (ChessMove chessMove : valid) {
-            if (Objects.equals(chessMove, move)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    boolean validateMove(ChessMove move) {
+//        ChessPosition start = move.getStartPosition();
+//        Collection<ChessMove> valid = game.validMoves(start);
+//        for (ChessMove chessMove : valid) {
+//            if (Objects.equals(chessMove, move)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
 
-    public boolean checkMate() {
-        if (Objects.equals(team, BLACK)) {
-            if (game.isInStalemate(WHITE) || game.isInCheckmate(WHITE)) {
-                return true;
-            }
-        }
-
-        else {
-            if (game.isInStalemate(BLACK) || game.isInCheckmate(BLACK)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    public boolean checkMate() {
+//        if (Objects.equals(team, BLACK)) {
+//            if (game.isInStalemate(WHITE) || game.isInCheckmate(WHITE)) {
+//                game.state = OVER;
+//                return true;
+//            }
+//        }
+//
+//        else {
+//            if (game.isInStalemate(BLACK) || game.isInCheckmate(BLACK)) {
+//                game.state = OVER;
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     @Override
     public void notify(ServerMessage notification) {
         chessBoardUI chessboard = new chessBoardUI();
-        chessboard.printBoard(board, backwards(), null);
+        //chessboard.printBoard(board, backwards(), null);
         System.out.println("\n");
         switch (notification.getServerMessageType()) {
             case LOAD_GAME -> chessboard.printBoard(board, backwards(), null);
