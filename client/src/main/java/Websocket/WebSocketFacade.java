@@ -3,13 +3,11 @@ package Websocket;
 import chess.ChessGame;
 import chess.ChessMove;
 import com.google.gson.Gson;
-import dataAccess.DataAccessException;
 import ui.NotificationHandler;
 import webSocketMessages.serverMessages.ServerMessage;
 import webSocketMessages.userCommands.UserGameCommand;
 import webSocketMessages.userCommands.UserGameCommand.CommandType;
 
-//import javax.management.Notification;
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
@@ -29,12 +27,6 @@ public class WebSocketFacade extends Endpoint {
 
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             this.session = container.connectToServer(this, socketURI);
-
-            //set message handler
-//            this.session.addMessageHandler((MessageHandler.Whole<String>) message -> {
-//                ServerMessage notification = new Gson().fromJson(message, ServerMessage.class);
-//                notificationHandler.notify(notification);
-//            });
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String message) {
@@ -82,13 +74,4 @@ public class WebSocketFacade extends Endpoint {
             throw new DataAccessException(ex.getMessage());
         }
     }
-
-//    public void stop(String visitorName) throws DataAccessException {
-//        try {
-//            if ()
-//            this.session.close();
-//        } catch (IOException ex) {
-//            throw new DataAccessException(ex.getMessage());
-//        }
-//    }
 }

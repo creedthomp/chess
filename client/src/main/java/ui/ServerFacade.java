@@ -1,7 +1,7 @@
 package ui;
 
 import com.google.gson.Gson;
-import dataAccess.DataAccessException;
+import DataAccess.DataAccessException;
 import requests.RegisterRequest;
 import responses.FinalResponse;
 import requests.*;

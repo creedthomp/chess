@@ -32,7 +32,7 @@ public class ConnectionManager {
                 removeList.add(c);
             }
         }
-        // only send notification to people in this game
+
         // Clean up any connections that were left open.
         for (var c : removeList) {
             connections.remove(c.visitorName);

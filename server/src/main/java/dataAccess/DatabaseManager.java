@@ -1,5 +1,6 @@
 package dataAccess;
 
+import DataAccess.DataAccessException;
 import chess.ChessGame;
 
 import java.sql.*;

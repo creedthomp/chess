@@ -1,14 +1,12 @@
 package dataAccess;
 
+import DataAccess.DataAccessException;
 import chess.ChessGame;
 import com.google.gson.Gson;
-import models.AuthTokenInformation;
 import models.GameInformation;
 
-import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 

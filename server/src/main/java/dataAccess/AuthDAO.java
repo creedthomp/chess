@@ -1,5 +1,6 @@
 package dataAccess;
 
+import DataAccess.DataAccessException;
 import models.AuthTokenInformation;
 
 import java.util.HashSet;

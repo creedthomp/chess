@@ -1,11 +1,8 @@
 package dataAccess;
 
+import DataAccess.DataAccessException;
 import models.UserInformation;
 import java.sql.*;
-import static dataAccess.DatabaseManager.*;
-
-import static java.sql.Statement.RETURN_GENERATED_KEYS;
-import static java.sql.Types.NULL;
 
 public class SqlUserDAO implements UserDAO {
 

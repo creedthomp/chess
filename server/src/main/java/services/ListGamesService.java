@@ -1,5 +1,6 @@
 package services;
 
+import DataAccess.DataAccessException;
 import dataAccess.*;
 import responses.FinalResponse;
 

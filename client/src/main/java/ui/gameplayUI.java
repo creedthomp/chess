@@ -2,11 +2,10 @@ package ui;
 
 import Websocket.WebSocketFacade;
 import chess.*;
-import dataAccess.DataAccessException;
+import DataAccess.DataAccessException;
 import webSocketMessages.serverMessages.ServerMessage;
 
 import javax.websocket.Session;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.Scanner;
 

@@ -6,7 +6,7 @@ import responses.FinalResponse;
 import services.RegisterService;
 import spark.Request;
 import spark.Response;
-import dataAccess.DataAccessException;
+import DataAccess.DataAccessException;
 
 
 public class RegistrationHandler extends ParentHandler {

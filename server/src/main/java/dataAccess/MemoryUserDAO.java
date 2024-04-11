@@ -1,5 +1,6 @@
 package dataAccess;
 
+import DataAccess.DataAccessException;
 import models.UserInformation;
 
 import java.util.HashSet;

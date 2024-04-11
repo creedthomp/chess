@@ -3,7 +3,7 @@ package server.WebSocket;
 import chess.*;
 
 import com.google.gson.Gson;
-import dataAccess.DataAccessException;
+import DataAccess.DataAccessException;
 import dataAccess.SqlAuthDAO;
 import dataAccess.SqlGameDAO;
 import models.GameInformation;
@@ -39,16 +39,14 @@ public class WebSocketHandler {
         ChessGame.TeamColor color = action.getPlayerColor();
         int gameID = action.getGameID();
         String authToken = action.getAuthToken();
-        //ChessGame.TeamColor color = getTheColor(authToken,gameID);
+
         // if the authtoken is invalid
         if (!authDAO.findAuth(authToken)) {
             ServerMessage serverMessage = new ServerMessage(ServerMessageType.ERROR, null, "Error: Invalid AuthToken", null);
             session.getRemote().sendString(new Gson().toJson(serverMessage));
         }
         else {
-            // maybe change this. I need TO UPDATE THE GAME NOT KEEP CHANGING IT TO THE CURRENT ONE
-            //ChessGame game = gameDAO.getGame(gameID).getGame();
-            //ChessGame game = action.getGame();
+
             switch (action.getCommandType()) {
                 case LEAVE -> leave(authToken, gameID);
                 case RESIGN -> resign(authToken, session, gameID);
@@ -298,13 +296,14 @@ public class WebSocketHandler {
 
     public void leaveHelp(int gameID, String username) throws DataAccessException {
         ChessGame.TeamColor color = getTheColor(username, gameID);
-        if (Objects.equals(color, BLACK)) {
-             gameDAO.addBlack(gameID, null);
+        if (color != null) {
+            if (Objects.equals(color, BLACK)) {
+                gameDAO.addBlack(gameID, null);
+            }
+            if (Objects.equals(color, WHITE)) {
+                gameDAO.addWhite(gameID, null);
+            }
         }
-        else {
-            gameDAO.addWhite(gameID, null);
-        }
-
     }
 
 }

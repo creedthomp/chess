@@ -1,15 +1,12 @@
-import Websocket.WebSocketFacade;
 import chess.ChessGame;
-import dataAccess.DataAccessException;
+import DataAccess.DataAccessException;
 import models.GameInformation;
-import models.UserInformation;
 import requests.CreateGameRequest;
 import requests.JoinGameRequest;
 import requests.LoginRequest;
 import requests.RegisterRequest;
 import responses.FinalResponse;
 import ui.*;
-import webSocketMessages.serverMessages.ServerMessage;
 
 import java.util.Objects;
 import java.util.Scanner;

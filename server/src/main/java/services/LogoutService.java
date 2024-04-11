@@ -1,8 +1,7 @@
 package services;
 
 import dataAccess.AuthDAO;
-import dataAccess.DataAccessException;
-import dataAccess.MemoryAuthDAO;
+import DataAccess.DataAccessException;
 import dataAccess.SqlAuthDAO;
 import responses.FinalResponse;
 

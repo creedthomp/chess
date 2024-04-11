@@ -1,6 +1,6 @@
 package handlers;
 
-import dataAccess.DataAccessException;
+import DataAccess.DataAccessException;
 import services.ClearService;
 import responses.FinalResponse;
 import spark.Request;

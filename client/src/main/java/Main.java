@@ -1,5 +1,4 @@
-import chess.*;
-import dataAccess.DataAccessException;
+import DataAccess.DataAccessException;
 
 public class Main {
 //    public static void main(String[] args) {

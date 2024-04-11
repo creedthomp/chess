@@ -1,5 +1,6 @@
 package dataAccess;
 
+import DataAccess.DataAccessException;
 import models.GameInformation;
 
 import java.util.HashSet;

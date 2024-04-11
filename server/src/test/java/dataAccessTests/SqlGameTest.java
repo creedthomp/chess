@@ -1,5 +1,6 @@
 package dataAccessTests;
 
+import DataAccess.DataAccessException;
 import dataAccess.*;
 import models.GameInformation;
 import org.junit.jupiter.api.BeforeEach;

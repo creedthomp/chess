@@ -1,7 +1,6 @@
 package serviceTests;
 
-import dataAccess.DataAccessException;
-import org.junit.jupiter.api.BeforeAll;
+import DataAccess.DataAccessException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.LoginRequest;
