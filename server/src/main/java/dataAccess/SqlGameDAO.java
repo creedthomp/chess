@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class SqlGameDAO implements GameDAO {
-    //private static int theID = 1;
+    private static int theID = 1;
     public SqlGameDAO() throws DataAccessException {
         try {
             DatabaseManager databaseManager = new DatabaseManager();
@@ -106,7 +106,7 @@ public class SqlGameDAO implements GameDAO {
         databaseManager.executeUpdate(statement, username, gameID);
     }
     public void clear() throws DataAccessException {
-        ID = 1;
+        theID = 1;
         DatabaseManager databaseManager = new DatabaseManager();
         var statement = "TRUNCATE game";
         databaseManager.executeUpdate(statement);
