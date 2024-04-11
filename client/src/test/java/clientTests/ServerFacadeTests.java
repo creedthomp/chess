@@ -183,7 +183,7 @@ public class ServerFacadeTests {
             CreateGameRequest createGameRequest = new CreateGameRequest();
             createGameRequest.setGameName("MYGAME");
             FinalResponse finalResponse = facade.createGame(createGameRequest, responsInsertion);
-            FinalResponse response = facade.ListGames(responsInsertion);
+            FinalResponse response = facade.listGames(responsInsertion);
             assertNotNull(response.getGameList());
         }
         catch (Exception ex) {
@@ -194,7 +194,7 @@ public class ServerFacadeTests {
     @Test
     public void listGamesBad() throws DataAccessException {
         try {
-            FinalResponse response = facade.ListGames(responsInsertion);
+            FinalResponse response = facade.listGames(responsInsertion);
             assertNull(response.getGameList());
         }catch (Exception ex) {
             System.out.println(ex.getMessage());
